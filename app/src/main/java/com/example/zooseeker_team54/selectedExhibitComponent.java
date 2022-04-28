@@ -12,5 +12,11 @@ public class selectedExhibitComponent {
         this.plan = plan;
     }
 
-    //code to display contents of hashset
+    public void display()
+    {
+        for(String s: plan)
+        {
+            System.out.println(s);
+        }
+    }
 }

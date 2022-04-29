@@ -4,12 +4,14 @@ import android.app.Activity;
 import android.util.Log;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import java.util.List;
 
 public class selectedExhibitComponent {
 
     List<String> plan;
-    private static final int PLANSIZE = R.id.planSize;
     Activity activity;
 
     //assuming that a hashset of ids will be passed
@@ -21,14 +23,16 @@ public class selectedExhibitComponent {
 
     public void display()
     {
-        Log.d("selectedExhibitComponent", "" + plan.size());
-        for(String s: plan)
-        {
-            Log.d("selectedExhibitComponent", s);
-        }
         int size = plan.size();
-        TextView plan_size =(TextView) activity.findViewById(PLANSIZE);
+        TextView plan_size =(TextView) activity.findViewById(R.id.planSize);
         plan_size.setText("" + size);
+
+        selectionListAdapter adapter = new selectionListAdapter();
+        adapter.setHasStableIds(true);
+        RecyclerView recyclerView = activity.findViewById(R.id.selection_items);
+        recyclerView.setLayoutManager(new LinearLayoutManager(activity));
+        recyclerView.setAdapter(adapter);
+        adapter.setSelections(plan);
 
     }
 }

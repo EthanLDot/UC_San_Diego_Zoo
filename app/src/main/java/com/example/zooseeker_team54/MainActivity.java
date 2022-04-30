@@ -18,15 +18,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        List<Place> places = Place.loadJSON(this, "sample_node_info.json");
-        List<String> exhibits = new ArrayList<>();
-        for (Place place : places) {
-            if (place.kind.equals("exhibit")) {
-                exhibits.add(place.id);
-            }
-        }
-        selectedExhibitComponent sec = new selectedExhibitComponent(exhibits, this);
-        sec.display();
 
         // "source" and "sink" are graph terms for the start and end
         String start = "entrance_exit_gate";
@@ -35,7 +26,6 @@ public class MainActivity extends AppCompatActivity {
         // 1. Load the graph...
         Graph<String, IdentifiedWeightedEdge> g = ZooData.loadZooGraphJSON("assets/sample_zoo_graph.json");
         GraphPath<String, IdentifiedWeightedEdge> path = DijkstraShortestPath.findPathBetween(g, start, goal);
-
         // 2. Load the information about our nodes and edges...
         Map<String, ZooData.VertexInfo> vInfo = ZooData.loadVertexInfoJSON("assets/sample_node_info.json");
         Map<String, ZooData.EdgeInfo> eInfo = ZooData.loadEdgeInfoJSON("assets/sample_edge_info.json");
@@ -52,5 +42,18 @@ public class MainActivity extends AppCompatActivity {
                     vInfo.get(g.getEdgeTarget(e).toString()).name);
             i++;
         }
+
+
+        //testing code for the earlier class: will move to the test folder later
+        List<String> exhibits = new ArrayList<String>();
+        for(Map.Entry<String, ZooData.VertexInfo> entry : vInfo.entrySet())
+        {
+           if(("" + entry.getValue().kind).equals("EXHIBIT"))
+           {
+               exhibits.add(entry.getValue().name);
+           }
+        }
+        selectedExhibitComponent sec = new selectedExhibitComponent(exhibits, this);
+        sec.display();
     }
 }

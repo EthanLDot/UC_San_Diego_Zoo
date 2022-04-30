@@ -7,6 +7,7 @@ import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,12 +46,12 @@ public class MainActivity extends AppCompatActivity {
 
 
         //testing code for the earlier class: will move to the test folder later
-        List<String> exhibits = new ArrayList<String>();
+        List<Pair<String, String>> exhibits = new ArrayList<Pair<String, String>>();
         for(Map.Entry<String, ZooData.VertexInfo> entry : vInfo.entrySet())
         {
            if(("" + entry.getValue().kind).equals("EXHIBIT"))
            {
-               exhibits.add(entry.getValue().name);
+               exhibits.add(new Pair<String, String>(entry.getValue().id, entry.getValue().name));
            }
         }
         selectedExhibitComponent sec = new selectedExhibitComponent(exhibits, this);

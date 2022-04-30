@@ -64,15 +64,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 // Stores search results as a list of strings.
-                ArrayList<String> results = searchBar.searchQuery(vInfo);
+                ArrayList<Pair<String, String>> results = searchBar.searchQuery(vInfo);
 
                 // FIXME: Should be implemented differently when the results display class is ready.
                 if (results.size() == 0) {
                     Log.d("Results", "No Results");
                 }
                 else {
-                    for (String str: results) {
-                        Log.d("Results", "Exhibit: " + str);
+                    for (Pair<String, String> str: results) {
+                        Log.d("Results", "Exhibit: " + str.second);
                     }
                     Log.d("Break", "——————————————————————————————————");
                 }

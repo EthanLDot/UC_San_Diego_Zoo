@@ -1,5 +1,6 @@
 package com.example.zooseeker_team54;
 
+import android.util.Pair;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -27,8 +28,8 @@ public class searchBarComponent {
      * @return sResults An ArrayList of strings representing the names of the animals that
      *                  contain the query string.
      */
-    public ArrayList<String> searchQuery(Map<String, ZooData.VertexInfo> exhibits) {
-        ArrayList<String> sResults = new ArrayList<>();
+    public ArrayList<Pair<String, String>> searchQuery(Map<String, ZooData.VertexInfo> exhibits) {
+        ArrayList<Pair<String, String>> sResults = new ArrayList<>();
         if (query.length() == 0) {
             return sResults;
         }
@@ -37,7 +38,7 @@ public class searchBarComponent {
             if (String.valueOf(entry.getValue().kind).toLowerCase().equals("exhibit")) {
                 String entryVal = entry.getValue().name.toLowerCase();
                 if (entryVal.contains(query) && !sResults.contains(entryVal)) {
-                    sResults.add(entryVal);
+                    sResults.add(new Pair<String, String>(entry.getValue().id, entry.getValue().name));
                 }
             }
         }

@@ -69,5 +69,35 @@
       "fox",
       "mammal"
     ]
+  },
+  {
+    "id": "brown_bears",
+    "kind": "exhibit",
+    "name": "Brown Bears",
+    "tags": [
+      "forest",
+      "bear",
+      "mammal"
+    ]
+  },
+  {
+    "id": "black_bear",
+    "kind": "exhibit",
+    "name": "Black Bear",
+    "tags": [
+      "forest",
+      "bear",
+      "mammal"
+    ]
+  },
+  {
+    "id": "grizzly_bear",
+    "kind": "exhibit",
+    "name": "Grizzly Bear",
+    "tags": [
+      "forest",
+      "bear",
+      "mammal"
+    ]
   }
 ]

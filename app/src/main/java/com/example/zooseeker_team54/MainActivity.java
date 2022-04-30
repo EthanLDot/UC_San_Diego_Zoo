@@ -6,11 +6,15 @@ import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 import android.app.Activity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.util.Pair;
+import android.widget.EditText;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
@@ -44,6 +48,36 @@ public class MainActivity extends AppCompatActivity {
             i++;
         }
 
+        // Set up listener for the search bar
+        EditText searchBarField = this.findViewById(R.id.search_exhibits);
+        searchBarComponent searchBar = new searchBarComponent(searchBarField);
+
+        searchBarField.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                searchBar.setQuery(searchBarField.getText().toString());
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                // Stores search results as a list of strings.
+                ArrayList<String> results = searchBar.searchQuery(vInfo);
+
+                // FIXME: Should be implemented differently when the results display class is ready.
+                if (results.size() == 0) {
+                    Log.d("Results", "No Results");
+                }
+                else {
+                    for (String str: results) {
+                        Log.d("Results", "Exhibit: " + str);
+                    }
+                    Log.d("Break", "——————————————————————————————————");
+                }
+            }
+        });
 
         //testing code for the earlier class: will move to the test folder later
         List<Pair<String, String>> exhibits = new ArrayList<Pair<String, String>>();

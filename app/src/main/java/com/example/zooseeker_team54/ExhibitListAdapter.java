@@ -14,9 +14,9 @@ import java.util.List;
 
 
 public class ExhibitListAdapter extends RecyclerView.Adapter<ExhibitListAdapter.ViewHolder> {
-
     private List<Pair<String, String>> selections = Collections.emptyList();
     private boolean clickable;
+
     public void setSelections(List<Pair<String, String>> places, boolean clickable) {
         this.selections.clear();
         this.selections = places;
@@ -29,7 +29,7 @@ public class ExhibitListAdapter extends RecyclerView.Adapter<ExhibitListAdapter.
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater
                 .from(parent.getContext())
-                .inflate(R.layout.selection_item, parent, false);
+                .inflate(R.layout.exhibit_item, parent, false);
         return new ViewHolder(view);
     }
 
@@ -44,13 +44,12 @@ public class ExhibitListAdapter extends RecyclerView.Adapter<ExhibitListAdapter.
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-
         private final TextView textView;
-
         private Pair<String, String> place;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            this.textView = itemView.findViewById(R.id.select_item_text);
+            this.textView = itemView.findViewById(R.id.exhibit_name);
         }
 
         public Pair<String, String> getPlace(){

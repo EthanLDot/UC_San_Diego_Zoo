@@ -27,19 +27,14 @@ public class selectedExhibitComponent {
     {
         int size = plans.size();
         TextView plan_size =(TextView) activity.findViewById(R.id.planSize);
-        List<String> planNames = new ArrayList<>();
         plan_size.setText("" + size);
-        for (Pair<String, String> plan: plans)
-        {
-            planNames.add(plan.second);
-        }
 
         selectionListAdapter adapter = new selectionListAdapter();
         adapter.setHasStableIds(true);
         RecyclerView recyclerView = activity.findViewById(R.id.selection_items);
         recyclerView.setLayoutManager(new LinearLayoutManager(activity));
         recyclerView.setAdapter(adapter);
-        adapter.setSelections(planNames);
+        adapter.setSelections(plans);
 
     }
 }

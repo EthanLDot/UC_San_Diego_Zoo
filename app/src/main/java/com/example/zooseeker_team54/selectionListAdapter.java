@@ -1,6 +1,7 @@
 package com.example.zooseeker_team54;
 
 import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,12 +16,12 @@ import java.util.List;
 
 public class selectionListAdapter extends RecyclerView.Adapter<selectionListAdapter.ViewHolder> {
 
-    private List<String> selections = Collections.emptyList();
-    public void setSelections(List<String> places) {
+    private List<Pair<String, String>> selections = Collections.emptyList();
+    public void setSelections(List<Pair<String, String>> places) {
         this.selections.clear();
         this.selections = places;
         notifyDataSetChanged();
-        Log.d("selectionListAdapter", "test");
+        //Log.d("selectionListAdapter", "test");
     }
     @NonNull
     @Override
@@ -45,18 +46,19 @@ public class selectionListAdapter extends RecyclerView.Adapter<selectionListAdap
 
         private final TextView textView;
 
-        private String place;
+        private Pair<String, String> place;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             this.textView = itemView.findViewById(R.id.select_item_text);
         }
 
-        public String getPlace(){
+        public Pair<String, String> getPlace(){
             return place;
         }
-        public void setPlace(String place) {
+        public void setPlace(Pair<String, String> place) {
             this.place = place;
-            this.textView.setText(place);
+            this.textView.setTag(place.first);
+            this.textView.setText(place.second);
         }
 
 

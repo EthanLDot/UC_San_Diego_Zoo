@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //testing code for the earlier class: will move to the test folder later
-        /*List<Pair<String, String>> exhibits = new ArrayList<Pair<String, String>>();
+        List<Pair<String, String>> exhibits = new ArrayList<Pair<String, String>>();
         for(Map.Entry<String, ZooData.VertexInfo> entry : vInfo.entrySet())
         {
            if(("" + entry.getValue().kind).equals("EXHIBIT"))
@@ -90,6 +90,6 @@ public class MainActivity extends AppCompatActivity {
            }
         }
         selectedExhibitComponent sec = new selectedExhibitComponent(exhibits, this);
-        sec.display();*/
+        sec.display();
     }
 }

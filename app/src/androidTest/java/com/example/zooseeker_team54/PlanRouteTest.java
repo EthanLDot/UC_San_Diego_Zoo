@@ -12,7 +12,7 @@ import androidx.test.core.app.ActivityScenario;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 @RunWith(AndroidJUnit4.class)
-public class planRouteTest {
+public class PlanRouteTest {
     @Test
     public void sampleTest() {
         try (ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class)){

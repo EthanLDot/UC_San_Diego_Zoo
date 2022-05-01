@@ -20,9 +20,14 @@ public class planRouteTest {
             scenario.onActivity(activity -> {
                 assertEquals(4, 2 + 2);
                 TextView planSize = activity.findViewById(R.id.planSize);
-                assertEquals("5", planSize.getText().toString());
+                assertEquals("8", planSize.getText().toString());
             });
         }
+    }
+
+    @Test
+    public void failingTest() {
+        assertEquals("There is no way this test shoudl pass", "Yep, there's no way");
     }
 
            /*System.out.printf("The shortest path from '%s' to '%s' is:\n", start, goal);

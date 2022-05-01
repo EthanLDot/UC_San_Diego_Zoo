@@ -14,7 +14,6 @@ import android.widget.EditText;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
@@ -35,23 +34,12 @@ public class MainActivity extends AppCompatActivity {
         Map<String, ZooData.VertexInfo> vInfo = ZooData.loadVertexInfoJSON("assets/sample_node_info.json");
         Map<String, ZooData.EdgeInfo> eInfo = ZooData.loadEdgeInfoJSON("assets/sample_edge_info.json");
 
-        System.out.printf("The shortest path from '%s' to '%s' is:\n", start, goal);
 
-        int i = 1;
-        for (IdentifiedWeightedEdge e : path.getEdgeList()) {
-            System.out.printf("  %d. Walk %.0f meters along %s from '%s' to '%s'.\n",
-                    i,
-                    g.getEdgeWeight(e),
-                    eInfo.get(e.getId()).street,
-                    vInfo.get(g.getEdgeSource(e).toString()).name,
-                    vInfo.get(g.getEdgeTarget(e).toString()).name);
-            i++;
-        }
 
         // Set up listener for the search bar
         EditText searchBarField = this.findViewById(R.id.search_exhibits);
         searchBarComponent searchBar = new searchBarComponent(searchBarField);
-
+        Activity myActivity = this;
         searchBarField.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -69,17 +57,22 @@ public class MainActivity extends AppCompatActivity {
 
                 // FIXME: Should be implemented differently when the results display class is ready.
                 if (results.size() == 0) {
+                    //list of stuff, activity, id for the recycler view, display count or not (if so, pass id), clickable or not
+                    exhibitListComponent sec = new exhibitListComponent(results, myActivity, R.id.search_results, -1, true);
+                    sec.display();
                     Log.d("Results", "No Results");
                 }
                 else {
+                    //printOutput(results);
                     for (Pair<String, String> str: results) {
                         Log.d("Results", "Exhibit: " + str.second);
                     }
                     Log.d("Break", "——————————————————————————————————");
+                    exhibitListComponent sec = new exhibitListComponent(results, myActivity, R.id.search_results, -1, true);
+                    sec.display();
                 }
             }
         });
-
         //testing code for the earlier class: will move to the test folder later
         List<Pair<String, String>> exhibits = new ArrayList<Pair<String, String>>();
         for(Map.Entry<String, ZooData.VertexInfo> entry : vInfo.entrySet())
@@ -89,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
                exhibits.add(new Pair<String, String>(entry.getValue().id, entry.getValue().name));
            }
         }
-        selectedExhibitComponent sec = new selectedExhibitComponent(exhibits, this, R.id.selection_items);
+        exhibitListComponent sec = new exhibitListComponent(exhibits, this, R.id.selection_items, R.id.planSize, false);
         sec.display();
     }
 }

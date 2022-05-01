@@ -24,4 +24,17 @@ public class planRouteTest {
             });
         }
     }
+
+           /*System.out.printf("The shortest path from '%s' to '%s' is:\n", start, goal);
+
+        int i = 1;
+        for (IdentifiedWeightedEdge e : path.getEdgeList()) {
+            System.out.printf("  %d. Walk %.0f meters along %s from '%s' to '%s'.\n",
+                    i,
+                    g.getEdgeWeight(e),
+                    eInfo.get(e.getId()).street,
+                    vInfo.get(g.getEdgeSource(e).toString()).name,
+                    vInfo.get(g.getEdgeTarget(e).toString()).name);
+            i++;
+        }*/
 }

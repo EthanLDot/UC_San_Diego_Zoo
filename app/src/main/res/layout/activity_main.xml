@@ -9,14 +9,16 @@
     <TextView
         android:id="@+id/planSize"
         android:layout_width="0dp"
-        android:layout_height="40dp"
+        android:layout_height="42dp"
         android:layout_gravity="end"
         android:layout_marginTop="60dp"
+        android:layout_marginBottom="214dp"
         android:background="#000000"
         android:text="0"
         android:textAlignment="textEnd"
         android:textColor="#FFFFFF"
         android:textSize="36dp"
+        app:layout_constraintBottom_toTopOf="@+id/search_results"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,18 +26,18 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/selection_items"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="355dp"
+        android:layout_height="228dp"
         android:layout_marginStart="1dp"
         android:layout_marginTop="100dp"
         android:layout_marginEnd="1dp"
         android:layout_marginBottom="1dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <EditText
         android:id="@+id/search_exhibits"
@@ -48,5 +50,25 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/search_results"
+        android:layout_width="355dp"
+        android:layout_height="228dp"
+        android:layout_marginBottom="1dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/planSize" />
+
+    <TextView
+        android:id="@+id/horiz_divider"
+        android:layout_width="0dp"
+        android:layout_height="22dp"
+        android:layout_marginBottom="8dp"
+        android:text="______________________________________________________________---"
+        app:layout_constraintBottom_toBottomOf="@+id/selection_items"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

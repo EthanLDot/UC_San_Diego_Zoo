@@ -1,6 +1,5 @@
 package com.example.zooseeker_team54;
 
-import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,12 +13,14 @@ import java.util.Collections;
 import java.util.List;
 
 
-public class selectionListAdapter extends RecyclerView.Adapter<selectionListAdapter.ViewHolder> {
+public class exhibitListAdapter extends RecyclerView.Adapter<exhibitListAdapter.ViewHolder> {
 
     private List<Pair<String, String>> selections = Collections.emptyList();
-    public void setSelections(List<Pair<String, String>> places) {
+    private boolean clickable;
+    public void setSelections(List<Pair<String, String>> places, boolean clickable) {
         this.selections.clear();
         this.selections = places;
+        this.clickable = clickable;
         notifyDataSetChanged();
         //Log.d("selectionListAdapter", "test");
     }
@@ -34,7 +35,7 @@ public class selectionListAdapter extends RecyclerView.Adapter<selectionListAdap
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.setPlace(selections.get(position));
+        holder.setPlace(selections.get(position), clickable);
     }
 
     @Override
@@ -55,10 +56,11 @@ public class selectionListAdapter extends RecyclerView.Adapter<selectionListAdap
         public Pair<String, String> getPlace(){
             return place;
         }
-        public void setPlace(Pair<String, String> place) {
+        public void setPlace(Pair<String, String> place, boolean clickable) {
             this.place = place;
             this.textView.setTag(place.first);
             this.textView.setText(place.second);
+            this.textView.setClickable(clickable);
         }
 
 

@@ -64,7 +64,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable editable) {
                 // Stores search results as a list of strings.
-                ArrayList<Pair<String, String>> results = searchBar.searchQuery(vInfo);
+                //Pair: id, followed by name
+                List<Pair<String, String>> results = searchBar.searchQuery(vInfo);
 
                 // FIXME: Should be implemented differently when the results display class is ready.
                 if (results.size() == 0) {
@@ -80,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         //testing code for the earlier class: will move to the test folder later
-        List<Pair<String, String>> exhibits = new ArrayList<Pair<String, String>>();
+        /*List<Pair<String, String>> exhibits = new ArrayList<Pair<String, String>>();
         for(Map.Entry<String, ZooData.VertexInfo> entry : vInfo.entrySet())
         {
            if(("" + entry.getValue().kind).equals("EXHIBIT"))
@@ -89,6 +90,6 @@ public class MainActivity extends AppCompatActivity {
            }
         }
         selectedExhibitComponent sec = new selectedExhibitComponent(exhibits, this);
-        sec.display();
+        sec.display();*/
     }
 }

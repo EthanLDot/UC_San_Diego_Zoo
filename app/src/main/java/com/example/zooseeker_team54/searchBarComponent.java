@@ -4,6 +4,7 @@ import android.util.Pair;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class searchBarComponent {
@@ -25,11 +26,11 @@ public class searchBarComponent {
     /**
      * Looks for a queried animal in the list of animals available at the zoo
      * @param exhibits Map of all exhibits in the zoo
-     * @return sResults An ArrayList of strings representing the names of the animals that
+     * @return sResults An List of strings representing the names of the animals that
      *                  contain the query string.
      */
-    public ArrayList<Pair<String, String>> searchQuery(Map<String, ZooData.VertexInfo> exhibits) {
-        ArrayList<Pair<String, String>> sResults = new ArrayList<>();
+    public List<Pair<String, String>> searchQuery(Map<String, ZooData.VertexInfo> exhibits) {
+        List<Pair<String, String>> sResults = new ArrayList<>();
         if (query.length() == 0) {
             return sResults;
         }

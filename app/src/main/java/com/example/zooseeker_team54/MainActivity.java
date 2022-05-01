@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     public RecyclerView plannedExhibitsView;
 
     private SearchResultAdapter searchResultAdapter;
+    private PlannedExhibitsAdapter plannedExhibitsAdapter;
     private EditText searchBarText;
 
     @Override
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
         searchBarText = this.findViewById(R.id.search_bar);
         searchBarText.addTextChangedListener(searchBarTextWatcher);
 
+        // TODO: Add a listener when an exhibit is clicked using View Model
         // Create an adapter for the RecyclerView of search results
         searchResultAdapter = new SearchResultAdapter();
         searchResultAdapter.setHasStableIds(true);
@@ -46,6 +48,15 @@ public class MainActivity extends AppCompatActivity {
         searchResultView = this.findViewById(R.id.search_results);
         searchResultView.setLayoutManager(new LinearLayoutManager(this));
         searchResultView.setAdapter(searchResultAdapter);
+
+        // Create an adapter for the RecyclerView of search results
+        plannedExhibitsAdapter = new PlannedExhibitsAdapter();
+        plannedExhibitsAdapter.setHasStableIds(true);
+
+        // Set the adapter for the actual RecyclerView
+        plannedExhibitsView = this.findViewById(R.id.planned_exhibits);
+        plannedExhibitsView.setLayoutManager(new LinearLayoutManager(this));
+        plannedExhibitsView.setAdapter(plannedExhibitsAdapter);
 
     }
 

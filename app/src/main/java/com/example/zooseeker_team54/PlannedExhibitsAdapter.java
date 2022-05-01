@@ -11,23 +11,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.Collections;
 import java.util.List;
 
-public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapter.ViewHolder> {
+public class PlannedExhibitsAdapter extends RecyclerView.Adapter<PlannedExhibitsAdapter.ViewHolder> {
     private List<ExhibitItem> exhibitItems = Collections.emptyList();
-
-    public void setExhibitItems(List<ExhibitItem> newExhibitItems) {
-        this.exhibitItems.clear();
-        this.exhibitItems = newExhibitItems;
-        notifyDataSetChanged();
-    }
 
     @NonNull
     @Override
-    public SearchResultAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater
                 .from(parent.getContext())
                 .inflate(R.layout.exhibit_item, parent, false);
 
-        return new ViewHolder(view);
+        return new PlannedExhibitsAdapter.ViewHolder(view);
     }
 
     @Override

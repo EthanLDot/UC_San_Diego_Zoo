@@ -7,11 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class searchBarComponent {
+public class SearchBarComponent {
     TextView textView;
     String query;
 
-    public searchBarComponent(TextView textView) {
+    public SearchBarComponent(TextView textView) {
         this.textView = textView;
     }
 

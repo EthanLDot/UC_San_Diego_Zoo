@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-public class exhibitListComponent {
+public class ExhibitListComponent {
 
     List<Pair<String, String>> plans;
     Activity activity;
@@ -18,7 +18,7 @@ public class exhibitListComponent {
     boolean clickable;
 
     //assuming that a list of ids will be passed
-    public exhibitListComponent(List<Pair<String, String>> plans, Activity activity,
+    public ExhibitListComponent(List<Pair<String, String>> plans, Activity activity,
                                 int exhibitId, int displayCountId, boolean clickable)
     {
         this.plans = plans;
@@ -36,7 +36,7 @@ public class exhibitListComponent {
             plan_size.setText("" + size);
         }
 
-        exhibitListAdapter adapter = new exhibitListAdapter();
+        ExhibitListAdapter adapter = new ExhibitListAdapter();
         adapter.setHasStableIds(true);
 
         RecyclerView recyclerView = activity.findViewById(exhibitId);

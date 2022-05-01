@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Set up listener for the search bar
         EditText searchBarField = this.findViewById(R.id.search_exhibits);
-        searchBarComponent searchBar = new searchBarComponent(searchBarField);
+        SearchBarComponent searchBar = new SearchBarComponent(searchBarField);
         Activity myActivity = this;
         searchBarField.addTextChangedListener(new TextWatcher() {
             @Override
@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
                 // FIXME: Should be implemented differently when the results display class is ready.
                 if (results.size() == 0) {
                     //list of stuff, activity, id for the recycler view, display count or not (if so, pass id), clickable or not
-                    exhibitListComponent sec = new exhibitListComponent(results, myActivity, R.id.search_results, -1, true);
+                    ExhibitListComponent sec = new ExhibitListComponent(results, myActivity, R.id.search_results, -1, true);
                     sec.display();
                     Log.d("Results", "No Results");
                 }
@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
                         Log.d("Results", "Exhibit: " + str.second);
                     }
                     Log.d("Break", "——————————————————————————————————");
-                    exhibitListComponent sec = new exhibitListComponent(results, myActivity, R.id.search_results, -1, true);
+                    ExhibitListComponent sec = new ExhibitListComponent(results, myActivity, R.id.search_results, -1, true);
                     sec.display();
                 }
             }
@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
                exhibits.add(new Pair<String, String>(entry.getValue().id, entry.getValue().name));
            }
         }
-        exhibitListComponent sec = new exhibitListComponent(exhibits, this, R.id.selection_items, R.id.planSize, false);
+        ExhibitListComponent sec = new ExhibitListComponent(exhibits, this, R.id.selection_items, R.id.planSize, false);
         sec.display();
     }
 }

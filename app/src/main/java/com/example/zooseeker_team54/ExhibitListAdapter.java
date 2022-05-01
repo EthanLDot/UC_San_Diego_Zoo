@@ -13,7 +13,7 @@ import java.util.Collections;
 import java.util.List;
 
 
-public class exhibitListAdapter extends RecyclerView.Adapter<exhibitListAdapter.ViewHolder> {
+public class ExhibitListAdapter extends RecyclerView.Adapter<ExhibitListAdapter.ViewHolder> {
 
     private List<Pair<String, String>> selections = Collections.emptyList();
     private boolean clickable;

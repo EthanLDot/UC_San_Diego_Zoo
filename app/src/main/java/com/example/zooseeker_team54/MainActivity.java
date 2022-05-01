@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
                exhibits.add(new Pair<String, String>(entry.getValue().id, entry.getValue().name));
            }
         }
-        selectedExhibitComponent sec = new selectedExhibitComponent(exhibits, this);
+        selectedExhibitComponent sec = new selectedExhibitComponent(exhibits, this, R.id.selection_items);
         sec.display();
     }
 }

@@ -15,12 +15,14 @@ public class selectedExhibitComponent {
 
     List<Pair<String, String>> plans;
     Activity activity;
+    int exhibitId;
 
     //assuming that a list of ids will be passed
-    public selectedExhibitComponent(List<Pair<String, String>> plans, Activity activity)
+    public selectedExhibitComponent(List<Pair<String, String>> plans, Activity activity, int exhibitId)
     {
         this.plans = plans;
         this.activity = activity;
+        this.exhibitId = exhibitId;
     }
 
     public void display()
@@ -31,7 +33,8 @@ public class selectedExhibitComponent {
 
         selectionListAdapter adapter = new selectionListAdapter();
         adapter.setHasStableIds(true);
-        RecyclerView recyclerView = activity.findViewById(R.id.selection_items);
+
+        RecyclerView recyclerView = activity.findViewById(exhibitId);
         recyclerView.setLayoutManager(new LinearLayoutManager(activity));
         recyclerView.setAdapter(adapter);
         adapter.setSelections(plans);

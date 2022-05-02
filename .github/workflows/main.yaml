@@ -6,13 +6,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the codebase
-        uses: actions/checkout@v2
+        uses: actions/checkout@v1
 
       - name: Run Lint
         run: ./gradlew lintDebug
 
       - name: Upload html test report
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v1
         with:
           name: index.html
           path: app/build/reports/lint-result-debug.html

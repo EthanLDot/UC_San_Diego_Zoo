@@ -32,6 +32,6 @@ public interface ExhibitItemDao {
     @Query("SELECT * FROM `exhibit_items` ORDER BY `id`")
     LiveData<List<ExhibitItem>> getAllLive();
 
-    @Query("SELECT * FROM `exhibit_items` WHERE `planned`=1 ORDER BY `id`")
+    @Query("SELECT * FROM `exhibit_items` WHERE `planned` = 1 ORDER BY `id`")
     LiveData<List<ExhibitItem>> getAllPlannedLive();
 }

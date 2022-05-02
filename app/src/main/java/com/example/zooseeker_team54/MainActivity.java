@@ -44,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
         searchBarText = this.findViewById(R.id.search_bar);
         searchBarText.addTextChangedListener(searchBarTextWatcher);
 
-        // TODO: Add a listener when an exhibit is clicked using View Model
         // Create an adapter for the RecyclerView of search results
         searchResultAdapter = new SearchResultAdapter();
         searchResultAdapter.setOnSearchResultClicked(exhibitViewModel::addPlannedExhibit);

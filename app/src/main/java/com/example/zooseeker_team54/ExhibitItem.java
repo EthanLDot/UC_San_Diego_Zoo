@@ -33,6 +33,7 @@ public class ExhibitItem {
         return "Exhibit{" +
                 "id=" + id +
                 ", name='" + name +
+                "', planned=" + planned +
                 '}';
     }
 

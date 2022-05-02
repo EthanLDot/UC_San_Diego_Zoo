@@ -10,7 +10,6 @@ import androidx.lifecycle.LiveData;
 import java.util.List;
 
 public class ExhibitViewModel extends AndroidViewModel {
-    private LiveData<List<ExhibitItem>> plannedExhibitItems;
     private final ExhibitItemDao exhibitItemDao;
 
     public ExhibitViewModel(@NonNull Application application) {
@@ -23,16 +22,26 @@ public class ExhibitViewModel extends AndroidViewModel {
     public List<ExhibitItem> getAll() { return exhibitItemDao.getAll(); }
 
     public LiveData<List<ExhibitItem>> getPlannedExhibits() {
-        if (plannedExhibitItems == null) loadPlannedExhibits();
-        return plannedExhibitItems;
+        return exhibitItemDao.getAllPlannedLive();
     }
 
-    public void addPlannedExhibit(ExhibitItem exhibitItem) { exhibitItem.planned = true; }
+    public void addPlannedExhibit(ExhibitItem exhibitItem) {
+        exhibitItem.planned = true;
+        exhibitItemDao.update(exhibitItem);
+    }
 
-    public void removePlannedExhibit(ExhibitItem exhibitItem) { exhibitItem.planned = false; }
+    public void removePlannedExhibit(ExhibitItem exhibitItem) {
+        exhibitItem.planned = false;
+        exhibitItemDao.update(exhibitItem);
+    }
 
-    // TODO: figure this out
-    public void clearPlannedExhibits() {}
+    public void clearPlannedExhibits() {
+        List<ExhibitItem> allExhibits = exhibitItemDao.getAll();
+        for (ExhibitItem exhibitItem : allExhibits) {
+            exhibitItem.planned = false;
+            exhibitItemDao.update(exhibitItem);
+        }
+    }
 
-    private void loadPlannedExhibits() { plannedExhibitItems = exhibitItemDao.getAllPlannedLive(); }
 }
+

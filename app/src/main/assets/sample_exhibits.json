@@ -4,6 +4,10 @@
     "planned": true
   },
   {
+    "name":  "Giraffe2",
+    "planned": false
+  },
+  {
     "name":  "Elephant",
     "planned": false
   },
@@ -21,10 +25,6 @@
   },
   {
     "name":  "exit",
-    "planned": false
-  },
-  {
-    "name":  "Giraffe2",
     "planned": false
   }
 ]

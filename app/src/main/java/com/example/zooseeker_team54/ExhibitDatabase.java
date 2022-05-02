@@ -1,6 +1,7 @@
 package com.example.zooseeker_team54;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;

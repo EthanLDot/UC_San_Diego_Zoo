@@ -1,0 +1,30 @@
+[
+  {
+    "name":  "Giraffe1",
+    "planned": false
+  },
+  {
+    "name":  "Giraffe2",
+    "planned": false
+  },
+  {
+    "name":  "Elephant",
+    "planned": false
+  },
+  {
+    "name":  "Lion",
+    "planned": false
+  },
+  {
+    "name":  "Tiger",
+    "planned": false
+  },
+  {
+    "name":  "entrance",
+    "planned": false
+  },
+  {
+    "name":  "exit",
+    "planned": false
+  }
+]

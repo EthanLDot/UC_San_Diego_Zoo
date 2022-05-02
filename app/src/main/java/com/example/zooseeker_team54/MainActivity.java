@@ -1,88 +1,115 @@
 package com.example.zooseeker_team54;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
+import org.w3c.dom.Text;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.util.Pair;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
+    public RecyclerView searchResultView;
+    public RecyclerView plannedExhibitsView;
+
+    private EditText searchBarText;
+    private Button clearBtn;
+
+    private ExhibitViewModel exhibitViewModel;
+    private SearchResultAdapter searchResultAdapter;
+    private PlannedExhibitsAdapter plannedExhibitsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // "source" and "sink" are graph terms for the start and end
-        String start = "entrance_exit_gate";
-        String goal = "elephant_odyssey";
+        exhibitViewModel = new ViewModelProvider(this).get(ExhibitViewModel.class);
 
-        // 1. Load the graph...
-        Graph<String, IdentifiedWeightedEdge> g = ZooData.loadZooGraphJSON("assets/sample_zoo_graph.json");
-        GraphPath<String, IdentifiedWeightedEdge> path = DijkstraShortestPath.findPathBetween(g, start, goal);
-        // 2. Load the information about our nodes and edges...
-        Map<String, ZooData.VertexInfo> vInfo = ZooData.loadVertexInfoJSON("assets/sample_node_info.json");
-        Map<String, ZooData.EdgeInfo> eInfo = ZooData.loadEdgeInfoJSON("assets/sample_edge_info.json");
+        // Get search bar EditText and bind a text watcher to it
+        searchBarText = this.findViewById(R.id.search_bar);
+        searchBarText.addTextChangedListener(searchBarTextWatcher);
 
+        // Create an adapter for the RecyclerView of search results
+        searchResultAdapter = new SearchResultAdapter();
+        searchResultAdapter.setOnSearchResultClicked(exhibitViewModel::addPlannedExhibit);
+        searchResultAdapter.setHasStableIds(true);
 
+        // Set the adapter for the actual RecyclerView
+        searchResultView = this.findViewById(R.id.search_results);
+        searchResultView.setLayoutManager(new LinearLayoutManager(this));
+        searchResultView.setAdapter(searchResultAdapter);
 
-        // Set up listener for the search bar
-        EditText searchBarField = this.findViewById(R.id.search_exhibits);
-        searchBarComponent searchBar = new searchBarComponent(searchBarField);
-        Activity myActivity = this;
-        searchBarField.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                searchBar.setQuery(searchBarField.getText().toString());
-            }
+        // Create an adapter for the RecyclerView of search results
+        plannedExhibitsAdapter = new PlannedExhibitsAdapter();
+        plannedExhibitsAdapter.setHasStableIds(true);
 
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+        // Set the adapter for the actual RecyclerView
+        plannedExhibitsView = this.findViewById(R.id.planned_exhibits);
+        plannedExhibitsView.setLayoutManager(new LinearLayoutManager(this));
+        plannedExhibitsView.setAdapter(plannedExhibitsAdapter);
 
-            @Override
-            public void afterTextChanged(Editable editable) {
-                // Stores search results as a list of strings.
-                //Pair: id, followed by name
-                List<Pair<String, String>> results = searchBar.searchQuery(vInfo);
+        //
+        exhibitViewModel.getPlannedExhibits()
+                .observe(this, plannedExhibitsAdapter::setExhibitItems);
 
-                // FIXME: Should be implemented differently when the results display class is ready.
-                if (results.size() == 0) {
-                    //list of stuff, activity, id for the recycler view, display count or not (if so, pass id), clickable or not
-                    exhibitListComponent sec = new exhibitListComponent(results, myActivity, R.id.search_results, -1, true);
-                    sec.display();
-                    Log.d("Results", "No Results");
-                }
-                else {
-                    //printOutput(results);
-                    for (Pair<String, String> str: results) {
-                        Log.d("Results", "Exhibit: " + str.second);
-                    }
-                    Log.d("Break", "——————————————————————————————————");
-                    exhibitListComponent sec = new exhibitListComponent(results, myActivity, R.id.search_results, -1, true);
-                    sec.display();
-                }
-            }
-        });
-        //testing code for the earlier class: will move to the test folder later
-        List<Pair<String, String>> exhibits = new ArrayList<Pair<String, String>>();
-        for(Map.Entry<String, ZooData.VertexInfo> entry : vInfo.entrySet())
-        {
-           if(("" + entry.getValue().kind).equals("EXHIBIT"))
-           {
-               exhibits.add(new Pair<String, String>(entry.getValue().id, entry.getValue().name));
-           }
+        // Set up clear button for planned exhibits
+        this.clearBtn = this.findViewById(R.id.clear_btn);
+        clearBtn.setOnClickListener(this::onClearBtnClicked);
+
+    }
+
+    // Text Watcher for search bar textview
+    private TextWatcher searchBarTextWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+            showSearchResult(editable.toString());
         }
-        exhibitListComponent sec = new exhibitListComponent(exhibits, this, R.id.selection_items, R.id.planSize, false);
-        sec.display();
+    };
+
+    void showSearchResult(String query) {
+
+        // Display nothing when query is empty
+        if (query.length() == 0) {
+            searchResultAdapter.setExhibitItems(Collections.emptyList());
+            return;
+        }
+
+        List<ExhibitItem> allExhibits = exhibitViewModel.getAll();
+        List<ExhibitItem> searchResults = new ArrayList<>();
+
+        for(ExhibitItem exhibitItem : allExhibits) {
+            if (exhibitItem.name.toLowerCase().contains(query.toLowerCase()) && !exhibitItem.planned) {
+                searchResults.add(exhibitItem);
+            }
+        }
+        searchResultAdapter.setExhibitItems(searchResults);
+    }
+
+    private void onClearBtnClicked(View view) {
+        exhibitViewModel.clearPlannedExhibits();
     }
 }

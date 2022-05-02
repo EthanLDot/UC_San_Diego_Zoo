@@ -13,7 +13,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 @RunWith(AndroidJUnit4.class)
 public class PlanRouteTest {
-    @Test
+    /*@Test
     public void sampleTest() {
         try (ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class)){
             scenario.moveToState(Lifecycle.State.CREATED);
@@ -23,7 +23,7 @@ public class PlanRouteTest {
                 assertEquals("5", planSize.getText().toString());
             });
         }
-    }
+    } */
 
            /*System.out.printf("The shortest path from '%s' to '%s' is:\n", start, goal);
 

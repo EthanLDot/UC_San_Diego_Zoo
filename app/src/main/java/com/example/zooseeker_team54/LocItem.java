@@ -27,7 +27,6 @@ public class LocItem {
     @NonNull
     public String name, kind, id;
     public boolean planned;
-
     public List<String> tags;
 
     @NonNull
@@ -47,7 +46,6 @@ public class LocItem {
         this.id = id;
         this.tags = tags;
         this.planned = false;
-        System.out.println(this.toString());
     }
 
     public static List<LocItem> loadJSON(Context context, String path) {

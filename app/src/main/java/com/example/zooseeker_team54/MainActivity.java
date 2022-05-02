@@ -67,6 +67,11 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    // TODO: implement this function
+    private static List<LocItem> findRoute() {
+        return Collections.emptyList();
+    }
+
     // Text Watcher for search bar textview
     private TextWatcher searchBarTextWatcher = new TextWatcher() {
         @Override
@@ -81,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    void showSearchResult(String query) {
+    private void showSearchResult(String query) {
 
         // Display nothing when query is empty
         if (query.length() == 0) {

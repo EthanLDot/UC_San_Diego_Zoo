@@ -22,7 +22,7 @@ public class PlannedExhibitsAdapter extends RecyclerView.Adapter<PlannedExhibits
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public PlannedExhibitsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater
                 .from(parent.getContext())
                 .inflate(R.layout.exhibit_item, parent, false);
@@ -36,9 +36,7 @@ public class PlannedExhibitsAdapter extends RecyclerView.Adapter<PlannedExhibits
     }
 
     @Override
-    public int getItemCount() {
-        return exhibitItems.size();
-    }
+    public int getItemCount() { return exhibitItems.size(); }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView exhibitNameText;

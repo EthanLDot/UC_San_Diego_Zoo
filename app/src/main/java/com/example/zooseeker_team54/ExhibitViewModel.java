@@ -10,7 +10,7 @@ import androidx.lifecycle.LiveData;
 import java.util.List;
 
 public class ExhibitViewModel extends AndroidViewModel {
-    LiveData<List<ExhibitItem>> exhibitItems;
+    private LiveData<List<ExhibitItem>> plannedExhibitItems;
     private final ExhibitItemDao exhibitItemDao;
 
     public ExhibitViewModel(@NonNull Application application) {
@@ -22,7 +22,10 @@ public class ExhibitViewModel extends AndroidViewModel {
 
     public List<ExhibitItem> getAll() { return exhibitItemDao.getAll(); }
 
-    public LiveData<List<ExhibitItem>> getPlannedExhibits() { return exhibitItemDao.getAllPlannedLive(); }
+    public LiveData<List<ExhibitItem>> getPlannedExhibits() {
+        if (plannedExhibitItems == null) loadPlannedExhibits();
+        return plannedExhibitItems;
+    }
 
     public void addPlannedExhibit(ExhibitItem exhibitItem) { exhibitItem.planned = true; }
 
@@ -30,4 +33,6 @@ public class ExhibitViewModel extends AndroidViewModel {
 
     // TODO: figure this out
     public void clearPlannedExhibits() {}
+
+    private void loadPlannedExhibits() { plannedExhibitItems = exhibitItemDao.getAllPlannedLive(); }
 }

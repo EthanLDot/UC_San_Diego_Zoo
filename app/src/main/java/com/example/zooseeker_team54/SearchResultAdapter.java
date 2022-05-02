@@ -10,14 +10,20 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapter.ViewHolder> {
     private List<ExhibitItem> exhibitItems = Collections.emptyList();
+    private Consumer<ExhibitItem> onSearchResultClicked;
 
     public void setExhibitItems(List<ExhibitItem> newExhibitItems) {
         this.exhibitItems.clear();
         this.exhibitItems = newExhibitItems;
         notifyDataSetChanged();
+    }
+
+    public void setOnSearchResultClicked(Consumer<ExhibitItem> onSearchResultClicked) {
+        this.onSearchResultClicked = onSearchResultClicked;
     }
 
     @NonNull
@@ -47,6 +53,12 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             this.exhibitNameText = itemView.findViewById(R.id.exhibit_name);
+
+            this.exhibitNameText.setOnClickListener(view -> {
+                if (onSearchResultClicked == null) return;
+                onSearchResultClicked.accept(exhibitItem);
+                setExhibitItems(Collections.emptyList());
+            });
         }
 
         public void setExhibitItem(ExhibitItem exhibitItem) {

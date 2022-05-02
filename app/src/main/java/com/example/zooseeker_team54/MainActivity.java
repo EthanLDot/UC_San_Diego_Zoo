@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         // TODO: Add a listener when an exhibit is clicked using View Model
         // Create an adapter for the RecyclerView of search results
         searchResultAdapter = new SearchResultAdapter();
+        searchResultAdapter.setOnSearchResultClicked(exhibitViewModel::addPlannedExhibit);
         searchResultAdapter.setHasStableIds(true);
 
         // Set the adapter for the actual RecyclerView
@@ -90,8 +91,6 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        // TODO: Create a database and use getAll()
-//         List<ExhibitItem> allExhibits = Dao.getAll();
         List<ExhibitItem> allExhibits = exhibitViewModel.getAll();
         List<ExhibitItem> searchResults = new ArrayList<>();
 

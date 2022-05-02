@@ -17,10 +17,10 @@ import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.List;
 
-//@Entity(tableName = "todo_list_names")
+@Entity(tableName = "exhibit_items")
 public class ExhibitItem {
 
-    // @PrimaryKey(autoGenerate = true)
+     @PrimaryKey(autoGenerate = true)
     public long id;
 
     @NonNull
@@ -35,8 +35,7 @@ public class ExhibitItem {
                 '}';
     }
 
-    ExhibitItem(long id, @NonNull String name) {
-        this.id = id;
+    ExhibitItem(@NonNull String name) {
         this.name = name;
     }
 

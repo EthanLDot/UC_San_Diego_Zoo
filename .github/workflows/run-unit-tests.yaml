@@ -22,17 +22,14 @@ jobs:
         uses: asadmansr/android-test-report-action@v1.2.0
         if: ${{ always() }} # IMPORTANT: run Android Test Report regardless
 
-      # Execute unit tests using Espresso
+      # Execute unit tests using Espresso (additional)
       - name: Espresso Test
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 23
-          target: default
-          arch: x86
-          profile: Nexus 6
+          api-level: 29
           script: ./gradlew connectedCheck --stacktrace
 
-      # Report the results
+      # Report the results (additional)
       - name: Espresso Test Report
         uses: actions/upload-artifact@v2
         with:

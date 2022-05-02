@@ -60,8 +60,8 @@ public class SearchResultsTests {
         appCompatEditText.perform(replaceText("Elephant"), closeSoftKeyboard());
 
         ViewInteraction LocItemView = onView(allOf(withId(R.id.loc_name), withText("Bear")));
-//        LocItemView.check(doesNotExist());
-        LocItemView.check(matches(withText("Bear")));
+        LocItemView.check(doesNotExist());
+//        LocItemView.check(matches(withText("Bear")));
     }
 
     @Test

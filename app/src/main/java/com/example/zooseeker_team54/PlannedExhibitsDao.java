@@ -12,6 +12,9 @@ public interface PlannedExhibitsDao {
     @Insert
     long insert(ExhibitItem exhibitItem);
 
+    @Insert
+    List<Long> insertAll(List<ExhibitItem> exhibitItems);
+
     @Query("SELECT * FROM `exhibit_items` WHERE `id`=:id")
     ExhibitItem get(long id);
 

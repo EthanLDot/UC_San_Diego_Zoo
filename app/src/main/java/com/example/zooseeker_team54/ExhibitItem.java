@@ -20,12 +20,15 @@ import java.util.List;
 @Entity(tableName = "exhibit_items")
 public class ExhibitItem {
 
-     @PrimaryKey(autoGenerate = true)
-    public long id;
+
+    @PrimaryKey(autoGenerate = true)
+    public long pk_id;
 
     @NonNull
-    public String name;
+    public String name, kind, id;
     public boolean planned;
+
+    public List<String> tags;
 
     @NonNull
     @Override
@@ -37,10 +40,20 @@ public class ExhibitItem {
                 '}';
     }
 
-    ExhibitItem(@NonNull String name, boolean planned) {
+
+    ExhibitItem(@NonNull String name, String id, String kind, List<String> tags) {
         this.name = name;
-        this.planned = planned;
+        this.kind = kind;
+        this.id = id;
+        this.tags = tags;
+        this.planned = false;
+        System.out.println(this.toString());
     }
+
+//    ExhibitItem(@NonNull String name, boolean planned) {
+//        this.name = name;
+//        this.planned = planned;
+//    }
 
     public static List<ExhibitItem> loadJSON(Context context, String path) {
         try {

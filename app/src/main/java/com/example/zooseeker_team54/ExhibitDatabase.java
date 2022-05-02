@@ -8,12 +8,14 @@ import androidx.annotation.VisibleForTesting;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import java.util.List;
 import java.util.concurrent.Executors;
 
 @Database(entities = {ExhibitItem.class}, version = 1)
+@TypeConverters(Converters.class)
 public abstract class ExhibitDatabase extends RoomDatabase {
     private static ExhibitDatabase singleton = null;
 
@@ -35,7 +37,7 @@ public abstract class ExhibitDatabase extends RoomDatabase {
                         super.onCreate(db);
                         Executors.newSingleThreadScheduledExecutor().execute(() -> {
                             List<ExhibitItem> exhibits = ExhibitItem
-                                    .loadJSON(context, "sample_exhibits.json");
+                                    .loadJSON(context, "sample_node_info.json");
                             getSingleton(context).plannedExhibitsDao().insertAll(exhibits);
                         });
                     }

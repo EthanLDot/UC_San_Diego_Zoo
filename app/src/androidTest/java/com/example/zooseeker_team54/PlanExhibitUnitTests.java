@@ -47,7 +47,7 @@ public class PlanExhibitUnitTests {
         appCompatEditText.perform(replaceText("entrance"), closeSoftKeyboard());
 
         ViewInteraction materialTextView = onView(
-                allOf(withId(R.id.exhibit_name), withText("entrance"),
+                allOf(withId(R.id.loc_name), withText("entrance"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.search_results),

@@ -98,7 +98,8 @@ public class MainActivity extends AppCompatActivity {
         List<LocItem> searchResults = new ArrayList<>();
 
         for(LocItem locItem : allLocs) {
-            if (locItem.name.toLowerCase().contains(query.toLowerCase()) && !locItem.planned) {
+            if (locItem.name.toLowerCase().contains(query.toLowerCase())
+                    && !locItem.planned && locItem.kind.equals("exhibit")) {
                 searchResults.add(locItem);
             }
         }

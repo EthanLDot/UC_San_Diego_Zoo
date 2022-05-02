@@ -16,6 +16,8 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.util.Pair;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
 import java.util.ArrayList;
@@ -28,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     public RecyclerView plannedExhibitsView;
 
     private EditText searchBarText;
+    private Button clearBtn;
 
     private ExhibitViewModel exhibitViewModel;
     private SearchResultAdapter searchResultAdapter;
@@ -63,8 +66,13 @@ public class MainActivity extends AppCompatActivity {
         plannedExhibitsView.setLayoutManager(new LinearLayoutManager(this));
         plannedExhibitsView.setAdapter(plannedExhibitsAdapter);
 
+        //
         exhibitViewModel.getPlannedExhibits()
                 .observe(this, plannedExhibitsAdapter::setExhibitItems);
+
+        // Set up clear button for planned exhibits
+        this.clearBtn = this.findViewById(R.id.clear_btn);
+        clearBtn.setOnClickListener(this::onClearBtnClicked);
 
     }
 
@@ -99,5 +107,9 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         searchResultAdapter.setExhibitItems(searchResults);
+    }
+
+    private void onClearBtnClicked(View view) {
+        exhibitViewModel.clearPlannedExhibits();
     }
 }

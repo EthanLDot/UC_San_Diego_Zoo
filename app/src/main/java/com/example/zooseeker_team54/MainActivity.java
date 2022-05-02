@@ -5,17 +5,9 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.jgrapht.Graph;
-import org.jgrapht.GraphPath;
-import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
-import org.w3c.dom.Text;
-
-import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,25 +15,24 @@ import android.widget.EditText;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     public RecyclerView searchResultView;
-    public RecyclerView plannedExhibitsView;
+    public RecyclerView plannedLocsView;
 
     private EditText searchBarText;
     private Button clearBtn;
 
-    private ExhibitViewModel exhibitViewModel;
+    private LocViewModel locViewModel;
     private SearchResultAdapter searchResultAdapter;
-    private PlannedExhibitsAdapter plannedExhibitsAdapter;
+    private PlannedLocsAdapter plannedLocsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        exhibitViewModel = new ViewModelProvider(this).get(ExhibitViewModel.class);
+        locViewModel = new ViewModelProvider(this).get(LocViewModel.class);
 
         // Get search bar EditText and bind a text watcher to it
         searchBarText = this.findViewById(R.id.search_bar);
@@ -49,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Create an adapter for the RecyclerView of search results
         searchResultAdapter = new SearchResultAdapter();
-        searchResultAdapter.setOnSearchResultClicked(exhibitViewModel::addPlannedExhibit);
+        searchResultAdapter.setOnSearchResultClicked(locViewModel::addPlannedLoc);
         searchResultAdapter.setHasStableIds(true);
 
         // Set the adapter for the actual RecyclerView
@@ -58,19 +49,19 @@ public class MainActivity extends AppCompatActivity {
         searchResultView.setAdapter(searchResultAdapter);
 
         // Create an adapter for the RecyclerView of search results
-        plannedExhibitsAdapter = new PlannedExhibitsAdapter();
-        plannedExhibitsAdapter.setHasStableIds(true);
+        plannedLocsAdapter = new PlannedLocsAdapter();
+        plannedLocsAdapter.setHasStableIds(true);
 
         // Set the adapter for the actual RecyclerView
-        plannedExhibitsView = this.findViewById(R.id.planned_exhibits);
-        plannedExhibitsView.setLayoutManager(new LinearLayoutManager(this));
-        plannedExhibitsView.setAdapter(plannedExhibitsAdapter);
+        plannedLocsView = this.findViewById(R.id.planned_locs);
+        plannedLocsView.setLayoutManager(new LinearLayoutManager(this));
+        plannedLocsView.setAdapter(plannedLocsAdapter);
 
         //
-        exhibitViewModel.getPlannedExhibits()
-                .observe(this, plannedExhibitsAdapter::setExhibitItems);
+        locViewModel.getPlannedLocs()
+                .observe(this, plannedLocsAdapter::setLocItems);
 
-        // Set up clear button for planned exhibits
+        // Set up clear button for planned locs
         this.clearBtn = this.findViewById(R.id.clear_btn);
         clearBtn.setOnClickListener(this::onClearBtnClicked);
 
@@ -94,22 +85,22 @@ public class MainActivity extends AppCompatActivity {
 
         // Display nothing when query is empty
         if (query.length() == 0) {
-            searchResultAdapter.setExhibitItems(Collections.emptyList());
+            searchResultAdapter.setLocItems(Collections.emptyList());
             return;
         }
 
-        List<ExhibitItem> allExhibits = exhibitViewModel.getAll();
-        List<ExhibitItem> searchResults = new ArrayList<>();
+        List<LocItem> allLocs = locViewModel.getAll();
+        List<LocItem> searchResults = new ArrayList<>();
 
-        for(ExhibitItem exhibitItem : allExhibits) {
-            if (exhibitItem.name.toLowerCase().contains(query.toLowerCase()) && !exhibitItem.planned) {
-                searchResults.add(exhibitItem);
+        for(LocItem locItem : allLocs) {
+            if (locItem.name.toLowerCase().contains(query.toLowerCase()) && !locItem.planned) {
+                searchResults.add(locItem);
             }
         }
-        searchResultAdapter.setExhibitItems(searchResults);
+        searchResultAdapter.setLocItems(searchResults);
     }
 
     private void onClearBtnClicked(View view) {
-        exhibitViewModel.clearPlannedExhibits();
+        locViewModel.clearPlannedLocs();
     }
 }

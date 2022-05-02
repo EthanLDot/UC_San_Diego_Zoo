@@ -10,11 +10,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Consumer;
 
-public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapter.ViewHolder> {
+public class PlannedLocsAdapter extends RecyclerView.Adapter<PlannedLocsAdapter.ViewHolder> {
     private List<LocItem> locItems = Collections.emptyList();
-    private Consumer<LocItem> onSearchResultClicked;
 
     public void setLocItems(List<LocItem> newLocItems) {
         this.locItems.clear();
@@ -22,18 +20,14 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
         notifyDataSetChanged();
     }
 
-    public void setOnSearchResultClicked(Consumer<LocItem> onSearchResultClicked) {
-        this.onSearchResultClicked = onSearchResultClicked;
-    }
-
     @NonNull
     @Override
-    public SearchResultAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public PlannedLocsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater
                 .from(parent.getContext())
                 .inflate(R.layout.loc_item, parent, false);
 
-        return new ViewHolder(view);
+        return new PlannedLocsAdapter.ViewHolder(view);
     }
 
     @Override
@@ -42,9 +36,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
     }
 
     @Override
-    public int getItemCount() {
-        return locItems.size();
-    }
+    public int getItemCount() { return locItems.size(); }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView locNameText;
@@ -53,12 +45,6 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             this.locNameText = itemView.findViewById(R.id.loc_name);
-
-            this.locNameText.setOnClickListener(view -> {
-                if (onSearchResultClicked == null) return;
-                onSearchResultClicked.accept(locItem);
-                setLocItems(Collections.emptyList());
-            });
         }
 
         public void setLocItem(LocItem locItem) {

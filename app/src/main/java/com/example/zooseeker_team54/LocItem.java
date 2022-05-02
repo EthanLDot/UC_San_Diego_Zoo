@@ -17,8 +17,8 @@ import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.List;
 
-@Entity(tableName = "exhibit_items")
-public class ExhibitItem {
+@Entity(tableName = "loc_items")
+public class LocItem {
 
 
     @PrimaryKey(autoGenerate = true)
@@ -33,7 +33,7 @@ public class ExhibitItem {
     @NonNull
     @Override
     public String toString() {
-        return "Exhibit{" +
+        return "Loc{" +
                 "id=" + id +
                 ", name='" + name +
                 "', planned=" + planned +
@@ -41,7 +41,7 @@ public class ExhibitItem {
     }
 
 
-    ExhibitItem(@NonNull String name, String id, String kind, List<String> tags) {
+    LocItem(@NonNull String name, String id, String kind, List<String> tags) {
         this.name = name;
         this.kind = kind;
         this.id = id;
@@ -50,17 +50,12 @@ public class ExhibitItem {
         System.out.println(this.toString());
     }
 
-//    ExhibitItem(@NonNull String name, boolean planned) {
-//        this.name = name;
-//        this.planned = planned;
-//    }
-
-    public static List<ExhibitItem> loadJSON(Context context, String path) {
+    public static List<LocItem> loadJSON(Context context, String path) {
         try {
             InputStream input = context.getAssets().open(path);
             Reader reader = new InputStreamReader(input);
             Gson gson = new Gson();
-            Type type = new TypeToken<List<ExhibitItem>>(){}.getType();
+            Type type = new TypeToken<List<LocItem>>(){}.getType();
             return gson.fromJson(reader, type);
         } catch (IOException e) {
             e.printStackTrace();

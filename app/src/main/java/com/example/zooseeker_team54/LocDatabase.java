@@ -1,7 +1,6 @@
 package com.example.zooseeker_team54;
 
 import android.content.Context;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
@@ -14,31 +13,31 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 import java.util.List;
 import java.util.concurrent.Executors;
 
-@Database(entities = {ExhibitItem.class}, version = 1)
+@Database(entities = {LocItem.class}, version = 1)
 @TypeConverters(Converters.class)
-public abstract class ExhibitDatabase extends RoomDatabase {
-    private static ExhibitDatabase singleton = null;
+public abstract class LocDatabase extends RoomDatabase {
+    private static LocDatabase singleton = null;
 
-    public abstract ExhibitItemDao plannedExhibitsDao();
+    public abstract LocItemDao plannedLocsDao();
 
-    public synchronized static ExhibitDatabase getSingleton(Context context) {
+    public synchronized static LocDatabase getSingleton(Context context) {
         if (singleton == null) {
-            singleton = ExhibitDatabase.makeDatabase(context);
+            singleton = LocDatabase.makeDatabase(context);
         }
         return singleton;
     }
 
-    private static ExhibitDatabase makeDatabase(Context context) {
-        return Room.databaseBuilder(context, ExhibitDatabase.class, "zoo_app.db")
+    private static LocDatabase makeDatabase(Context context) {
+        return Room.databaseBuilder(context, LocDatabase.class, "zoo_app.db")
                 .allowMainThreadQueries()
                 .addCallback(new Callback() {
                     @Override
                     public void onCreate(@NonNull SupportSQLiteDatabase db) {
                         super.onCreate(db);
                         Executors.newSingleThreadScheduledExecutor().execute(() -> {
-                            List<ExhibitItem> exhibits = ExhibitItem
+                            List<LocItem> locs = LocItem
                                     .loadJSON(context, "sample_node_info.json");
-                            getSingleton(context).plannedExhibitsDao().insertAll(exhibits);
+                            getSingleton(context).plannedLocsDao().insertAll(locs);
                         });
                     }
                 })
@@ -46,7 +45,7 @@ public abstract class ExhibitDatabase extends RoomDatabase {
     }
 
     @VisibleForTesting
-    public static void injectTestDatabase(ExhibitDatabase testDatabase) {
+    public static void injectTestDatabase(LocDatabase testDatabase) {
         if (singleton != null) {
             singleton.close();
         }

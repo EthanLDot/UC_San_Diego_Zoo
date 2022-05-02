@@ -4,6 +4,7 @@ package com.example.zooseeker_team54;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
+import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -35,7 +36,7 @@ public class SearchBarResultsTest {
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
     @Test
-    public void searchBarResultsTest() {
+    public void displayAllExhibitsContainingQuery() {
         ViewInteraction appCompatEditText = onView(
                 allOf(withId(R.id.search_bar),
                         childAtPosition(
@@ -57,6 +58,22 @@ public class SearchBarResultsTest {
                         withParent(withParent(withId(R.id.search_results))),
                         isDisplayed()));
         textView2.check(matches(withText("Giraffe2")));
+    }
+
+    @Test
+    public void displayNoExhibitsWithWeirdQuery() {
+        ViewInteraction appCompatEditText = onView(
+                allOf(withId(R.id.search_bar),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                3),
+                        isDisplayed()));
+        appCompatEditText.perform(replaceText("asodjifjdsa"), closeSoftKeyboard());
+
+        ViewInteraction ExhibitItemView = onView(allOf(withId(R.id.exhibit_name)));
+        ExhibitItemView.check(doesNotExist());
     }
 
     private static Matcher<View> childAtPosition(

@@ -14,12 +14,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1be06c0c-e4b8-497f-8fa9-21d4f7412494" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/modules/app/ZooSeeker_Team54.app.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/app/ZooSeeker_Team54.app.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/androidTest/java/com/example/zooseeker_team54/PlanExhibitUnitTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/androidTest/java/com/example/zooseeker_team54/PlanExhibitUnitTests.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/androidTest/java/com/example/zooseeker_team54/SearchBarResultsTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/androidTest/java/com/example/zooseeker_team54/SearchBarResultsTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/example/zooseeker_team54/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/example/zooseeker_team54/MainActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,7 +50,7 @@
     <property name="cidr.known.project.marker" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
-  <component name="RunManager" selected="Android Instrumented Tests.displayNoOtherThan...()">
+  <component name="RunManager" selected="Android Instrumented Tests.SearchBarResultsTest">
     <configuration name="app" type="AndroidRunConfigurationType" factoryName="Android App" activateToolWindowBeforeRun="false">
       <module name="ZooSeeker_Team54.app" />
       <option name="DEPLOY" value="true" />
@@ -392,8 +387,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Android Instrumented Tests.displayNoOtherThan...()" />
         <item itemvalue="Android Instrumented Tests.SearchBarResultsTest" />
+        <item itemvalue="Android Instrumented Tests.displayNoOtherThan...()" />
         <item itemvalue="Android Instrumented Tests.displayNoExhibitsN...()" />
         <item itemvalue="Android Instrumented Tests.displayAllExhibits...()" />
         <item itemvalue="Android Instrumented Tests.displayNoExhibitsW...()" />

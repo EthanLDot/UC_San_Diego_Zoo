@@ -13,20 +13,20 @@ import java.util.List;
 import java.util.concurrent.Executors;
 
 @Database(entities = {ExhibitItem.class}, version = 1)
-public abstract class PlannedTaskDatabase extends RoomDatabase {
-    private static PlannedTaskDatabase singleton = null;
+public abstract class ExhibitDatabase extends RoomDatabase {
+    private static ExhibitDatabase singleton = null;
 
-    public abstract PlannedExhibitsDao plannedExhibitsDao();
+    public abstract ExhibitItemDao plannedExhibitsDao();
 
-    public synchronized static PlannedTaskDatabase getSingleton(Context context) {
+    public synchronized static ExhibitDatabase getSingleton(Context context) {
         if (singleton == null) {
-            singleton = PlannedTaskDatabase.makeDatabase(context);
+            singleton = ExhibitDatabase.makeDatabase(context);
         }
         return singleton;
     }
 
-    private static PlannedTaskDatabase makeDatabase(Context context) {
-        return Room.databaseBuilder(context, PlannedTaskDatabase.class, "zoo_app.db")
+    private static ExhibitDatabase makeDatabase(Context context) {
+        return Room.databaseBuilder(context, ExhibitDatabase.class, "zoo_app.db")
                 .allowMainThreadQueries()
                 .addCallback(new Callback() {
                     @Override
@@ -43,7 +43,7 @@ public abstract class PlannedTaskDatabase extends RoomDatabase {
     }
 
     @VisibleForTesting
-    public static void injectTestDatabase(PlannedTaskDatabase testDatabase) {
+    public static void injectTestDatabase(ExhibitDatabase testDatabase) {
         if (singleton != null) {
             singleton.close();
         }

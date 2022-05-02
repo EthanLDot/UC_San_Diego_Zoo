@@ -14,6 +14,12 @@ import java.util.List;
 public class PlannedExhibitsAdapter extends RecyclerView.Adapter<PlannedExhibitsAdapter.ViewHolder> {
     private List<ExhibitItem> exhibitItems = Collections.emptyList();
 
+    public void setExhibitItems(List<ExhibitItem> newExhibitItems) {
+        this.exhibitItems.clear();
+        this.exhibitItems = newExhibitItems;
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

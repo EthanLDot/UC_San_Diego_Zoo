@@ -1,6 +1,7 @@
 package com.example.zooseeker_team54;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,14 +27,18 @@ public class MainActivity extends AppCompatActivity {
     public RecyclerView searchResultView;
     public RecyclerView plannedExhibitsView;
 
+    private EditText searchBarText;
+
+    private ExhibitViewModel exhibitViewModel;
     private SearchResultAdapter searchResultAdapter;
     private PlannedExhibitsAdapter plannedExhibitsAdapter;
-    private EditText searchBarText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        exhibitViewModel = new ViewModelProvider(this).get(ExhibitViewModel.class);
 
         // Get search bar EditText and bind a text watcher to it
         searchBarText = this.findViewById(R.id.search_bar);
@@ -57,6 +62,9 @@ public class MainActivity extends AppCompatActivity {
         plannedExhibitsView = this.findViewById(R.id.planned_exhibits);
         plannedExhibitsView.setLayoutManager(new LinearLayoutManager(this));
         plannedExhibitsView.setAdapter(plannedExhibitsAdapter);
+
+        exhibitViewModel.getPlannedExhibits()
+                .observe(this, plannedExhibitsAdapter::setExhibitItems);
 
     }
 
@@ -83,12 +91,12 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // TODO: Create a database and use getAll()
-        // List<ExhibitItem> allExhibits = Dao.getAll();
-        List<ExhibitItem> allExhibits = ExhibitItem.loadJSON(this, "sample_exhibits.json");
+//         List<ExhibitItem> allExhibits = Dao.getAll();
+        List<ExhibitItem> allExhibits = exhibitViewModel.getAll();
         List<ExhibitItem> searchResults = new ArrayList<>();
 
         for(ExhibitItem exhibitItem : allExhibits) {
-            if (exhibitItem.name.contains(query)) {
+            if (exhibitItem.name.toLowerCase().contains(query.toLowerCase()) && !exhibitItem.planned) {
                 searchResults.add(exhibitItem);
             }
         }

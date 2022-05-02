@@ -1,9 +1,30 @@
 [
-  {"name":  "Giraffe1"},
-  {"name":  "Elephant"},
-  {"name":  "Lion"},
-  {"name":  "Tiger"},
-  {"name":  "entrance"},
-  {"name":  "exit"},
-  {"name":  "Giraffe2"}
+  {
+    "name":  "Giraffe1",
+    "planned": true
+  },
+  {
+    "name":  "Elephant",
+    "planned": false
+  },
+  {
+    "name":  "Lion",
+    "planned": false
+  },
+  {
+    "name":  "Tiger",
+    "planned": false
+  },
+  {
+    "name":  "entrance",
+    "planned": false
+  },
+  {
+    "name":  "exit",
+    "planned": false
+  },
+  {
+    "name":  "Giraffe2",
+    "planned": false
+  }
 ]

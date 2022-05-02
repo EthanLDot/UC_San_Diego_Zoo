@@ -25,6 +25,7 @@ public class ExhibitItem {
 
     @NonNull
     public String name;
+    public boolean planned;
 
     @NonNull
     @Override
@@ -35,8 +36,9 @@ public class ExhibitItem {
                 '}';
     }
 
-    ExhibitItem(@NonNull String name) {
+    ExhibitItem(@NonNull String name, boolean planned) {
         this.name = name;
+        this.planned = planned;
     }
 
     public static List<ExhibitItem> loadJSON(Context context, String path) {

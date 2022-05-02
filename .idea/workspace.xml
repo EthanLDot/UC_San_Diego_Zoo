@@ -50,7 +50,7 @@
     <property name="cidr.known.project.marker" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
-  <component name="RunManager" selected="Android Instrumented Tests.SearchBarResultsTest">
+  <component name="RunManager" selected="Android Instrumented Tests.displayNoExhibitsN...() (1)">
     <configuration name="app" type="AndroidRunConfigurationType" factoryName="Android App" activateToolWindowBeforeRun="false">
       <module name="ZooSeeker_Team54.app" />
       <option name="DEPLOY" value="true" />
@@ -220,11 +220,11 @@
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
       </method>
     </configuration>
-    <configuration name="displayNoExhibitsN...()" type="AndroidTestRunConfigurationType" factoryName="Android Instrumented Tests" temporary="true" nameIsGenerated="true">
+    <configuration name="displayNoExhibitsN...() (1)" type="AndroidTestRunConfigurationType" factoryName="Android Instrumented Tests" temporary="true" nameIsGenerated="true">
       <module name="ZooSeeker_Team54.app" />
       <option name="TESTING_TYPE" value="3" />
       <option name="METHOD_NAME" value="displayNoExhibitsNotContainingQuery" />
-      <option name="CLASS_NAME" value="com.example.zooseeker_team54.SearchBarResultsTest" />
+      <option name="CLASS_NAME" value="com.example.zooseeker_team54.SearchResultsTests" />
       <option name="PACKAGE_NAME" value="" />
       <option name="INSTRUMENTATION_RUNNER_CLASS" value="" />
       <option name="EXTRA_OPTIONS" value="" />
@@ -275,10 +275,10 @@
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
       </method>
     </configuration>
-    <configuration name="displayNoExhibitsW...()" type="AndroidTestRunConfigurationType" factoryName="Android Instrumented Tests" temporary="true" nameIsGenerated="true">
+    <configuration name="displayNoExhibitsN...()" type="AndroidTestRunConfigurationType" factoryName="Android Instrumented Tests" temporary="true" nameIsGenerated="true">
       <module name="ZooSeeker_Team54.app" />
       <option name="TESTING_TYPE" value="3" />
-      <option name="METHOD_NAME" value="displayNoExhibitsWithWeirdQuery" />
+      <option name="METHOD_NAME" value="displayNoExhibitsNotContainingQuery" />
       <option name="CLASS_NAME" value="com.example.zooseeker_team54.SearchBarResultsTest" />
       <option name="PACKAGE_NAME" value="" />
       <option name="INSTRUMENTATION_RUNNER_CLASS" value="" />
@@ -387,11 +387,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Android Instrumented Tests.displayNoExhibitsN...() (1)" />
         <item itemvalue="Android Instrumented Tests.SearchBarResultsTest" />
         <item itemvalue="Android Instrumented Tests.displayNoOtherThan...()" />
         <item itemvalue="Android Instrumented Tests.displayNoExhibitsN...()" />
         <item itemvalue="Android Instrumented Tests.displayAllExhibits...()" />
-        <item itemvalue="Android Instrumented Tests.displayNoExhibitsW...()" />
       </list>
     </recent_temporary>
   </component>

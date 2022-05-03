@@ -18,8 +18,8 @@ import android.view.ViewParent;
 
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.filters.LargeTest;
+import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
-import androidx.test.runner.AndroidJUnit4;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
@@ -30,50 +30,67 @@ import org.junit.runner.RunWith;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class SearchBarResultsTest {
+public class SearchResultsTests {
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
     @Test
     public void displayAllExhibitsContainingQuery() {
-        ViewInteraction appCompatEditText = onView(
-                allOf(withId(R.id.search_bar),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                3),
-                        isDisplayed()));
-        appCompatEditText.perform(replaceText("Giraffe"), closeSoftKeyboard());
+        ViewInteraction appCompatEditText = onView(allOf(withId(R.id.search_bar)));
+        appCompatEditText.perform(replaceText("bear"), closeSoftKeyboard());
 
         ViewInteraction textView = onView(
-                allOf(withId(R.id.exhibit_name), withText("Giraffe1"),
+                allOf(withId(R.id.loc_name), withText("Black Bear"),
                         withParent(withParent(withId(R.id.search_results))),
                         isDisplayed()));
-        textView.check(matches(withText("Giraffe1")));
+        textView.check(matches(withText("Black Bear")));
 
         ViewInteraction textView2 = onView(
-                allOf(withId(R.id.exhibit_name), withText("Giraffe2"),
+                allOf(withId(R.id.loc_name), withText("Brown Bears"),
                         withParent(withParent(withId(R.id.search_results))),
                         isDisplayed()));
-        textView2.check(matches(withText("Giraffe2")));
+        textView2.check(matches(withText("Brown Bears")));
+
+        ViewInteraction textView3 = onView(
+                allOf(withId(R.id.loc_name), withText("Grizzly Bear"),
+                        withParent(withParent(withId(R.id.search_results))),
+                        isDisplayed()));
+        textView3.check(matches(withText("Grizzly Bear")));
+    }
+
+    @Test
+    public void displayNoExhibitsNotContainingQuery() {
+        ViewInteraction appCompatEditText = onView(allOf(withId(R.id.search_bar)));
+        appCompatEditText.perform(replaceText("Elephant"), closeSoftKeyboard());
+
+        ViewInteraction LocItemView = onView(allOf(withId(R.id.loc_name), withText("Bear")));
+        LocItemView.check(doesNotExist());
+//        LocItemView.check(matches(withText("Bear")));
     }
 
     @Test
     public void displayNoExhibitsWithWeirdQuery() {
-        ViewInteraction appCompatEditText = onView(
-                allOf(withId(R.id.search_bar),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                3),
-                        isDisplayed()));
+        ViewInteraction appCompatEditText = onView(allOf(withId(R.id.search_bar)));
         appCompatEditText.perform(replaceText("asodjifjdsa"), closeSoftKeyboard());
 
-        ViewInteraction ExhibitItemView = onView(allOf(withId(R.id.exhibit_name)));
-        ExhibitItemView.check(doesNotExist());
+        ViewInteraction textView = onView(
+                allOf(withId(R.id.loc_name), withText("Black Bear"),
+                        withParent(withParent(withId(R.id.search_results))),
+                        isDisplayed()));
+        textView.check(doesNotExist());
+    }
+
+    @Test
+    public void displayNoOtherThanExhibits() {
+        ViewInteraction appCompatEditText = onView(allOf(withId(R.id.search_bar)));
+        appCompatEditText.perform(replaceText("en"), closeSoftKeyboard());
+
+        ViewInteraction textView = onView(
+                allOf(withId(R.id.loc_name), withText("Entrance Plaza"),
+                        withParent(withParent(withId(R.id.search_results))),
+                        isDisplayed()));
+        textView.check(doesNotExist());
     }
 
     private static Matcher<View> childAtPosition(

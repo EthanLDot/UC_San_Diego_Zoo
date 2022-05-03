@@ -35,7 +35,7 @@
         />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/planned_exhibits"
+        android:id="@+id/planned_locs"
         android:layout_width="355dp"
         android:layout_height="228dp"
         android:layout_marginStart="1dp"
@@ -80,6 +80,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/planned_exhibits" />
+        app:layout_constraintTop_toBottomOf="@+id/planned_locs" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

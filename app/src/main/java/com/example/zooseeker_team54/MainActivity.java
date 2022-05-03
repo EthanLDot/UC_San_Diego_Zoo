@@ -5,12 +5,14 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -108,5 +110,22 @@ public class MainActivity extends AppCompatActivity {
 
     private void onClearBtnClicked(View view) {
         locViewModel.clearPlannedLocs();
+    }
+
+    public void onPlanButtonClicked(View view) {
+        // should create plan on database to display on routePlanActivity and take us there
+
+        // get number of exhibits in plan from the TextView
+        String planSizeString = Integer.toString(plannedLocsAdapter.getItemCount());
+        int planSize = Integer.parseInt(planSizeString);
+
+        // show an alert if plan size is 0
+        if (planSize == 0) {
+            Utilities.showAlert(this, "Plan list is empty, can't create plan!");
+            return;
+        }
+
+        Intent intent = new Intent(this, RoutePlanActivity.class);
+        startActivity(intent);
     }
 }

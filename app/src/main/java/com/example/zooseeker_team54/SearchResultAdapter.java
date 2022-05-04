@@ -26,6 +26,8 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
         this.onSearchResultClicked = onSearchResultClicked;
     }
 
+    public List<LocItem> getLocItems() { return locItems; }
+
     @NonNull
     @Override
     public SearchResultAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

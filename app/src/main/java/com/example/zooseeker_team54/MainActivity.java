@@ -43,9 +43,6 @@ public class MainActivity extends AppCompatActivity {
         searchBarText = this.findViewById(R.id.search_bar);
         searchBarText.addTextChangedListener(searchBarTextWatcher);
 
-        // Show the size of the plan
-        planSizeText = this.findViewById(R.id.plan_size);
-
         // Create an adapter for the RecyclerView of search results
         searchResultAdapter = new SearchResultAdapter();
         searchResultAdapter.setHasStableIds(true);
@@ -58,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Create an adapter for the RecyclerView of search results
         plannedLocsAdapter = new PlannedLocsAdapter();
-        plannedLocsAdapter.setOnDeleteClicked(locViewModel::removePlannedLoc);
+        plannedLocsAdapter.setOnDeleteClicked(this::removePlannedLoc);
         plannedLocsAdapter.setHasStableIds(true);
 
         // Set the adapter for the actual RecyclerView
@@ -70,14 +67,27 @@ public class MainActivity extends AppCompatActivity {
         locViewModel.getPlannedLocs()
                 .observe(this, plannedLocsAdapter::setLocItems);
 
+        // Show the size of the plan
+        planSizeText = this.findViewById(R.id.plan_size);
+        updatePlanSizeText();
+
         // Set up clear button for planned locs
         this.clearBtn = this.findViewById(R.id.clear_btn);
         clearBtn.setOnClickListener(this::onClearBtnClicked);
 
     }
 
+    private void removePlannedLoc(LocItem locItem) {
+        locViewModel.removePlannedLoc(locItem);
+        updatePlanSizeText();
+    }
+
     private void addPlannedLoc(LocItem locItem) {
         locViewModel.addPlannedLoc(locItem);
+        updatePlanSizeText();
+    }
+    
+    private void updatePlanSizeText() {
         planSizeText.setText(Integer.toString(locViewModel.countPlannedExhibits()));
     }
 

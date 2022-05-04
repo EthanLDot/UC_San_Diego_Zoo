@@ -3,13 +3,13 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/Jeff Lin/AndroidStudioProjects/zooseeker-team-54/app/src/main/res/layout/activity_main.xml" value="0.264" />
-        <entry key="..\:/Users/Jeff Lin/AndroidStudioProjects/zooseeker-team-54/app/src/main/res/layout/activity_route_plan.xml" value="0.2" />
-        <entry key="..\:/Users/Jeff Lin/AndroidStudioProjects/zooseeker-team-54/app/src/main/res/layout/loc_item.xml" value="0.4" />
+        <entry key="../../../../../../../../layout/custom_preview.xml" value="0.1962962962962963" />
         <entry key="..\:/Users/ethan/AndroidStudioProjects/zooseeker-team-54/app/src/main/res/layout/activity_main.xml" value="0.22" />
         <entry key="..\:/Users/ethan/AndroidStudioProjects/zooseeker-team-54/app/src/main/res/layout/selection_item.xml" value="0.11367753623188406" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.26666666666666666" />
+        <entry key="app/src/main/res/layout/activity_route_plan.xml" value="0.1887031408308004" />
         <entry key="app/src/main/res/layout/exhibit_item.xml" value="0.2078125" />
+        <entry key="app/src/main/res/layout/loc_item.xml" value="0.1" />
         <entry key="app/src/main/res/layout/selection_item.xml" value="0.25769927536231885" />
       </map>
     </option>

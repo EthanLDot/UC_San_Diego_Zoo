@@ -57,7 +57,8 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
             this.locNameText.setOnClickListener(view -> {
                 if (onSearchResultClicked == null) return;
                 onSearchResultClicked.accept(locItem);
-                setLocItems(Collections.emptyList());
+                locItems.remove(locItem);
+                notifyDataSetChanged();
             });
         }
 

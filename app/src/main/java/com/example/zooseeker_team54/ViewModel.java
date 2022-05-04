@@ -9,10 +9,10 @@ import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
-public class LocViewModel extends AndroidViewModel {
+public class ViewModel extends AndroidViewModel {
     private final LocItemDao locItemDao;
 
-    public LocViewModel(@NonNull Application application) {
+    public ViewModel(@NonNull Application application) {
         super(application);
         Context context = getApplication().getApplicationContext();
         LocDatabase db = LocDatabase.getSingleton(context);

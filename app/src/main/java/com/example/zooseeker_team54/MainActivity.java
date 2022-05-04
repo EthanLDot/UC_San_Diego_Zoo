@@ -1,9 +1,7 @@
 package com.example.zooseeker_team54;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.AsyncListDiffer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -31,14 +29,16 @@ public class MainActivity extends AppCompatActivity {
     private Button clearBtn;
     private TextView planSizeText;
 
-    private LocViewModel locViewModel;
+    private ViewModel viewModel;
+    private Utilities utils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        locViewModel = new ViewModelProvider(this).get(LocViewModel.class);
+        viewModel = new ViewModelProvider(this).get(ViewModel.class);
+        utils = new Utilities();
 
         // Get search bar EditText and bind a text watcher to it
         searchBarText = this.findViewById(R.id.search_bar);
@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
         plannedLocsView.setAdapter(plannedLocsAdapter);
 
         //
-        locViewModel.getPlannedLocs()
+        viewModel.getPlannedLocs()
                 .observe(this, plannedLocsAdapter::setLocItems);
 
         // Show the size of the plan
@@ -79,30 +79,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void removePlannedLoc(LocItem locItem) {
-        locViewModel.removePlannedLoc(locItem);
+        viewModel.removePlannedLoc(locItem);
         updatePlanSizeText();
     }
 
     private void addPlannedLoc(LocItem locItem) {
-        locViewModel.addPlannedLoc(locItem);
+        viewModel.addPlannedLoc(locItem);
         updatePlanSizeText();
     }
     
     private void updatePlanSizeText() {
-        planSizeText.setText(Integer.toString(locViewModel.countPlannedExhibits()));
-    }
-
-    // TODO: implement this function
-    //now is mock object for testing plan listing functionality
-    private static List<LocItem> findRoute() {
-        List<LocItem> mockPath  = new ArrayList<>();
-        LocItem locItem1 = new LocItem("name1", "this is id", "stuff", Collections.emptyList());
-        LocItem locItem2 = new LocItem("name2", "this is id", "stuff", Collections.emptyList());
-        LocItem locItem3 = new LocItem("name3", "this is id", "stuff", Collections.emptyList());
-        mockPath.add(locItem1);
-        mockPath.add(locItem2);
-        mockPath.add(locItem3);
-        return mockPath;
+        planSizeText.setText(Integer.toString(viewModel.countPlannedExhibits()));
     }
 
     // Text Watcher for search bar textview
@@ -127,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        List<LocItem> allLocs = locViewModel.getAll();
+        List<LocItem> allLocs = viewModel.getAll();
         List<LocItem> searchResults = new ArrayList<>();
 
         for(LocItem locItem : allLocs) {
@@ -140,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onClearBtnClicked(View view) {
-        locViewModel.clearPlannedLocs();
+        viewModel.clearPlannedLocs();
         planSizeText.setText("0");
     }
 
@@ -157,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        List<LocItem> route = findRoute();
+        List<LocItem> route = utils.findRoute(plannedLocsAdapter.getLocItems());
         System.out.println(route.size());
 
         Intent intent = new Intent(this, RoutePlanActivity.class);

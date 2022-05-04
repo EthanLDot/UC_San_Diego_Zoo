@@ -70,7 +70,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // TODO: implement this function
+    //now is mock object for testing plan listing functionality
     private static List<LocItem> findRoute() {
+        List<LocItem> mockPath = Collections.emptyList();
+        mockPath.add(new LocItem("whatever", "this is id", "stuff", Collections.emptyList()));
+        mockPath.add(new LocItem("test2", "this is id2", "stuph", Collections.emptyList()));
+        mockPath.add(new LocItem("test3", "this is id3", "stuf", Collections.emptyList()));
         return Collections.emptyList();
     }
 

@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.AsyncListDiffer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -57,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Create an adapter for the RecyclerView of search results
         plannedLocsAdapter = new PlannedLocsAdapter();
+        plannedLocsAdapter.setOnDeleteClicked(locViewModel::removePlannedLoc);
         plannedLocsAdapter.setHasStableIds(true);
 
         // Set the adapter for the actual RecyclerView
@@ -80,8 +82,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // TODO: implement this function
+    //now is mock object for testing plan listing functionality
     private static List<LocItem> findRoute() {
-        return Collections.emptyList();
+        List<LocItem> mockPath  = new ArrayList<>();
+        LocItem locItem1 = new LocItem("name1", "this is id", "stuff", Collections.emptyList());
+        LocItem locItem2 = new LocItem("name2", "this is id", "stuff", Collections.emptyList());
+        LocItem locItem3 = new LocItem("name3", "this is id", "stuff", Collections.emptyList());
+        mockPath.add(locItem1);
+        mockPath.add(locItem2);
+        mockPath.add(locItem3);
+        return mockPath;
     }
 
     // Text Watcher for search bar textview
@@ -121,5 +131,26 @@ public class MainActivity extends AppCompatActivity {
     private void onClearBtnClicked(View view) {
         locViewModel.clearPlannedLocs();
         planSizeText.setText("0");
+    }
+
+    public void onPlanButtonClicked(View view) {
+        // should create plan on database to display on routePlanActivity and take us there
+
+        // get number of exhibits in plan from the TextView
+        String planSizeString = Integer.toString(plannedLocsAdapter.getItemCount());
+        int planSize = Integer.parseInt(planSizeString);
+
+        // show an alert if plan size is 0
+        if (planSize == 0) {
+            Utilities.showAlert(this, "Plan list is empty, can't create plan!");
+            return;
+        }
+
+        List<LocItem> route = findRoute();
+        System.out.println(route.size());
+
+        Intent intent = new Intent(this, RoutePlanActivity.class);
+        intent.putExtra("route", (ArrayList<LocItem>) route);
+        startActivity(intent);
     }
 }

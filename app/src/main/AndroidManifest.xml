@@ -10,10 +10,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ZooSeeker_Team54">
         <activity
+            android:name=".RoutePlanActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustPan"
-            >
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

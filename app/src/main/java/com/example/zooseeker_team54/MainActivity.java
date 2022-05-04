@@ -72,11 +72,14 @@ public class MainActivity extends AppCompatActivity {
     // TODO: implement this function
     //now is mock object for testing plan listing functionality
     private static List<LocItem> findRoute() {
-        List<LocItem> mockPath = Collections.emptyList();
-        mockPath.add(new LocItem("whatever", "this is id", "stuff", Collections.emptyList()));
-        mockPath.add(new LocItem("test2", "this is id2", "stuph", Collections.emptyList()));
-        mockPath.add(new LocItem("test3", "this is id3", "stuf", Collections.emptyList()));
-        return Collections.emptyList();
+        List<LocItem> mockPath  = new ArrayList<>();
+        LocItem locItem1 = new LocItem("name1", "this is id", "stuff", Collections.emptyList());
+        LocItem locItem2 = new LocItem("name2", "this is id", "stuff", Collections.emptyList());
+        LocItem locItem3 = new LocItem("name3", "this is id", "stuff", Collections.emptyList());
+        mockPath.add(locItem1);
+        mockPath.add(locItem2);
+        mockPath.add(locItem3);
+        return mockPath;
     }
 
     // Text Watcher for search bar textview
@@ -130,7 +133,11 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
+        List<LocItem> route = findRoute();
+        System.out.println(route.size());
+
         Intent intent = new Intent(this, RoutePlanActivity.class);
+        intent.putExtra("route", (ArrayList<LocItem>) route);
         startActivity(intent);
     }
 }

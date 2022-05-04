@@ -24,13 +24,14 @@ public class MainActivity extends AppCompatActivity {
     public RecyclerView searchResultView;
     public RecyclerView plannedLocsView;
 
+    public SearchResultAdapter searchResultAdapter;
+    public PlannedLocsAdapter plannedLocsAdapter;
+
     private EditText searchBarText;
     private Button clearBtn;
     private TextView planSizeText;
 
     private LocViewModel locViewModel;
-    private SearchResultAdapter searchResultAdapter;
-    private PlannedLocsAdapter plannedLocsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

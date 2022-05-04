@@ -43,9 +43,7 @@ public class LocViewModel extends AndroidViewModel {
         }
     }
 
-    public int countPlannedExhibits() {
-        return locItemDao.countPlannedExhibits();
-    }
+    public int countPlannedExhibits() { return locItemDao.countPlannedExhibits(); }
 
 }
 

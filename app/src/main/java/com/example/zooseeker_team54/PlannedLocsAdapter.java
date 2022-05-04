@@ -10,9 +10,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class PlannedLocsAdapter extends RecyclerView.Adapter<PlannedLocsAdapter.ViewHolder> {
     private List<LocItem> locItems = Collections.emptyList();
+    private Consumer<LocItem> onDeleteClicked;
 
     public void setLocItems(List<LocItem> newLocItems) {
         this.locItems.clear();
@@ -20,6 +22,9 @@ public class PlannedLocsAdapter extends RecyclerView.Adapter<PlannedLocsAdapter.
         notifyDataSetChanged();
     }
 
+    public void setOnDeleteClicked(Consumer<LocItem> onDeleteClicked){
+        this.onDeleteClicked = onDeleteClicked;
+    }
     @NonNull
     @Override
     public PlannedLocsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -41,10 +46,17 @@ public class PlannedLocsAdapter extends RecyclerView.Adapter<PlannedLocsAdapter.
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView locNameText;
         private LocItem locItem;
+        private TextView delView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             this.locNameText = itemView.findViewById(R.id.loc_name);
+            this.delView =itemView.findViewById(R.id.loc_delete_selected);
+
+            this.delView.setOnClickListener(view ->{
+                if(onDeleteClicked == null) return;
+                onDeleteClicked.accept(locItem);
+            });
         }
 
         public void setLocItem(LocItem locItem) {

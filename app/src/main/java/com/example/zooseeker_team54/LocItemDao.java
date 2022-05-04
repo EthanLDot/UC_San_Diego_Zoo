@@ -17,10 +17,10 @@ public interface LocItemDao {
     @Insert
     List<Long> insertAll(List<LocItem> locItems);
 
-    @Query("SELECT * FROM loc_items WHERE `id`=:id")
+    @Query("SELECT * FROM loc_items WHERE id=:id")
     LocItem get(long id);
 
-    @Query("SELECT * FROM loc_items ORDER BY `id`")
+    @Query("SELECT * FROM loc_items ORDER BY id")
     List<LocItem> getAll();
 
     @Update
@@ -29,9 +29,12 @@ public interface LocItemDao {
     @Delete
     int delete(LocItem locItem);
 
-    @Query("SELECT * FROM loc_items ORDER BY `id`")
+    @Query("SELECT * FROM loc_items ORDER BY id")
     LiveData<List<LocItem>> getAllLive();
 
-    @Query("SELECT * FROM loc_items WHERE `planned` = 1 ORDER BY `id`")
+    @Query("SELECT * FROM loc_items WHERE planned = 1 ORDER BY id")
     LiveData<List<LocItem>> getAllPlannedLive();
+
+    @Query("SELECT COUNT(*) FROM loc_items WHERE planned = 1 ORDER BY id")
+    int countPlannedExhibits();
 }

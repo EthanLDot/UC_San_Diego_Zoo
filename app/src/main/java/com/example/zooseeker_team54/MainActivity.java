@@ -1,7 +1,9 @@
 package com.example.zooseeker_team54;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.AsyncListDiffer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
     private EditText searchBarText;
     private Button clearBtn;
+    private TextView planSizeText;
 
     private LocViewModel locViewModel;
     private SearchResultAdapter searchResultAdapter;
@@ -40,10 +43,13 @@ public class MainActivity extends AppCompatActivity {
         searchBarText = this.findViewById(R.id.search_bar);
         searchBarText.addTextChangedListener(searchBarTextWatcher);
 
+        // Show the size of the plan
+        planSizeText = this.findViewById(R.id.plan_size);
+
         // Create an adapter for the RecyclerView of search results
         searchResultAdapter = new SearchResultAdapter();
-        searchResultAdapter.setOnSearchResultClicked(locViewModel::addPlannedLoc);
         searchResultAdapter.setHasStableIds(true);
+        searchResultAdapter.setOnSearchResultClicked(this::addPlannedLoc);
 
         // Set the adapter for the actual RecyclerView
         searchResultView = this.findViewById(R.id.search_results);
@@ -68,6 +74,11 @@ public class MainActivity extends AppCompatActivity {
         this.clearBtn = this.findViewById(R.id.clear_btn);
         clearBtn.setOnClickListener(this::onClearBtnClicked);
 
+    }
+
+    private void addPlannedLoc(LocItem locItem) {
+        locViewModel.addPlannedLoc(locItem);
+        planSizeText.setText(Integer.toString(locViewModel.countPlannedExhibits()));
     }
 
     // TODO: implement this function
@@ -119,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void onClearBtnClicked(View view) {
         locViewModel.clearPlannedLocs();
+        planSizeText.setText("0");
     }
 
     public void onPlanButtonClicked(View view) {

@@ -6,6 +6,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.AsyncListDiffer;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.Collections;
@@ -13,6 +15,7 @@ import java.util.List;
 
 public class PlannedLocsAdapter extends RecyclerView.Adapter<PlannedLocsAdapter.ViewHolder> {
     private List<LocItem> locItems = Collections.emptyList();
+    private AsyncListDiffer<LocItem> mDiffer;
 
     public void setLocItems(List<LocItem> newLocItems) {
         this.locItems.clear();

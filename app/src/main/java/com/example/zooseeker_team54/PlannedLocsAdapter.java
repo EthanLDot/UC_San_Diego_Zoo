@@ -25,6 +25,7 @@ public class PlannedLocsAdapter extends RecyclerView.Adapter<PlannedLocsAdapter.
     public void setOnDeleteClicked(Consumer<LocItem> onDeleteClicked){
         this.onDeleteClicked = onDeleteClicked;
     }
+
     @NonNull
     @Override
     public PlannedLocsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Create an adapter for the RecyclerView of search results
         plannedLocsAdapter = new PlannedLocsAdapter();
+        plannedLocsAdapter.setOnDeleteClicked(locViewModel::removePlannedLoc);
         plannedLocsAdapter.setHasStableIds(true);
 
         // Set the adapter for the actual RecyclerView

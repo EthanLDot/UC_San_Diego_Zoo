@@ -16,7 +16,7 @@ public class LocViewModel extends AndroidViewModel {
         super(application);
         Context context = getApplication().getApplicationContext();
         LocDatabase db = LocDatabase.getSingleton(context);
-        locItemDao = db.plannedLocsDao();
+        locItemDao = db.LocItemDao();
     }
 
     public List<LocItem> getAll() { return locItemDao.getAll(); }

@@ -18,7 +18,7 @@ import java.util.concurrent.Executors;
 public abstract class LocDatabase extends RoomDatabase {
     private static LocDatabase singleton = null;
 
-    public abstract LocItemDao plannedLocsDao();
+    public abstract LocItemDao LocItemDao();
 
     public synchronized static LocDatabase getSingleton(Context context) {
         if (singleton == null) {
@@ -37,7 +37,7 @@ public abstract class LocDatabase extends RoomDatabase {
                         Executors.newSingleThreadScheduledExecutor().execute(() -> {
                             List<LocItem> locs = LocItem
                                     .loadJSON(context, "sample_node_info.json");
-                            getSingleton(context).plannedLocsDao().insertAll(locs);
+                            getSingleton(context).LocItemDao().insertAll(locs);
                         });
                     }
                 })

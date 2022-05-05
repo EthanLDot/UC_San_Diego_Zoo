@@ -52,7 +52,7 @@ public class ShowRouteAdapter extends RecyclerView.Adapter<ShowRouteAdapter.View
         public void setLocEdge(LocEdge locEdge) {
             this.locEdge = locEdge;
             this.targetText.setText(locEdge.target);
-            this.directionText.setText(locEdge.toString());
+            this.directionText.setText(locEdge.getDirection());
         }
     }
 }

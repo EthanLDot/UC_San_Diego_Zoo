@@ -14,14 +14,13 @@ public class LocEdge implements Serializable {
         this.target = target;
     }
 
-    // @Override
-//    public String toString() {
-//        return String.format("Walk %.0f meters along %s from '%s' to '%s'.\n",
-//                weight, street, source, target);
-//    }
-
     @Override
     public String toString() {
-        return String.format("%s - %.0f meters", target, weight);
+        return String.format("Walk %.0f meters along %s from '%s' to '%s'.\n",
+                weight, street, source, target);
+    }
+
+    public String getDirection() {
+        return String.format("%s - %.0f meters", street, weight);
     }
 }

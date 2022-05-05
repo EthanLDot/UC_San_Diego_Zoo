@@ -87,7 +87,7 @@ public class PlanRouteTests {
             List<LocEdge> route = activity.findRoute(locsAdapterContents);
             assertEquals(2, route.size());
             assertEquals("[Walk 10 meters along Entrance Way from 'Entrance and Exit Gate' to 'Entrance Plaza'.\n" +
-                    ", Walk 210 meters along Africa Rocks Street from 'Entrance Plaza' to 'Gorillas'.\n" +
+                    ", Walk 200 meters along Africa Rocks Street from 'Entrance Plaza' to 'Gorillas'.\n" +
                     "]", route.toString());
         });
     }
@@ -126,7 +126,7 @@ public class PlanRouteTests {
             List<LocEdge> route = activity.findRoute(locsAdapterContents);
             assertEquals(3, route.size());
             assertEquals("[Walk 10 meters along Entrance Way from 'Entrance and Exit Gate' to 'Entrance Plaza'.\n" +
-                    ", Walk 110 meters along Reptile Road from 'Entrance Plaza' to 'Alligators'.\n" +
+                    ", Walk 100 meters along Reptile Road from 'Entrance Plaza' to 'Alligators'.\n" +
                     ", Walk 200 meters along Sharp Teeth Shortcut from 'Alligators' to 'Lions'.\n" + "]"
                     , route.toString());
         });

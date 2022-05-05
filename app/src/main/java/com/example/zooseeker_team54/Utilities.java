@@ -41,10 +41,11 @@ public class Utilities {
             String source = vInfo.get(g.getEdgeSource(e)).name;
             String target = vInfo.get(g.getEdgeTarget(e)).name;
 
-            LocEdge locEdge = new LocEdge(id, weight, street, source, target);
+            sumWeight += weight;
+
+            LocEdge locEdge = new LocEdge(id, sumWeight, street, source, target);
             shortestPath.add(locEdge);
 
-            sumWeight += weight;
             i++;
         }
 

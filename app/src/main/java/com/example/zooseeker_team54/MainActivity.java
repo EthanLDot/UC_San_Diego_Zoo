@@ -119,9 +119,9 @@ public class MainActivity extends AppCompatActivity {
             unvisited.remove(minIndex);
         }
 
-        String target = "entrance_exit_gate";
-        Pair<List<LocEdge>, Double> pair = Utilities.findShortestPathBetween(current, target);
-        route.addAll(pair.first);
+        // String target = "entrance_exit_gate";
+        // Pair<List<LocEdge>, Double> pair = Utilities.findShortestPathBetween(current, target);
+        // route.addAll(pair.first);
         return route;
     }
 

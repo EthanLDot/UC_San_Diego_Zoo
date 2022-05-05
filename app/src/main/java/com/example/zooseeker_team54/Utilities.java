@@ -15,42 +15,35 @@ import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 
 public class Utilities {
-    private Graph<String, IdentifiedWeightedEdge> g;
-    Map<String, ZooData.VertexInfo> vInfo;
-    Map<String, ZooData.EdgeInfo> eInfo;
+    private static final Graph<String, IdentifiedWeightedEdge> g
+            = ZooData.loadZooGraphJSON("sample_zoo_graph.json");
+    private static final Map<String, ZooData.VertexInfo> vInfo
+            = ZooData.loadVertexInfoJSON("sample_node_info.json");
+    private static final Map<String, ZooData.EdgeInfo> eInfo
+            = ZooData.loadEdgeInfoJSON("sample_edge_info.json");
 
-    public Utilities() {
-        g = ZooData.loadZooGraphJSON("sample_zoo_graph.json");
-        vInfo = ZooData.loadVertexInfoJSON("sample_node_info.json");
-        eInfo = ZooData.loadEdgeInfoJSON("sample_edge_info.json");
-    }
+    public static Pair<List<LocEdge>, Double> findShortestPathBetween(String start, String goal) {
 
-    // TODO: implement this function
-    public List<LocItem> findRoute(List<LocItem> plannedLocItems) {
-        return plannedLocItems;
-    }
-
-    public Pair<List<LocEdge>, Double> findShortestPathBetween(String start, String goal) {
-
-        double sumWeight = 0;
         List<LocEdge> shortestPath = new ArrayList<>();
         GraphPath<String, IdentifiedWeightedEdge> path = DijkstraShortestPath.findPathBetween(g, start, goal);
 
         int i = 1;
+        double sumWeight = 0;
         for (IdentifiedWeightedEdge e : path.getEdgeList()) {
             double weight = g.getEdgeWeight(e);
+            String id = e.getId();
+            String street = eInfo.get(id).street;
             String source = vInfo.get(g.getEdgeSource(e)).name;
             String target = vInfo.get(g.getEdgeTarget(e)).name;
-            String description = String.format("  %d. Walk %.0f meters along %s from '%s' to '%s'.\n",
-                    i, weight, eInfo.get(e.getId()).street, source, target);
 
-            i++;
-            sumWeight += weight;
-            LocEdge locEdge = new LocEdge(weight, source, target, description);
+            LocEdge locEdge = new LocEdge(id, weight, street, source, target);
             shortestPath.add(locEdge);
+
+            sumWeight += weight;
+            i++;
         }
 
-        return new Pair<List<LocEdge>, Double>(shortestPath, sumWeight);
+        return new Pair<>(shortestPath, sumWeight);
     }
 
     public static void showAlert(Activity activity, String message) {

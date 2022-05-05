@@ -30,7 +30,6 @@ public class MainActivity extends AppCompatActivity {
     private TextView planSizeText;
 
     private ViewModel viewModel;
-    private Utilities utils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         viewModel = new ViewModelProvider(this).get(ViewModel.class);
-        utils = new Utilities();
 
         // Get search bar EditText and bind a text watcher to it
         searchBarText = this.findViewById(R.id.search_bar);
@@ -76,6 +74,10 @@ public class MainActivity extends AppCompatActivity {
         this.clearBtn = this.findViewById(R.id.clear_btn);
         clearBtn.setOnClickListener(this::onClearBtnClicked);
 
+    }
+
+    private List<LocItem> findRoute(List<LocItem> plannedLocItems) {
+        return plannedLocItems;
     }
 
     private void removePlannedLoc(LocItem locItem) {
@@ -144,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        List<LocItem> route = utils.findRoute(plannedLocsAdapter.getLocItems());
+        List<LocItem> route = findRoute(plannedLocsAdapter.getLocItems());
         System.out.println(route.size());
 
         Intent intent = new Intent(this, RoutePlanActivity.class);

@@ -9,6 +9,7 @@ import androidx.appcompat.app.AlertDialog;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.jgrapht.Graph;
@@ -28,11 +29,10 @@ public class Utilities {
 
     public static Pair<List<LocEdge>, Double> findShortestPathBetween(String start, String goal) {
 
+        String current = start, temp;
         List<LocEdge> shortestPath = new ArrayList<>();
-        System.out.println("Start: " + start);
         GraphPath<String, IdentifiedWeightedEdge> path = DijkstraShortestPath.findPathBetween(g, start, goal);
 
-        int i = 1;
         double sumWeight = 0;
         for (IdentifiedWeightedEdge e : path.getEdgeList()) {
             double weight = g.getEdgeWeight(e);
@@ -41,11 +41,19 @@ public class Utilities {
             String source = vInfo.get(g.getEdgeSource(e)).name;
             String target = vInfo.get(g.getEdgeTarget(e)).name;
 
-            LocEdge locEdge = new LocEdge(id, weight, street, source, target);
-            shortestPath.add(locEdge);
+            // we need to swap source or target if the edge we are going is opposite
+            if (!current.equals(g.getEdgeSource(e))) {
+                temp = source;
+                source = target;
+                target = temp;
+                current = g.getEdgeSource(e);
+            }
+            else {
+                current = g.getEdgeTarget(e);
+            }
 
+            shortestPath.add(new LocEdge(id, weight, street, source, target));
             sumWeight += weight;
-            i++;
         }
 
         return new Pair<>(shortestPath, sumWeight);

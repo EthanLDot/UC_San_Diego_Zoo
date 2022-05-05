@@ -2,6 +2,7 @@ package com.example.zooseeker_team54;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.util.Pair;
 
 import androidx.appcompat.app.AlertDialog;
@@ -15,16 +16,20 @@ import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 
 public class Utilities {
-    private static final Graph<String, IdentifiedWeightedEdge> g
-            = ZooData.loadZooGraphJSON("sample_zoo_graph.json");
-    private static final Map<String, ZooData.VertexInfo> vInfo
-            = ZooData.loadVertexInfoJSON("sample_node_info.json");
-    private static final Map<String, ZooData.EdgeInfo> eInfo
-            = ZooData.loadEdgeInfoJSON("sample_edge_info.json");
+    private static Graph<String, IdentifiedWeightedEdge> g;
+    private static Map<String, ZooData.VertexInfo> vInfo;
+    private static Map<String, ZooData.EdgeInfo> eInfo;
+
+    public Utilities(Context context) {
+        g = ZooData.loadZooGraphJSON("sample_zoo_graph.json", context);
+        vInfo = ZooData.loadVertexInfoJSON("sample_node_info.json", context);
+        eInfo = ZooData.loadEdgeInfoJSON("sample_edge_info.json", context);
+    }
 
     public static Pair<List<LocEdge>, Double> findShortestPathBetween(String start, String goal) {
 
         List<LocEdge> shortestPath = new ArrayList<>();
+        System.out.println("Start: " + start);
         GraphPath<String, IdentifiedWeightedEdge> path = DijkstraShortestPath.findPathBetween(g, start, goal);
 
         int i = 1;

@@ -33,7 +33,7 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
     public SearchResultAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater
                 .from(parent.getContext())
-                .inflate(R.layout.loc_item, parent, false);
+                .inflate(R.layout.undeletable_loc_item, parent, false);
 
         return new ViewHolder(view);
     }

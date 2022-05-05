@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ZooSeeker_Team54">
         <activity
-            android:name=".RoutePlanActivity"
+            android:name=".ShowRouteActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

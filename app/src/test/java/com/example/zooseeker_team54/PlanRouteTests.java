@@ -83,7 +83,7 @@ public class PlanRouteTests {
             assertEquals(1, activity.plannedLocsAdapter.getItemCount());
             List<LocItem> locsAdapterContents = activity.plannedLocsAdapter.getLocItems();
             assertEquals(1, locsAdapterContents.size());
-            assertEquals("Loc{id=gorillas, name='Gorillas', planned=false}", locsAdapterContents.get(0).toString());
+            assertEquals("Loc {id=gorillas, name='Gorillas', planned=false, visited=false, current distance=0.0}", locsAdapterContents.get(0).toString());
 
             HashMap<String, List<LocEdge>> route = activity.findRoute(locsAdapterContents);
             assertEquals(1, route.size());
@@ -121,8 +121,8 @@ public class PlanRouteTests {
             List<LocItem> locsAdapterContents = activity.plannedLocsAdapter.getLocItems();
             assertEquals(2, locsAdapterContents.size());
 
-            assertEquals("Loc{id=gators, name='Alligators', planned=false}", locsAdapterContents.get(0).toString());
-            assertEquals("Loc{id=lions, name='Lions', planned=false}", locsAdapterContents.get(1).toString());
+            assertEquals("Loc {id=gators, name='Alligators', planned=false, visited=false, current distance=0.0}", locsAdapterContents.get(0).toString());
+            assertEquals("Loc {id=lions, name='Lions', planned=false, visited=false, current distance=0.0}", locsAdapterContents.get(1).toString());
 
             HashMap<String, List<LocEdge>> route = activity.findRoute(locsAdapterContents);
             assertEquals(2, route.size());

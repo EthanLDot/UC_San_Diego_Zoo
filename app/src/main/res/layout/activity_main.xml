@@ -11,87 +11,88 @@
         android:layout_width="0dp"
         android:layout_height="42dp"
         android:layout_gravity="end"
-        android:layout_marginTop="60dp"
-        android:layout_marginBottom="214dp"
+        android:layout_marginTop="20dp"
         android:background="#000000"
         android:text="0"
         android:textAlignment="textEnd"
         android:textColor="#FFFFFF"
         android:textSize="36dp"
-        app:layout_constraintBottom_toTopOf="@+id/search_results"
+        app:layout_constraintBottom_toTopOf="@id/planned_locs"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/clear_btn"
+        app:layout_constraintVertical_bias="1.0" />
 
     <Button
         android:id="@+id/clear_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:text="clear"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.913"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/search_bar"
         app:layout_constraintTop_toBottomOf="@+id/search_bar" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/planned_locs"
-        android:layout_width="355dp"
-        android:layout_height="228dp"
-        android:layout_marginStart="1dp"
-        android:layout_marginTop="100dp"
-        android:layout_marginEnd="1dp"
-        android:layout_marginBottom="1dp"
+        android:layout_width="358dp"
+        android:layout_height="84dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginEnd="28dp"
+        android:layout_marginBottom="44dp"
         android:inputType="text"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/search_results"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.186" />
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <EditText
+    <AutoCompleteTextView
         android:id="@+id/search_bar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="20dp"
+        android:completionHint="Search for Exhibits"
+        android:completionThreshold="2"
         android:hint="Search for Exhibits"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/plan_size"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/search_results"
-        android:layout_width="355dp"
-        android:layout_height="228dp"
-        android:layout_marginBottom="1dp"
+        android:layout_width="354dp"
+        android:layout_height="299dp"
+        android:layout_marginStart="29dp"
+        android:layout_marginEnd="29dp"
+        android:layout_marginBottom="32dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/plan_size" />
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/horiz_divider"
         android:layout_width="0dp"
-        android:layout_height="22dp"
-        android:text="______________________________________________________________---"
+        android:layout_height="0dp"
+        android:layout_marginBottom="17dp"
+        android:text="_______________________________________________________________"
+        app:layout_constraintBottom_toTopOf="@+id/search_results"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/planned_locs" />
+        app:layout_constraintTop_toBottomOf="@+id/planned_locs"
+        app:layout_constraintVertical_bias="1.0" />
 
     <Button
         android:id="@+id/buttonPlan"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="9dp"
         android:onClick="onPlanButtonClicked"
         android:text="Plan"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.061"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/search_bar"
         app:layout_constraintTop_toBottomOf="@+id/search_bar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,11 +6,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Pair;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -27,17 +30,21 @@ public class MainActivity extends AppCompatActivity {
     public PlannedLocsAdapter plannedLocsAdapter;
 
 
-    private EditText searchBarText;
+    private AutoCompleteTextView searchBarText;
     private Button clearBtn;
     private TextView planSizeText;
 
     private ViewModel viewModel;
     private Utilities utils;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //prevents UI difficulties resulting from a rotated screen
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         viewModel = new ViewModelProvider(this).get(ViewModel.class);
         utils = new Utilities(getApplication().getApplicationContext());
@@ -45,6 +52,12 @@ public class MainActivity extends AppCompatActivity {
         // Get search bar EditText and bind a text watcher to it
         searchBarText = this.findViewById(R.id.search_bar);
         searchBarText.addTextChangedListener(searchBarTextWatcher);
+
+        //generate a list of exhibits from utilities and create the array adapter for autocomplete suggestions
+        List<String> EXHIBITS = Utilities.getExhibitList();
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1, EXHIBITS);
+        searchBarText.setAdapter(adapter);
 
         // Create an adapter for the RecyclerView of search results
         searchResultAdapter = new SearchResultAdapter();

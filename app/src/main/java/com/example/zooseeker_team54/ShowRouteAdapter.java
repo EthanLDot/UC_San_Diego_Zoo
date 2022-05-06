@@ -9,14 +9,15 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 public class ShowRouteAdapter extends RecyclerView.Adapter<ShowRouteAdapter.ViewHolder> {
-    private List<LocEdge> locEdges = Collections.emptyList();
+    private List<LocItem> locItems = Collections.emptyList();
 
-    public void setLocEdges(List<LocEdge> newLocEdges) {
-        this.locEdges.clear();
-        this.locEdges = newLocEdges;
+    public void setLocItems(List<LocItem> newLocItems) {
+        this.locItems.clear();
+        this.locItems = newLocItems;
         notifyDataSetChanged();
     }
 
@@ -25,34 +26,34 @@ public class ShowRouteAdapter extends RecyclerView.Adapter<ShowRouteAdapter.View
     public ShowRouteAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater
                 .from(parent.getContext())
-                .inflate(R.layout.loc_edge, parent, false);
+                .inflate(R.layout.route_plan_loc_item, parent, false);
 
         return new ShowRouteAdapter.ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ShowRouteAdapter.ViewHolder holder, int position) {
-        holder.setLocEdge(locEdges.get(position));
+        holder.setLocItem(locItems.get(position));
     }
 
     @Override
-    public int getItemCount() { return locEdges.size(); }
+    public int getItemCount() { return locItems.size(); }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private LocEdge locEdge;
-        private TextView targetText;
-        private TextView directionText;
+        private LocItem locItem;
+        private TextView locNameText;
+        private TextView distanceText;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            this.targetText = itemView.findViewById(R.id.target_name);
-            this.directionText = itemView.findViewById(R.id.direction);
+            this.locNameText = itemView.findViewById(R.id.loc_name);
+            this.distanceText = itemView.findViewById(R.id.distance);
         }
 
-        public void setLocEdge(LocEdge locEdge) {
-            this.locEdge = locEdge;
-            this.targetText.setText(locEdge.target);
-            this.directionText.setText(locEdge.getDirection());
+        public void setLocItem(LocItem locItem) {
+            this.locItem = locItem;
+            this.locNameText.setText(locItem.name);
+            this.distanceText.setText(locItem.getCurrDist());
         }
     }
 }

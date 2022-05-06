@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private HashMap<String, List<LocEdge>> findRoute(List<LocItem> plannedLocItems) {
+    public HashMap<String, List<LocEdge>> findRoute(List<LocItem> plannedLocItems) {
 
         // the final route to return
         HashMap<String, List<LocEdge>> route = new HashMap<>();

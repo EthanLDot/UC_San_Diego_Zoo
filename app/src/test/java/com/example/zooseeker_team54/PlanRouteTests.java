@@ -20,6 +20,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -55,7 +56,7 @@ public class PlanRouteTests {
 
         scenario.onActivity(activity -> {
             List<LocItem> selectedExhibits = activity.plannedLocsAdapter.getLocItems();
-            List<LocEdge> route = activity.findRoute(selectedExhibits);
+            HashMap<String, List<LocEdge>> route = activity.findRoute(selectedExhibits);
             assertEquals(0, selectedExhibits.size());
             assertEquals(0, route.size());
         });
@@ -84,11 +85,11 @@ public class PlanRouteTests {
             assertEquals(1, locsAdapterContents.size());
             assertEquals("Loc{id=gorillas, name='Gorillas', planned=false}", locsAdapterContents.get(0).toString());
 
-            List<LocEdge> route = activity.findRoute(locsAdapterContents);
-            assertEquals(2, route.size());
-            assertEquals("[Walk 10 meters along Entrance Way from 'Entrance and Exit Gate' to 'Entrance Plaza'.\n" +
+            HashMap<String, List<LocEdge>> route = activity.findRoute(locsAdapterContents);
+            assertEquals(1, route.size());
+            assertEquals("{gorillas=[Walk 10 meters along Entrance Way from 'Entrance and Exit Gate' to 'Entrance Plaza'.\n" +
                     ", Walk 200 meters along Africa Rocks Street from 'Entrance Plaza' to 'Gorillas'.\n" +
-                    "]", route.toString());
+                    "]}", route.toString());
         });
     }
 
@@ -123,12 +124,12 @@ public class PlanRouteTests {
             assertEquals("Loc{id=gators, name='Alligators', planned=false}", locsAdapterContents.get(0).toString());
             assertEquals("Loc{id=lions, name='Lions', planned=false}", locsAdapterContents.get(1).toString());
 
-            List<LocEdge> route = activity.findRoute(locsAdapterContents);
-            assertEquals(3, route.size());
-            assertEquals("[Walk 10 meters along Entrance Way from 'Entrance and Exit Gate' to 'Entrance Plaza'.\n" +
+            HashMap<String, List<LocEdge>> route = activity.findRoute(locsAdapterContents);
+            assertEquals(2, route.size());
+            assertEquals("{lions=[Walk 200 meters along Sharp Teeth Shortcut from 'Alligators' to 'Lions'.\n" +
+                    "], gators=[Walk 10 meters along Entrance Way from 'Entrance and Exit Gate' to 'Entrance Plaza'.\n" +
                     ", Walk 100 meters along Reptile Road from 'Entrance Plaza' to 'Alligators'.\n" +
-                    ", Walk 200 meters along Sharp Teeth Shortcut from 'Alligators' to 'Lions'.\n" + "]"
-                    , route.toString());
+                    "]}", route.toString());
         });
     }
 }

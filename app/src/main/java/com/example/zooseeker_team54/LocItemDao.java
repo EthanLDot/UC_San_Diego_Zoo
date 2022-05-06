@@ -18,7 +18,7 @@ public interface LocItemDao {
     List<Long> insertAll(List<LocItem> locItems);
 
     @Query("SELECT * FROM loc_items WHERE id=:id")
-    LocItem get(long id);
+    LocItem get(String id);
 
     @Query("SELECT * FROM loc_items ORDER BY id")
     List<LocItem> getAll();
@@ -37,4 +37,7 @@ public interface LocItemDao {
 
     @Query("SELECT COUNT(*) FROM loc_items WHERE planned = 1 ORDER BY id")
     int countPlannedExhibits();
+
+    @Query("SELECT * FROM loc_items WHERE planned = 1 and visited = 0 ORDER BY currDist")
+    LiveData<List<LocItem>> getAllPlannedUnvisitedLive();
 }

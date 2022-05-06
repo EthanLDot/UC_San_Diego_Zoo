@@ -43,10 +43,12 @@ public class LocItem implements Serializable {
     @NonNull
     @Override
     public String toString() {
-        return "Loc{" +
+        return "Loc {" +
                 "id=" + id +
                 ", name='" + name +
                 "', planned=" + planned +
+                ", visited=" + visited +
+                ", current distance=" + currDist +
                 '}';
     }
 

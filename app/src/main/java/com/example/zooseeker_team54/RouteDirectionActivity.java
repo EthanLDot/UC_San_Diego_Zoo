@@ -5,13 +5,16 @@ import android.os.Bundle;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.HashMap;
 import java.util.List;
 
 public class RouteDirectionActivity extends AppCompatActivity {
-    public RecyclerView showDirectionView;
+    public RecyclerView routeDirectionView;
+
+    private RouteDirectionAdapter routeDirectionAdapter;
 
     List<LocEdge> directions;
 
@@ -23,7 +26,14 @@ public class RouteDirectionActivity extends AppCompatActivity {
         Intent intent = getIntent();
         directions = (List<LocEdge>) intent.getSerializableExtra("directions");
 
-        System.out.println(directions);
+        routeDirectionAdapter = new RouteDirectionAdapter();
+        routeDirectionAdapter.setHasStableIds(true);
+        routeDirectionAdapter.setLocEdges(directions);
+
+        routeDirectionView = this.findViewById(R.id.route_direction);
+        routeDirectionView.setLayoutManager(new LinearLayoutManager(this));
+        routeDirectionView.setAdapter(routeDirectionAdapter);
+
     }
 
     public void onBackToPlanBtnClicked(View view){ finish(); }

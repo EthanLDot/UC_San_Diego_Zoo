@@ -39,19 +39,16 @@ public class RouteDirectionAdapter extends RecyclerView.Adapter<RouteDirectionAd
 
     public class ViewHolder extends RecyclerView.ViewHolder{
         private LocEdge  locEdge;
-        private TextView targetText;
         private TextView directionGuideText;
 
         public ViewHolder(@NonNull View itemView){
             super(itemView);
-            this.targetText = itemView.findViewById(R.id.target_name);
             this.directionGuideText = itemView.findViewById(R.id.direction);
         }
 
         public void setLocEdge(LocEdge locEdge){
             this.locEdge = locEdge;
-            this.targetText.setText(locEdge.target);
-            this.directionGuideText.setText(locEdge.getDirection());
+            this.directionGuideText.setText(locEdge.toString());
         }
     }
 }

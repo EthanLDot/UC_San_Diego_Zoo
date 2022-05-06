@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -47,6 +48,8 @@ public class ShowRouteActivity extends AppCompatActivity {
 
     public void onDirectionBtnClicked (View view) {
         Intent intent = new Intent(this, RouteDirectionActivity.class);
+        List<LocEdge> directions = route.get(viewModel.getNextUnvisitedExhibit().id);
+        intent.putExtra("directions", (ArrayList<LocEdge>) directions);
         startActivity(intent);
     }
 }

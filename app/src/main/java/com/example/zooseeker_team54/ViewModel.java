@@ -23,8 +23,12 @@ public class ViewModel extends AndroidViewModel {
 
     public List<LocItem> getAll() { return locItemDao.getAll(); }
 
-    public LiveData<List<LocItem>> getAllPlannedLive() {
-        return locItemDao.getAllPlannedLive();
+    public LiveData<List<LocItem>> getAllPlannedLive() { return locItemDao.getAllPlannedLive(); }
+
+    public LocItem getNextUnvisitedExhibit() { return locItemDao.getNextUnvisitedExhibit(); }
+
+    public LiveData<List<LocItem>> getAllPlannedUnvisitedLive() {
+        return locItemDao.getAllPlannedUnvisitedLive();
     }
 
     public void addPlannedLoc(LocItem locItem) {
@@ -63,10 +67,6 @@ public class ViewModel extends AndroidViewModel {
     }
 
     public int countPlannedExhibits() { return locItemDao.countPlannedExhibits(); }
-
-    public LiveData<List<LocItem>> getAllPlannedUnvisitedLive() {
-        return locItemDao.getAllPlannedUnvisitedLive();
-    }
 
 }
 

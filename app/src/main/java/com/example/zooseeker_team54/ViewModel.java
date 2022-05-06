@@ -38,10 +38,13 @@ public class ViewModel extends AndroidViewModel {
 
     public void removePlannedLoc(LocItem locItem) {
         locItem.planned = false;
+        locItem.visited = false;
+        locItem.currDist = 0;
         locItemDao.update(locItem);
     }
 
     public void addVisitedLoc(LocItem locItem) {
+        if (!locItem.planned) return;
         locItem.visited = true;
         locItemDao.update(locItem);
     }

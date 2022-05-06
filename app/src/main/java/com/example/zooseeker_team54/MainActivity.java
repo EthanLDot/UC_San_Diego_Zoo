@@ -20,7 +20,9 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     public RecyclerView searchResultView;
@@ -80,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
         plannedLocsView.setAdapter(plannedLocsAdapter);
 
         //
-        viewModel.getPlannedLocs()
+        viewModel.getAllPlannedLive()
                 .observe(this, plannedLocsAdapter::setLocItems);
 
         // Show the size of the plan
@@ -93,16 +95,17 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public List<LocEdge> findRoute(List<LocItem> plannedLocItems) {
+    private HashMap<String, List<LocEdge>> findRoute(List<LocItem> plannedLocItems) {
 
         // the final route to return
-        List<LocEdge> route = new ArrayList<>();
+        HashMap<String, List<LocEdge>> route = new HashMap<>();
 
         // set up a list unvisited locations
         List<String> unvisited = new ArrayList<>();
         plannedLocItems.forEach((word) -> unvisited.add(word.id));
 
         // start at the entrance of the zoo
+        double currDist = 0;
         String current = "entrance_exit_gate";
 
         // while there are still unvisited locations
@@ -110,13 +113,13 @@ public class MainActivity extends AppCompatActivity {
 
             // initialize index, distance, and the path to the shortest planned locations
             int minIndex = 0;
+            String closest = "", target = "";
             double minDist = Double.MAX_VALUE;
-            String closest = "";
             List<LocEdge> minPath = new ArrayList<>();
 
             // loop through each other planned locations
             for (int i = 0; i < unvisited.size(); i++) {
-                String target = unvisited.get(i);
+                target = unvisited.get(i);
                 Pair<List<LocEdge>, Double> pair = Utilities.findShortestPathBetween(current, target);
 
                 // if the distance is shorter than current min distance, update
@@ -128,15 +131,20 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
+            //
+            LocItem targetLocItem = viewModel.getLocItemById(closest);
+            if (!targetLocItem.visited) {
+                currDist += minDist;
+                viewModel.updateLocCurrentDist(targetLocItem, currDist);
+            }
+
+            //
             current = closest;
-            route.addAll(minPath);
             unvisited.remove(minIndex);
+            route.put(closest, minPath);
         }
 
-        //commented out for now
-        /*String target = "entrance_exit_gate";
-        Pair<List<LocEdge>, Double> pair = Utilities.findShortestPathBetween(current, target);
-        route.addAll(pair.first);*/
+        // todo: figure out whether we need to finish at entrance/exit gate
         return route;
     }
 
@@ -206,11 +214,11 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        List<LocEdge> route = findRoute(plannedLocsAdapter.getLocItems());
-        System.out.println(route.size());
+        HashMap<String, List<LocEdge>> directions = findRoute(plannedLocsAdapter.getLocItems());
+        System.out.println(directions.size());
 
         Intent intent = new Intent(this, ShowRouteActivity.class);
-        intent.putExtra("route", (ArrayList<LocEdge>) route);
+        intent.putExtra("route", directions);
         startActivity(intent);
     }
 }

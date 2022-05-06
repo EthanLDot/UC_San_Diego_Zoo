@@ -1,6 +1,7 @@
 package com.example.zooseeker_team54;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -9,29 +10,35 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class ShowRouteActivity extends AppCompatActivity {
     public RecyclerView showRouteView;
 
+    private ViewModel viewModel;
     private ShowRouteAdapter showRouteAdapter;
 
-    private List<LocEdge> route;
+    private HashMap<String, List<LocEdge>> route;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route_plan);
         Intent intent = getIntent();
-        route = (List<LocEdge>) intent.getSerializableExtra("route");
+        route = (HashMap<String, List<LocEdge>>) intent.getSerializableExtra("route");
+
+        viewModel = new ViewModelProvider(this).get(ViewModel.class);
 
         showRouteAdapter = new ShowRouteAdapter();
         showRouteAdapter.setHasStableIds(true);
-        showRouteAdapter.setLocEdges(route);
 
         showRouteView = this.findViewById(R.id.planned_route);
         showRouteView.setLayoutManager(new LinearLayoutManager(this));
         showRouteView.setAdapter(showRouteAdapter);
+
+        viewModel.getAllPlannedUnvisitedLive()
+                .observe(this, showRouteAdapter::setLocItems);
 
     }
     public void onBackButtonClicked (View view) {

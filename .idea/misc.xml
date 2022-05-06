@@ -4,6 +4,12 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../../../../../layout/custom_preview.xml" value="0.1962962962962963" />
+        <entry key="..\:/Users/Jeff Lin/AndroidStudioProjects/zooseeker-team-54/app/src/main/res/layout/activity_direction_xml.xml" value="0.25" />
+        <entry key="..\:/Users/Jeff Lin/AndroidStudioProjects/zooseeker-team-54/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/Users/Jeff Lin/AndroidStudioProjects/zooseeker-team-54/app/src/main/res/layout/activity_route_plan.xml" value="0.25" />
+        <entry key="..\:/Users/Jeff Lin/AndroidStudioProjects/zooseeker-team-54/app/src/main/res/layout/deletable_loc_item.xml" value="0.1585144927536232" />
+        <entry key="..\:/Users/Jeff Lin/AndroidStudioProjects/zooseeker-team-54/app/src/main/res/layout/loc_edge.xml" value="0.1585144927536232" />
+        <entry key="..\:/Users/Jeff Lin/AndroidStudioProjects/zooseeker-team-54/app/src/main/res/layout/undeletable_loc_item.xml" value="0.1585144927536232" />
         <entry key="..\:/Users/ethan/AndroidStudioProjects/zooseeker-team-54/app/src/main/res/layout/activity_main.xml" value="0.22" />
         <entry key="..\:/Users/ethan/AndroidStudioProjects/zooseeker-team-54/app/src/main/res/layout/activity_route_plan.xml" value="0.1" />
         <entry key="..\:/Users/ethan/AndroidStudioProjects/zooseeker-team-54/app/src/main/res/layout/deletable_loc_item.xml" value="0.1" />

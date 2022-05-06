@@ -37,5 +37,10 @@ public class ShowRouteActivity extends AppCompatActivity {
     public void onBackButtonClicked (View view) {
         finish();
     }
+
+    public void onDirectionBtnClicked (View view) {
+        Intent intent = new Intent(this, RouteDirectionActivity.class);
+        startActivity(intent);
+    }
 }
 

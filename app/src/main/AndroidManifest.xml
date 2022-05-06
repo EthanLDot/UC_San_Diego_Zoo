@@ -16,9 +16,6 @@
             android:name=".ShowRouteActivity"
             android:exported="false" />
         <activity
-            android:name=".RouteDirectionActivity"
-            android:exported="false" />
-        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustPan">

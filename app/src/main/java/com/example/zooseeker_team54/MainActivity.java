@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     public SearchResultAdapter searchResultAdapter;
     public PlannedLocsAdapter plannedLocsAdapter;
 
+
     private EditText searchBarText;
     private Button clearBtn;
     private TextView planSizeText;
@@ -79,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private List<LocEdge> findRoute(List<LocItem> plannedLocItems) {
+    public List<LocEdge> findRoute(List<LocItem> plannedLocItems) {
 
         // the final route to return
         List<LocEdge> route = new ArrayList<>();
@@ -119,9 +120,10 @@ public class MainActivity extends AppCompatActivity {
             unvisited.remove(minIndex);
         }
 
-        // String target = "entrance_exit_gate";
-        // Pair<List<LocEdge>, Double> pair = Utilities.findShortestPathBetween(current, target);
-        // route.addAll(pair.first);
+        //commented out for now
+        /*String target = "entrance_exit_gate";
+        Pair<List<LocEdge>, Double> pair = Utilities.findShortestPathBetween(current, target);
+        route.addAll(pair.first);*/
         return route;
     }
 

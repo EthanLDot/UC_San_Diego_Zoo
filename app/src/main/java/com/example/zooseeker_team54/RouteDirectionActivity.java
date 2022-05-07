@@ -57,12 +57,12 @@ public class RouteDirectionActivity extends AppCompatActivity {
         // Step 1: recalculate currDist for all unvisited LocItems
         LocItem currentTarget = viewModel.getNextUnvisitedExhibit();
         Double currentTargetDist = currentTarget.currDist;
-        viewModel.addVisitedLoc(currentTarget);
 
         List<LocItem> unvisited = viewModel.getAllPlannedUnvisited();
         for (LocItem locItem : unvisited) {
             viewModel.updateLocCurrentDist(locItem, locItem.currDist - currentTargetDist);
         }
+        viewModel.addVisitedLoc(currentTarget);
 
         LocItem newTarget = viewModel.getNextUnvisitedExhibit();
         if (newTarget == null) {

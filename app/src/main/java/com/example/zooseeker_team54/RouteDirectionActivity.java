@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,6 +23,7 @@ public class RouteDirectionActivity extends AppCompatActivity {
 
     List<LocEdge> directions;
     HashMap<String, List<LocEdge>> route;
+    List<LocEdge> nextDirections;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -36,9 +38,12 @@ public class RouteDirectionActivity extends AppCompatActivity {
         routeDirectionAdapter.setHasStableIds(true);
         routeDirectionAdapter.setLocEdges(directions);
 
-        //code for button disabling and/or modification
         nextButton = this.findViewById(R.id.next_btn);
-        nextButton.setClickable(false);
+
+        //getting next set of directions in advance, if they exist
+        ViewModel viewModel = new ViewModelProvider(this).get(ViewModel.class);
+        nextDirections = route.get(viewModel.getNextUnvisitedExhibit().id);
+        //nextButton.setClickable(false);
         nextButton.setAlpha(.5f);
         nextButton.setText(nextButton.getText() + "\n------\ntest");
 
@@ -51,11 +56,9 @@ public class RouteDirectionActivity extends AppCompatActivity {
     public void onBackToPlanBtnClicked(View view){ finish(); }
 
     public void onNextBtnClicked(View view) {
-        /*Intent intent = new Intent(this, RouteDirectionActivity.class);
-        List<LocEdge> directions = route.get(viewModel.getNextUnvisitedExhibit().id);
-        intent.putExtra("directions", (ArrayList<LocEdge>) directions);
+        Intent intent = new Intent(this, RouteDirectionActivity.class);
+        intent.putExtra("directions", (ArrayList<LocEdge>) nextDirections);
         intent.putExtra("route", route);
-        startActivity(intent);*/
-        finish();
+        //startActivity(intent);
     }
 }

@@ -30,6 +30,9 @@ public interface LocItemDao {
     LiveData<List<LocItem>> getAllPlannedLive();
 
     @Query("SELECT * FROM loc_items WHERE planned = 1 AND visited = 0 ORDER BY currDist")
+    List<LocItem> getAllPlannedUnvisited();
+
+    @Query("SELECT * FROM loc_items WHERE planned = 1 AND visited = 0 ORDER BY currDist")
     LiveData<List<LocItem>> getAllPlannedUnvisitedLive();
 
     @Query("SELECT * FROM loc_items WHERE currDist = (SELECT MIN(currDist) FROM loc_items WHERE planned = 1 AND visited = 0)")

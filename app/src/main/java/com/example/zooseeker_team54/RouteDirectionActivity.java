@@ -19,6 +19,7 @@ public class RouteDirectionActivity extends AppCompatActivity {
     public RecyclerView routeDirectionView;
     public Button nextButton;
 
+    private ViewModel viewModel;
     private RouteDirectionAdapter routeDirectionAdapter;
 
     List<LocEdge> directions;
@@ -34,18 +35,14 @@ public class RouteDirectionActivity extends AppCompatActivity {
         directions = (List<LocEdge>) intent.getSerializableExtra("directions");
         route = (HashMap<String, List<LocEdge>>) intent.getSerializableExtra("route");
 
+        viewModel = new ViewModelProvider(this).get(ViewModel.class);
+
         routeDirectionAdapter = new RouteDirectionAdapter();
         routeDirectionAdapter.setHasStableIds(true);
         routeDirectionAdapter.setLocEdges(directions);
 
         nextButton = this.findViewById(R.id.next_btn);
-
-        //getting next set of directions in advance, if they exist
-        ViewModel viewModel = new ViewModelProvider(this).get(ViewModel.class);
-        nextDirections = route.get(viewModel.getNextUnvisitedExhibit().id);
-        //nextButton.setClickable(false);
-        nextButton.setAlpha(.5f);
-        nextButton.setText(nextButton.getText() + "\n------\ntest");
+        nextButton.setOnClickListener(this::onNextBtnClicked);
 
         routeDirectionView = this.findViewById(R.id.route_direction);
         routeDirectionView.setLayoutManager(new LinearLayoutManager(this));
@@ -56,9 +53,24 @@ public class RouteDirectionActivity extends AppCompatActivity {
     public void onBackToPlanBtnClicked(View view){ finish(); }
 
     public void onNextBtnClicked(View view) {
-        Intent intent = new Intent(this, RouteDirectionActivity.class);
-        intent.putExtra("directions", (ArrayList<LocEdge>) nextDirections);
-        intent.putExtra("route", route);
-        //startActivity(intent);
+
+        // Step 1: recalculate currDist for all unvisited LocItems
+        LocItem currentTarget = viewModel.getNextUnvisitedExhibit();
+        Double currentTargetDist = currentTarget.currDist;
+        viewModel.addVisitedLoc(currentTarget);
+
+        List<LocItem> unvisited = viewModel.getAllPlannedUnvisited();
+        for (LocItem locItem : unvisited) {
+            viewModel.updateLocCurrentDist(locItem, locItem.currDist - currentTargetDist);
+        }
+
+        LocItem newTarget = viewModel.getNextUnvisitedExhibit();
+        if (newTarget == null) {
+            nextButton.setClickable(false);
+            return;
+        }
+
+        List<LocEdge> newDirections = route.get(newTarget.id);
+        routeDirectionAdapter.setLocEdges(newDirections);
     }
 }

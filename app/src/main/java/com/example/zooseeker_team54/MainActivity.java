@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private ViewModel viewModel;
     private Utilities utils;
 
+    // TODO: figure what should happen if a plan is there but users modify the plan in main
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,7 +150,8 @@ public class MainActivity extends AppCompatActivity {
             route.put(closest, minPath);
         }
 
-        // todo: figure out whether we need to finish at entrance/exit gate
+        // TODO: figure out whether we need to finish at entrance/exit gate
+
         return route;
     }
 

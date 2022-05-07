@@ -11,6 +11,7 @@
         <entry key="app/src/main/res/layout/activity_direction.xml" value="0.3309066772460938" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.3507965087890625" />
         <entry key="app/src/main/res/layout/activity_route_plan.xml" value="0.19117048702220657" />
+        <entry key="app/src/main/res/layout/deletable_loc_item.xml" value="0.30482330322265627" />
         <entry key="app/src/main/res/layout/exhibit_item.xml" value="0.2078125" />
         <entry key="app/src/main/res/layout/loc_edge.xml" value="0.17479248046874996" />
         <entry key="app/src/main/res/layout/loc_item.xml" value="0.1" />

@@ -46,8 +46,6 @@ public class PlannedLocsAdapter extends RecyclerView.Adapter<PlannedLocsAdapter.
     @Override
     public int getItemCount() { return locItems.size(); }
 
-    public List<LocItem> getLocItems() { return locItems; }
-
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView locNameText;
         private LocItem locItem;

@@ -23,6 +23,8 @@ public class ViewModel extends AndroidViewModel {
 
     public List<LocItem> getAll() { return locItemDao.getAll(); }
 
+    public List<LocItem> getAllExhibits() { return locItemDao.getAllExhibits(); }
+
     public LiveData<List<LocItem>> getAllPlannedLive() {
         return locItemDao.getAllPlannedLive();
     }

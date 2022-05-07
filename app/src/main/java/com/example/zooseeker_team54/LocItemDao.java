@@ -23,11 +23,8 @@ public interface LocItemDao {
     @Query("SELECT * FROM loc_items ORDER BY id")
     List<LocItem> getAll();
 
-    @Update
-    int update(LocItem locItem);
-
-    @Delete
-    int delete(LocItem locItem);
+    @Query("SELECT * FROM loc_items WHERE kind = 'exhibit' ORDER BY id")
+    List<LocItem> getAllExhibits();
 
     @Query("SELECT * FROM loc_items ORDER BY id")
     LiveData<List<LocItem>> getAllLive();
@@ -35,9 +32,16 @@ public interface LocItemDao {
     @Query("SELECT * FROM loc_items WHERE planned = 1 ORDER BY id")
     LiveData<List<LocItem>> getAllPlannedLive();
 
+    @Query("SELECT * FROM loc_items WHERE planned = 1 and visited = 0 ORDER BY currDist")
+    LiveData<List<LocItem>> getAllPlannedUnvisitedLive();
+
+    @Update
+    int update(LocItem locItem);
+
+    @Delete
+    int delete(LocItem locItem);
+
     @Query("SELECT COUNT(*) FROM loc_items WHERE planned = 1 ORDER BY id")
     int countPlannedExhibits();
 
-    @Query("SELECT * FROM loc_items WHERE planned = 1 and visited = 0 ORDER BY currDist")
-    LiveData<List<LocItem>> getAllPlannedUnvisitedLive();
 }

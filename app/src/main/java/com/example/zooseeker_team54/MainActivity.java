@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class MainActivity extends AppCompatActivity {
     public RecyclerView searchResultView;
@@ -56,7 +57,11 @@ public class MainActivity extends AppCompatActivity {
         searchBarText.addTextChangedListener(searchBarTextWatcher);
 
         //generate a list of exhibits from utilities and create the array adapter for autocomplete suggestions
-        List<String> EXHIBITS = Utilities.getExhibitList();
+        List<String> EXHIBITS = viewModel.getAllExhibits()
+                .stream()
+                .map(l -> l.name)
+                .collect(Collectors.toList());
+        System.out.println(EXHIBITS);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, EXHIBITS);
         searchBarText.setAdapter(adapter);
@@ -159,7 +164,8 @@ public class MainActivity extends AppCompatActivity {
     }
     
     private void updatePlanSizeText() {
-        planSizeText.setText(Integer.toString(viewModel.countPlannedExhibits()));
+        planSizeText.setText(String.format("Planned (%s)"
+                , Integer.toString(viewModel.countPlannedExhibits())));
     }
 
     // Text Watcher for search bar textview
@@ -198,7 +204,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void onClearBtnClicked(View view) {
         viewModel.clearPlannedLocs();
-        planSizeText.setText("0");
+        planSizeText.setText("Planned (0)");
     }
 
     public void onPlanButtonClicked(View view) {

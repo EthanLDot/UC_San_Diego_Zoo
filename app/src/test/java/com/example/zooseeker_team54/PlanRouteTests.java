@@ -87,8 +87,8 @@ public class PlanRouteTests {
 
             HashMap<String, List<LocEdge>> route = activity.findRoute(locsAdapterContents);
             assertEquals(1, route.size());
-            assertEquals("{gorillas=[Walk 10 meters along Entrance Way from 'Entrance and Exit Gate' to 'Entrance Plaza'.\n" +
-                    ", Walk 200 meters along Africa Rocks Street from 'Entrance Plaza' to 'Gorillas'.\n" +
+            assertEquals("{gorillas=[Proceed on 'Entrance Way' 10 meters towards 'Entrance Plaza' from 'Entrance and Exit Gate'.\n" +
+                    ", Proceed on 'Africa Rocks Street' 200 meters towards 'Gorillas' from 'Entrance Plaza'.\n" +
                     "]}", route.toString());
         });
     }
@@ -126,9 +126,9 @@ public class PlanRouteTests {
 
             HashMap<String, List<LocEdge>> route = activity.findRoute(locsAdapterContents);
             assertEquals(2, route.size());
-            assertEquals("{lions=[Walk 200 meters along Sharp Teeth Shortcut from 'Alligators' to 'Lions'.\n" +
-                    "], gators=[Walk 10 meters along Entrance Way from 'Entrance and Exit Gate' to 'Entrance Plaza'.\n" +
-                    ", Walk 100 meters along Reptile Road from 'Entrance Plaza' to 'Alligators'.\n" +
+            assertEquals("{lions=[Proceed on 'Sharp Teeth Shortcut' 200 meters towards 'Lions' from 'Alligators'.\n" +
+                    "], gators=[Proceed on 'Entrance Way' 10 meters towards 'Entrance Plaza' from 'Entrance and Exit Gate'.\n" +
+                    ", Proceed on 'Reptile Road' 100 meters towards 'Alligators' from 'Entrance Plaza'.\n" +
                     "]}", route.toString());
         });
     }

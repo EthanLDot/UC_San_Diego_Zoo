@@ -24,7 +24,7 @@ public class RouteDirectionActivity extends AppCompatActivity {
 
     List<LocEdge> directions;
     HashMap<String, List<LocEdge>> route;
-    List<LocEdge> nextDirections;
+    LocItem newTarget;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -42,6 +42,7 @@ public class RouteDirectionActivity extends AppCompatActivity {
         routeDirectionAdapter.setLocEdges(directions);
 
         nextButton = this.findViewById(R.id.next_btn);
+        configureButton();
         nextButton.setOnClickListener(this::onNextBtnClicked);
 
         routeDirectionView = this.findViewById(R.id.route_direction);
@@ -53,7 +54,14 @@ public class RouteDirectionActivity extends AppCompatActivity {
     public void onBackToPlanBtnClicked(View view){ finish(); }
 
     public void onNextBtnClicked(View view) {
+        List<LocEdge> newDirections = route.get(newTarget.id);
+        routeDirectionAdapter.setLocEdges(newDirections);
+        nextButton = this.findViewById(R.id.next_btn);
+        configureButton();
+    }
 
+    void configureButton()
+    {
         // Step 1: recalculate currDist for all unvisited LocItems
         LocItem currentTarget = viewModel.getNextUnvisitedExhibit();
         Double currentTargetDist = currentTarget.currDist;
@@ -64,13 +72,18 @@ public class RouteDirectionActivity extends AppCompatActivity {
         }
         viewModel.addVisitedLoc(currentTarget);
 
-        LocItem newTarget = viewModel.getNextUnvisitedExhibit();
-        if (newTarget == null) {
+        //Step 2: choose next exhibit to travel to
+        newTarget = viewModel.getNextUnvisitedExhibit();
+        if (newTarget == null || !newTarget.kind.equals("exhibit") || !newTarget.planned) {
+            nextButton.setText("NEXT");
             nextButton.setClickable(false);
-            return;
+            nextButton.setEnabled(false);
         }
-
-        List<LocEdge> newDirections = route.get(newTarget.id);
-        routeDirectionAdapter.setLocEdges(newDirections);
+        else
+        {
+            nextButton.setEnabled(true);
+            String newText = "NEXT\n------\n" + newTarget.name + ", " + (int)newTarget.currDist;
+            nextButton.setText(newText);
+        }
     }
 }

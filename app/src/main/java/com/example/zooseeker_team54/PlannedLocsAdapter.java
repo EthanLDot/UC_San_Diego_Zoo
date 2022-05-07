@@ -6,8 +6,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.AsyncListDiffer;
-import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.Collections;
@@ -28,12 +26,14 @@ public class PlannedLocsAdapter extends RecyclerView.Adapter<PlannedLocsAdapter.
         this.onDeleteClicked = onDeleteClicked;
     }
 
+    public List<LocItem> getLocItems() { return locItems; }
+
     @NonNull
     @Override
     public PlannedLocsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater
                 .from(parent.getContext())
-                .inflate(R.layout.loc_item, parent, false);
+                .inflate(R.layout.deletable_loc_item, parent, false);
 
         return new PlannedLocsAdapter.ViewHolder(view);
     }

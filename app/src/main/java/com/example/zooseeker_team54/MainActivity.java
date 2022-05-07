@@ -1,24 +1,28 @@
 package com.example.zooseeker_team54;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.AsyncListDiffer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Pair;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     public RecyclerView searchResultView;
@@ -27,22 +31,35 @@ public class MainActivity extends AppCompatActivity {
     public SearchResultAdapter searchResultAdapter;
     public PlannedLocsAdapter plannedLocsAdapter;
 
-    private EditText searchBarText;
+
+    private AutoCompleteTextView searchBarText;
     private Button clearBtn;
     private TextView planSizeText;
 
-    private LocViewModel locViewModel;
+    private ViewModel viewModel;
+    private Utilities utils;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        locViewModel = new ViewModelProvider(this).get(LocViewModel.class);
+        //prevents UI difficulties resulting from a rotated screen
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        viewModel = new ViewModelProvider(this).get(ViewModel.class);
+        utils = new Utilities(getApplication().getApplicationContext());
 
         // Get search bar EditText and bind a text watcher to it
         searchBarText = this.findViewById(R.id.search_bar);
         searchBarText.addTextChangedListener(searchBarTextWatcher);
+
+        //generate a list of exhibits from utilities and create the array adapter for autocomplete suggestions
+        List<String> EXHIBITS = Utilities.getExhibitList();
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_list_item_1, EXHIBITS);
+        searchBarText.setAdapter(adapter);
 
         // Create an adapter for the RecyclerView of search results
         searchResultAdapter = new SearchResultAdapter();
@@ -65,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
         plannedLocsView.setAdapter(plannedLocsAdapter);
 
         //
-        locViewModel.getPlannedLocs()
+        viewModel.getAllPlannedLive()
                 .observe(this, plannedLocsAdapter::setLocItems);
 
         // Show the size of the plan
@@ -78,31 +95,71 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public HashMap<String, List<LocEdge>> findRoute(List<LocItem> plannedLocItems) {
+
+        // the final route to return
+        HashMap<String, List<LocEdge>> route = new HashMap<>();
+
+        // set up a list unvisited locations
+        List<String> unvisited = new ArrayList<>();
+        plannedLocItems.forEach((word) -> unvisited.add(word.id));
+
+        // start at the entrance of the zoo
+        double currDist = 0;
+        String current = "entrance_exit_gate";
+
+        // while there are still unvisited locations
+        while (unvisited.size() > 0) {
+
+            // initialize index, distance, and the path to the shortest planned locations
+            int minIndex = 0;
+            String closest = "", target = "";
+            double minDist = Double.MAX_VALUE;
+            List<LocEdge> minPath = new ArrayList<>();
+
+            // loop through each other planned locations
+            for (int i = 0; i < unvisited.size(); i++) {
+                target = unvisited.get(i);
+                Pair<List<LocEdge>, Double> pair = Utilities.findShortestPathBetween(current, target);
+
+                // if the distance is shorter than current min distance, update
+                if (pair.second < minDist) {
+                    minPath = pair.first;
+                    minDist = pair.second;
+                    minIndex = i;
+                    closest = target;
+                }
+            }
+
+            //
+            LocItem targetLocItem = viewModel.getLocItemById(closest);
+            if (!targetLocItem.visited) {
+                currDist += minDist;
+                viewModel.updateLocCurrentDist(targetLocItem, currDist);
+            }
+
+            //
+            current = closest;
+            unvisited.remove(minIndex);
+            route.put(closest, minPath);
+        }
+
+        // todo: figure out whether we need to finish at entrance/exit gate
+        return route;
+    }
+
     private void removePlannedLoc(LocItem locItem) {
-        locViewModel.removePlannedLoc(locItem);
+        viewModel.removePlannedLoc(locItem);
         updatePlanSizeText();
     }
 
     private void addPlannedLoc(LocItem locItem) {
-        locViewModel.addPlannedLoc(locItem);
+        viewModel.addPlannedLoc(locItem);
         updatePlanSizeText();
     }
     
     private void updatePlanSizeText() {
-        planSizeText.setText(Integer.toString(locViewModel.countPlannedExhibits()));
-    }
-
-    // TODO: implement this function
-    //now is mock object for testing plan listing functionality
-    private static List<LocItem> findRoute() {
-        List<LocItem> mockPath  = new ArrayList<>();
-        LocItem locItem1 = new LocItem("name1", "this is id", "stuff", Collections.emptyList());
-        LocItem locItem2 = new LocItem("name2", "this is id", "stuff", Collections.emptyList());
-        LocItem locItem3 = new LocItem("name3", "this is id", "stuff", Collections.emptyList());
-        mockPath.add(locItem1);
-        mockPath.add(locItem2);
-        mockPath.add(locItem3);
-        return mockPath;
+        planSizeText.setText(Integer.toString(viewModel.countPlannedExhibits()));
     }
 
     // Text Watcher for search bar textview
@@ -127,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        List<LocItem> allLocs = locViewModel.getAll();
+        List<LocItem> allLocs = viewModel.getAll();
         List<LocItem> searchResults = new ArrayList<>();
 
         for(LocItem locItem : allLocs) {
@@ -140,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onClearBtnClicked(View view) {
-        locViewModel.clearPlannedLocs();
+        viewModel.clearPlannedLocs();
         planSizeText.setText("0");
     }
 
@@ -157,11 +214,11 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        List<LocItem> route = findRoute();
-        System.out.println(route.size());
+        HashMap<String, List<LocEdge>> directions = findRoute(plannedLocsAdapter.getLocItems());
+        System.out.println(directions.size());
 
-        Intent intent = new Intent(this, RoutePlanActivity.class);
-        intent.putExtra("route", (ArrayList<LocItem>) route);
+        Intent intent = new Intent(this, ShowRouteActivity.class);
+        intent.putExtra("route", directions);
         startActivity(intent);
     }
 }

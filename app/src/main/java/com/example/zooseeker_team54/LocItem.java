@@ -7,6 +7,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
@@ -21,22 +22,33 @@ import java.util.List;
 @Entity(tableName = "loc_items")
 public class LocItem implements Serializable {
 
+    // TODO: change the type of kind to Kind
+    public static enum Kind {
+        // The SerializedName annotation tells GSON how to convert
+        // from the strings in our JSON to this Enum.
+        @SerializedName("gate") GATE,
+        @SerializedName("exhibit") EXHIBIT,
+        @SerializedName("intersection") INTERSECTION
+    }
 
     @PrimaryKey(autoGenerate = true)
     public long pk_id;
 
     @NonNull
     public String name, kind, id;
-    public boolean planned;
+    public boolean planned, visited;
     public List<String> tags;
+    public double currDist;
 
     @NonNull
     @Override
     public String toString() {
-        return "Loc{" +
+        return "Loc {" +
                 "id=" + id +
                 ", name='" + name +
                 "', planned=" + planned +
+                ", visited=" + visited +
+                ", current distance=" + currDist +
                 '}';
     }
 
@@ -47,6 +59,12 @@ public class LocItem implements Serializable {
         this.id = id;
         this.tags = tags;
         this.planned = false;
+        this.visited = false;
+        this.currDist = 0;
+    }
+
+    public String getCurrDist() {
+        return String.format("- %.0f meters", currDist);
     }
 
     public static List<LocItem> loadJSON(Context context, String path) {

@@ -9,12 +9,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
-import java.util.function.Consumer;
 
-public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapter.ViewHolder> {
+public class ShowRouteAdapter extends RecyclerView.Adapter<ShowRouteAdapter.ViewHolder> {
     private List<LocItem> locItems = Collections.emptyList();
-    private Consumer<LocItem> onSearchResultClicked;
 
     public void setLocItems(List<LocItem> newLocItems) {
         this.locItems.clear();
@@ -22,51 +21,39 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
         notifyDataSetChanged();
     }
 
-    public void setOnSearchResultClicked(Consumer<LocItem> onSearchResultClicked) {
-        this.onSearchResultClicked = onSearchResultClicked;
-    }
-
-    public List<LocItem> getLocItems() { return locItems; }
-
     @NonNull
     @Override
-    public SearchResultAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ShowRouteAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater
                 .from(parent.getContext())
-                .inflate(R.layout.undeletable_loc_item, parent, false);
+                .inflate(R.layout.route_plan_loc_item, parent, false);
 
-        return new ViewHolder(view);
+        return new ShowRouteAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ShowRouteAdapter.ViewHolder holder, int position) {
         holder.setLocItem(locItems.get(position));
     }
 
     @Override
-    public int getItemCount() {
-        return locItems.size();
-    }
+    public int getItemCount() { return locItems.size(); }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView locNameText;
         private LocItem locItem;
+        private TextView locNameText;
+        private TextView distanceText;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             this.locNameText = itemView.findViewById(R.id.loc_name);
-
-            this.locNameText.setOnClickListener(view -> {
-                if (onSearchResultClicked == null) return;
-                onSearchResultClicked.accept(locItem);
-                locItems.remove(locItem);
-                notifyDataSetChanged();
-            });
+            this.distanceText = itemView.findViewById(R.id.distance);
         }
 
         public void setLocItem(LocItem locItem) {
             this.locItem = locItem;
             this.locNameText.setText(locItem.name);
+            this.distanceText.setText(locItem.getCurrDist());
         }
     }
 }

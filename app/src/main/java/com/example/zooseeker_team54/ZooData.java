@@ -1,5 +1,8 @@
 package com.example.zooseeker_team54;
 
+import android.content.Context;
+
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
@@ -37,21 +40,19 @@ public class ZooData {
         public String street;
     }
 
-    public static Map<String, ZooData.VertexInfo> loadVertexInfoJSON(String path) {
-        InputStream inputStream = MainActivity.class.getClassLoader().getResourceAsStream(path);
+    public static Map<String, ZooData.VertexInfo> loadVertexInfoJSON(String path, Context context) {
+        InputStream inputStream = null;
+        try {
+            inputStream = context.getAssets().open(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         Reader reader = new InputStreamReader(inputStream);
 
         Gson gson = new Gson();
         Type type = new TypeToken<List<ZooData.VertexInfo>>(){}.getType();
         List<ZooData.VertexInfo> zooData = gson.fromJson(reader, type);
 
-        // This code is equivalent to:
-        //
-        // Map<String, ZooData.VertexInfo> indexedZooData = new HashMap();
-        // for (ZooData.VertexInfo datum : zooData) {
-        //   indexedZooData[datum.id] = datum;
-        // }
-        //
         Map<String, ZooData.VertexInfo> indexedZooData = zooData
                 .stream()
                 .collect(Collectors.toMap(v -> v.id, datum -> datum));
@@ -59,8 +60,13 @@ public class ZooData {
         return indexedZooData;
     }
 
-    public static Map<String, ZooData.EdgeInfo> loadEdgeInfoJSON(String path) {
-        InputStream inputStream = MainActivity.class.getClassLoader().getResourceAsStream(path);
+    public static Map<String, ZooData.EdgeInfo> loadEdgeInfoJSON(String path, Context context) {
+        InputStream inputStream = null;
+        try {
+            inputStream = context.getAssets().open(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         Reader reader = new InputStreamReader(inputStream);
 
         Gson gson = new Gson();
@@ -74,7 +80,7 @@ public class ZooData {
         return indexedZooData;
     }
 
-    public static Graph<String, IdentifiedWeightedEdge> loadZooGraphJSON(String path) {
+    public static Graph<String, IdentifiedWeightedEdge> loadZooGraphJSON(String path, Context context) {
         // Create an empty graph to populate.
         Graph<String, IdentifiedWeightedEdge> g = new DefaultUndirectedWeightedGraph<>(IdentifiedWeightedEdge.class);
 
@@ -90,7 +96,13 @@ public class ZooData {
         importer.addEdgeAttributeConsumer(IdentifiedWeightedEdge::attributeConsumer);
 
         // On Android, you would use context.getAssets().open(path) here like in Lab 5.
-        InputStream inputStream = MainActivity.class.getClassLoader().getResourceAsStream(path);
+        // InputStream inputStream = MainActivity.class.getClassLoader().getResourceAsStream(path);
+        InputStream inputStream = null;
+        try {
+            inputStream = context.getAssets().open(path);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         Reader reader = new InputStreamReader(inputStream);
 
         // And now we just import it!

@@ -11,31 +11,25 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Displays the directions to get to a specific exhibit in the route o planned exhibits
+ */
 public class RouteDirectionActivity extends AppCompatActivity {
-    public RecyclerView routeDirectionView;
-
-    private RouteDirectionAdapter routeDirectionAdapter;
-
-    List<LocEdge> directions;
+    DirectionsDisplayRecyclerView display;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState){
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_direction);
 
         Intent intent = getIntent();
-        directions = (List<LocEdge>) intent.getSerializableExtra("directions");
-
-        routeDirectionAdapter = new RouteDirectionAdapter();
-        routeDirectionAdapter.setHasStableIds(true);
-        routeDirectionAdapter.setLocEdges(directions);
-
-        routeDirectionView = this.findViewById(R.id.route_direction);
-        routeDirectionView.setLayoutManager(new LinearLayoutManager(this));
-        routeDirectionView.setAdapter(routeDirectionAdapter);
-
+        display = new DirectionsDisplayRecyclerView((List<LocEdge>) intent.getSerializableExtra("directions"));
+        display.setContext(this);
+        display.initializeRecyclerView();
     }
 
     public void onBackToPlanBtnClicked(View view){ finish(); }
-
+    public DirectionsDisplayRecyclerView getDisplayView() {
+        return this.display;
+    }
 }

@@ -48,7 +48,17 @@ public class ShowRouteActivity extends AppCompatActivity {
 
     public void onDirectionBtnClicked (View view) {
         Intent intent = new Intent(this, RouteDirectionActivity.class);
-        List<LocEdge> directions = route.get(viewModel.getNextUnvisitedExhibit().id);
+
+        // todo: discuss if we really need to pass direction
+        LocItem target = viewModel.getNextUnvisitedExhibit();
+
+        if (target == null) {
+            // todo: send an alert
+            // maybe set it non-clickable as well?
+            return;
+        }
+
+        List<LocEdge> directions = route.get(target.id);
         intent.putExtra("directions", (ArrayList<LocEdge>) directions);
         intent.putExtra("route", route);
         startActivity(intent);

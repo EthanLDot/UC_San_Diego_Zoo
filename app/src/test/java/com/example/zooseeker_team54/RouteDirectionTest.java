@@ -25,16 +25,42 @@ import java.util.List;
 
 @RunWith(AndroidJUnit4.class)
 public class RouteDirectionTest {
+    List<LocEdge> directions;
+    Intent intent;
+
+    @Before
+    public void setUp() {
+        directions = new ArrayList<>();
+        intent = new Intent(ApplicationProvider.getApplicationContext(), RouteDirectionActivity.class);
+    }
+
     /**
      * Pass the RouteDirectionActivity class a single exhibit's directions to display.
      */
     @Test
     public void singleExhibitTest() {
-        List<LocEdge> directions = new ArrayList<>();
         directions.add(new LocEdge("Tasmanian Devils", 200, "Zoo Lane", "entrance", "exit"));
 
         // Launch RouteDirectionActivity class
-        Intent intent = new Intent(ApplicationProvider.getApplicationContext(), RouteDirectionActivity.class);
+        intent.putExtra("directions", (ArrayList<LocEdge>) directions);
+        ActivityScenario<RouteDirectionActivity> scenario = ActivityScenario.launch(intent);
+
+        // Check for Correctness
+        scenario.onActivity(activity -> {
+            DirectionsDisplayRecyclerView display = activity.getDisplayView();
+            assertEquals(directions.get(0), display.getDirections().get(0));
+        });
+    }
+
+    /**
+     * Pass the RouteDirectionActivity a plan with more than one exhibit.
+     * Should only display the directions for the first exhibit in the plan.
+     */
+    @Test
+    public void multipleExhibitTest() {
+        directions.add(new LocEdge("Gorillas", 340, "jungle_lane", "safari_blvd", "exit"));
+        directions.add(new LocEdge("Tasmanian Devils", 200, "Zoo Lane", "entrance", "exit"));
+
         intent.putExtra("directions", (ArrayList<LocEdge>) directions);
         ActivityScenario<RouteDirectionActivity> scenario = ActivityScenario.launch(intent);
 

@@ -50,6 +50,7 @@ public class ShowRouteActivity extends AppCompatActivity {
         Intent intent = new Intent(this, RouteDirectionActivity.class);
         List<LocEdge> directions = route.get(viewModel.getNextUnvisitedExhibit().id);
         intent.putExtra("directions", (ArrayList<LocEdge>) directions);
+        intent.putExtra("route", route);
         startActivity(intent);
     }
 }

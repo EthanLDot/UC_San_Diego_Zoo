@@ -38,7 +38,7 @@ public class RouteDirectionActivity extends AppCompatActivity {
         display.initializeRecyclerView();
 
         // Initialize New Button
-        button = new DirectionsDisplayNextButton(this);
+        button = new DirectionsDisplayNextButton(this, display);
         button.setViewModel(this.viewModel);
         button.initializeButton();
     }

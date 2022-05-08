@@ -53,15 +53,19 @@ public class ShowRouteActivity extends AppCompatActivity {
         LocItem target = viewModel.getNextUnvisitedExhibit();
 
         if (target == null) {
-            // todo: send an alert
-            // maybe set it non-clickable as well?
+            String alertMessage = "All exhibits visited! " + "" +
+                                "Please clear all selections on the previous page " +
+                                "with the CLEAR button " +
+                                "and select more exhibits to visit.";
+            Utilities.showAlert(this, alertMessage);
             return;
         }
-
-        List<LocEdge> directions = route.get(target.id);
-        intent.putExtra("directions", (ArrayList<LocEdge>) directions);
-        intent.putExtra("route", route);
-        startActivity(intent);
+        else {
+            List<LocEdge> directions = route.get(target.id);
+            intent.putExtra("directions", (ArrayList<LocEdge>) directions);
+            intent.putExtra("route", route);
+            startActivity(intent);
+        }
     }
 }
 

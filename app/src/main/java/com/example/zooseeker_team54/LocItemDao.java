@@ -32,14 +32,17 @@ public interface LocItemDao {
     @Query("SELECT * FROM loc_items WHERE planned = 1 ORDER BY id")
     LiveData<List<LocItem>> getAllPlannedLive();
 
-    @Query("SELECT * FROM loc_items WHERE planned = 1 and visited = 0 ORDER BY currDist")
-    LiveData<List<LocItem>> getAllPlannedUnvisitedLive();
-
     @Update
     int update(LocItem locItem);
 
     @Delete
     int delete(LocItem locItem);
+
+    @Query("SELECT * FROM loc_items WHERE planned = 1 AND visited = 0 ORDER BY currDist")
+    LiveData<List<LocItem>> getAllPlannedUnvisitedLive();
+
+    @Query("SELECT * FROM loc_items WHERE currDist = (SELECT MIN(currDist) FROM loc_items WHERE planned = 1 AND visited = 0)")
+    LocItem getNextUnvisitedExhibit();
 
     @Query("SELECT COUNT(*) FROM loc_items WHERE planned = 1 ORDER BY id")
     int countPlannedExhibits();

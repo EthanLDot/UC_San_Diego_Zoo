@@ -5,13 +5,27 @@
       <map>
         <entry key="../../../../../../../../layout/custom_preview.xml" value="0.1962962962962963" />
         <entry key="../../../../../../../layout/custom_preview.xml" value="0.3453703703703704" />
+<<<<<<< HEAD
         <entry key="../../../../../Library/Android/sdk/platforms/android-31/data/res/layout/simple_list_item_1.xml" value="0.2776268115942029" />
+=======
+        <entry key="..\:/Users/ethan/AndroidStudioProjects/zooseeker-team-54/app/src/main/res/layout/activity_direction.xml" value="0.12" />
+>>>>>>> main
         <entry key="..\:/Users/ethan/AndroidStudioProjects/zooseeker-team-54/app/src/main/res/layout/activity_main.xml" value="0.22" />
+        <entry key="..\:/Users/ethan/AndroidStudioProjects/zooseeker-team-54/app/src/main/res/layout/activity_route_plan.xml" value="0.1" />
+        <entry key="..\:/Users/ethan/AndroidStudioProjects/zooseeker-team-54/app/src/main/res/layout/deletable_loc_item.xml" value="0.1" />
+        <entry key="..\:/Users/ethan/AndroidStudioProjects/zooseeker-team-54/app/src/main/res/layout/loc_edge.xml" value="0.1" />
+        <entry key="..\:/Users/ethan/AndroidStudioProjects/zooseeker-team-54/app/src/main/res/layout/route_plan_loc_item.xml" value="0.1" />
         <entry key="..\:/Users/ethan/AndroidStudioProjects/zooseeker-team-54/app/src/main/res/layout/selection_item.xml" value="0.11367753623188406" />
+<<<<<<< HEAD
         <entry key="app/src/main/res/layout/activity_direction.xml" value="0.3309066772460938" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.3507965087890625" />
         <entry key="app/src/main/res/layout/activity_route_plan.xml" value="0.19117048702220657" />
         <entry key="app/src/main/res/layout/deletable_loc_item.xml" value="0.30482330322265627" />
+=======
+        <entry key="..\:/Users/ethan/AndroidStudioProjects/zooseeker-team-54/app/src/main/res/layout/undeletable_loc_item.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.26666666666666666" />
+        <entry key="app/src/main/res/layout/activity_route_plan.xml" value="0.1887031408308004" />
+>>>>>>> main
         <entry key="app/src/main/res/layout/exhibit_item.xml" value="0.2078125" />
         <entry key="app/src/main/res/layout/loc_edge.xml" value="0.17479248046874996" />
         <entry key="app/src/main/res/layout/loc_item.xml" value="0.1" />

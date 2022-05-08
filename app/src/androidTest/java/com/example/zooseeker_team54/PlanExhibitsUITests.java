@@ -30,6 +30,7 @@ import org.junit.runner.RunWith;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
+// User Story 2 UI Tests
 public class PlanExhibitsUITests {
 
     @Rule

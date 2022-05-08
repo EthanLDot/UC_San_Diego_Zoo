@@ -30,17 +30,18 @@ import org.junit.runner.RunWith;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-// User Story 3 and 4 UI Test
-public class RouteDirectionUITest {
+// User Story 5,6 UI Test
+public class GetDirectionsUITest {
 
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 
     /**
-     * Selects 3 exhibits (Lions, Alligators, and Arctic Foxes) and plans a route.
+     * Adds three exhibits to a plan, creates a plan, and checks to see that the
+     * directions displayed are correct, and the buttons show the correct information.
      */
     @Test
-    public void routeDirectionUITest() {
+    public void getDirectionsUITest() {
         ViewInteraction materialAutoCompleteTextView = onView(
                 allOf(withId(R.id.search_bar),
                         childAtPosition(
@@ -50,16 +51,6 @@ public class RouteDirectionUITest {
                                 0),
                         isDisplayed()));
         materialAutoCompleteTextView.perform(replaceText("lions"), closeSoftKeyboard());
-
-        ViewInteraction materialAutoCompleteTextView2 = onView(
-                allOf(withId(R.id.search_bar), withText("lions"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                0),
-                        isDisplayed()));
-        materialAutoCompleteTextView2.perform(click());
 
         ViewInteraction materialTextView = onView(
                 allOf(withId(R.id.loc_name), withText("Lions"),
@@ -71,7 +62,7 @@ public class RouteDirectionUITest {
                         isDisplayed()));
         materialTextView.perform(click());
 
-        ViewInteraction materialAutoCompleteTextView3 = onView(
+        ViewInteraction materialAutoCompleteTextView2 = onView(
                 allOf(withId(R.id.search_bar), withText("lions"),
                         childAtPosition(
                                 childAtPosition(
@@ -79,9 +70,9 @@ public class RouteDirectionUITest {
                                         0),
                                 0),
                         isDisplayed()));
-        materialAutoCompleteTextView3.perform(replaceText("gators"));
+        materialAutoCompleteTextView2.perform(replaceText("gators"));
 
-        ViewInteraction materialAutoCompleteTextView4 = onView(
+        ViewInteraction materialAutoCompleteTextView3 = onView(
                 allOf(withId(R.id.search_bar), withText("gators"),
                         childAtPosition(
                                 childAtPosition(
@@ -89,7 +80,7 @@ public class RouteDirectionUITest {
                                         0),
                                 0),
                         isDisplayed()));
-        materialAutoCompleteTextView4.perform(closeSoftKeyboard());
+        materialAutoCompleteTextView3.perform(closeSoftKeyboard());
 
         ViewInteraction materialTextView2 = onView(
                 allOf(withId(R.id.loc_name), withText("Alligators"),
@@ -101,7 +92,7 @@ public class RouteDirectionUITest {
                         isDisplayed()));
         materialTextView2.perform(click());
 
-        ViewInteraction materialAutoCompleteTextView5 = onView(
+        ViewInteraction materialAutoCompleteTextView4 = onView(
                 allOf(withId(R.id.search_bar), withText("gators"),
                         childAtPosition(
                                 childAtPosition(
@@ -109,17 +100,17 @@ public class RouteDirectionUITest {
                                         0),
                                 0),
                         isDisplayed()));
-        materialAutoCompleteTextView5.perform(replaceText("foxes"));
+        materialAutoCompleteTextView4.perform(replaceText("fox"));
 
-        ViewInteraction materialAutoCompleteTextView6 = onView(
-                allOf(withId(R.id.search_bar), withText("foxes"),
+        ViewInteraction materialAutoCompleteTextView5 = onView(
+                allOf(withId(R.id.search_bar), withText("fox"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
                                         0),
                                 0),
                         isDisplayed()));
-        materialAutoCompleteTextView6.perform(closeSoftKeyboard());
+        materialAutoCompleteTextView5.perform(closeSoftKeyboard());
 
         ViewInteraction materialTextView3 = onView(
                 allOf(withId(R.id.loc_name), withText("Arctic Foxes"),
@@ -141,29 +132,71 @@ public class RouteDirectionUITest {
                         isDisplayed()));
         materialButton.perform(click());
 
-        ViewInteraction textView = onView(
-                allOf(withId(R.id.loc_name), withText("Alligators"),
-                        withParent(withParent(withId(R.id.planned_route))),
+        ViewInteraction materialButton2 = onView(
+                allOf(withId(R.id.direction_btn), withText("Direction"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                1),
                         isDisplayed()));
-        textView.check(matches(withText("Alligators")));
+        materialButton2.perform(click());
+
+        ViewInteraction textView = onView(
+                allOf(withId(R.id.direction), withText("Proceed on 'Entrance Way' 10 meters towards 'Entrance Plaza' from 'Entrance and Exit Gate'.\n"),
+                        withParent(withParent(withId(R.id.route_direction))),
+                        isDisplayed()));
+        textView.check(matches(withText("Proceed on 'Entrance Way' 10 meters towards 'Entrance Plaza' from 'Entrance and Exit Gate'.\n")));
 
         ViewInteraction textView2 = onView(
-                allOf(withId(R.id.loc_name), withText("Lions"),
-                        withParent(withParent(withId(R.id.planned_route))),
+                allOf(withId(R.id.direction), withText("Proceed on 'Reptile Road' 100 meters towards 'Alligators' from 'Entrance Plaza'.\n"),
+                        withParent(withParent(withId(R.id.route_direction))),
                         isDisplayed()));
-        textView2.check(matches(withText("Lions")));
+        textView2.check(matches(withText("Proceed on 'Reptile Road' 100 meters towards 'Alligators' from 'Entrance Plaza'.\n")));
+
+        ViewInteraction button = onView(
+                allOf(withId(R.id.next_btn), withText("NEXT\n------\nLIONS, 200"),
+                        withParent(withParent(withId(android.R.id.content))),
+                        isDisplayed()));
+        button.check(matches(isDisplayed()));
+
+        ViewInteraction button2 = onView(
+                allOf(withId(R.id.next_btn), withText("NEXT\n------\nLIONS, 200"),
+                        withParent(withParent(withId(android.R.id.content))),
+                        isDisplayed()));
+        button2.check(matches(isDisplayed()));
+
+        ViewInteraction materialButton3 = onView(
+                allOf(withId(R.id.next_btn), withText("NEXT\n------\nLions, 200"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                2),
+                        isDisplayed()));
+        materialButton3.perform(click());
+
+        ViewInteraction materialButton4 = onView(
+                allOf(withId(R.id.next_btn), withText("NEXT\n------\nArctic Foxes, 600"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                2),
+                        isDisplayed()));
+        materialButton4.perform(click());
 
         ViewInteraction textView3 = onView(
-                allOf(withId(R.id.loc_name), withText("Arctic Foxes"),
-                        withParent(withParent(withId(R.id.planned_route))),
+                allOf(withId(R.id.direction), withText("Proceed on 'Arctic Avenue' 300 meters towards 'Arctic Foxes' from 'Entrance Plaza'.\n"),
+                        withParent(withParent(withId(R.id.route_direction))),
                         isDisplayed()));
-        textView3.check(matches(withText("Arctic Foxes")));
+        textView3.check(matches(withText("Proceed on 'Arctic Avenue' 300 meters towards 'Arctic Foxes' from 'Entrance Plaza'.\n")));
 
-        ViewInteraction textView4 = onView(
-                allOf(withId(R.id.loc_name), withText("Arctic Foxes"),
-                        withParent(withParent(withId(R.id.planned_route))),
+        ViewInteraction button3 = onView(
+                allOf(withId(R.id.next_btn), withText("NEXT\n------\nNO EXHIBITS LEFT!"),
+                        withParent(withParent(withId(android.R.id.content))),
                         isDisplayed()));
-        textView4.check(matches(withText("Arctic Foxes")));
+        button3.check(matches(isDisplayed()));
     }
 
     private static Matcher<View> childAtPosition(

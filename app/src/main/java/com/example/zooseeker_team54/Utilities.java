@@ -28,20 +28,6 @@ public class Utilities {
         eInfo = ZooData.loadEdgeInfoJSON("sample_edge_info.json", context);
     }
 
-    //simply accesses the vinfo to find all exhibits and returns their names as a list.
-    public static List<String> getExhibitList()
-    {
-        List<String> list = new ArrayList<>();
-        vInfo.forEach((k,v) -> {
-            if(("" + v.kind).equals("EXHIBIT"))
-            {
-                list.add(v.name);
-            }
-        });
-        return list;
-    }
-
-
     public static Pair<List<LocEdge>, Double> findShortestPathBetween(String start, String goal) {
 
         String current = start, temp;

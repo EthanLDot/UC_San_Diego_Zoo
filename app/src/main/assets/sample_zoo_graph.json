@@ -6,7 +6,11 @@
     { "id": "hyperion" },
     { "id": "soarin_junction" },
     { "id": "grizzly_run"},
-    { "id": "hotel"}
+    { "id": "hotel"},
+    { "id": "hollywood_hotel"},
+    { "id": "bugs_land"},
+    { "id": "junkyard_jamboree"},
+    { "id": "chew_chew"}
   ],
   "edges": [
     {
@@ -56,6 +60,48 @@
       "source": "entrance_exit_gate",
       "target": "hollywood_backlot",
       "weight": 1200.0
+    },
+    {
+      "id": "edge-8",
+      "source": "fountain",
+      "target": "junkyard_jamboree",
+      "weight": 700.0
+    },
+    {
+      "id": "edge-9",
+      "source": "junkyard_jamboree",
+      "target": "hotel",
+      "weight": 1700.0
+    },
+    {
+      "id": "edge-10",
+      "source": "hyperion",
+      "target": "hollywood_hotel",
+      "weight": 300.0
+    },
+    {
+      "id": "edge-11",
+      "source": "hollywood_hotel",
+      "target": "bugs_land",
+      "weight": 250.0
+    },
+    {
+      "id": "edge-12",
+      "source": "bugs_land",
+      "target": "junkyard_jamboree",
+      "weight": 200.0
+    },
+    {
+      "id": "edge-13",
+      "source": "bugs_land",
+      "target": "chew_chew",
+      "weight": 100.0
+    },
+    {
+      "id": "edge-14",
+      "source": "chew_chew",
+      "target": "junkyard_jamboree",
+      "weight": 150.0
     }
   ]
 }

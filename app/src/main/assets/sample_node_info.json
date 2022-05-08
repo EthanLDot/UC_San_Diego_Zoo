@@ -60,5 +60,41 @@
     "tags": [
       "hotel"
     ]
+  },
+  {
+    "id": "hollywood_hotel",
+    "kind": "exhibit",
+    "name": "Hollywood Hotel",
+    "tags": [
+      "hollywood",
+      "horror",
+      "tall"
+    ]
+  },
+  {
+    "id": "bugs_land",
+    "kind": "intersection",
+    "name": "Bug's Land Junction",
+    "tags": [
+      "lame",
+      "place_to_sit"
+    ]
+  },
+  {
+    "id": "junkyard_jamboree",
+    "kind": "exhibit",
+    "name": "Junkyard Jamboree",
+    "tags": [
+      "cars",
+      "carsland"
+    ]
+  },
+  {
+    "id": "chew_chew",
+    "kind": "exhibit",
+    "name": "Chew Chew Train",
+    "tags": [
+      "lame"
+    ]
   }
 ]

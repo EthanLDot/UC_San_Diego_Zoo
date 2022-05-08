@@ -30,5 +30,33 @@
   {
     "id": "edge-7",
     "street": "Animation Road"
+  },
+  {
+    "id": "edge-8",
+    "street": "Main Park Trail"
+  },
+  {
+    "id": "edge-9",
+    "street": "Power Street"
+  },
+  {
+    "id": "edge-10",
+    "street": "Guardians Road"
+  },
+  {
+    "id": "edge-11",
+    "street": "Bugs Road"
+  },
+  {
+    "id": "edge-12",
+    "street": "Bugs Parkway"
+  },
+  {
+    "id": "edge-13",
+    "street": "Bugs Alley"
+  },
+  {
+    "id": "edge-14",
+    "street": "Junkyard Alley"
   }
 ]

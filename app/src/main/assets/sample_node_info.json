@@ -2,7 +2,7 @@
   {
     "id": "entrance_exit_gate",
     "kind": "gate",
-    "name": "Entrance and Exit Gate",
+    "name": "Front Gate",
     "tags": [
       "enter",
       "leave",
@@ -13,91 +13,52 @@
     ]
   },
   {
-    "id": "entrance_plaza",
+    "id": "fountain",
     "kind": "intersection",
-    "name": "Entrance Plaza",
+    "name": "Fountain",
     "tags": []
   },
   {
-    "id": "gorillas",
+    "id": "hollywood_backlot",
     "kind": "exhibit",
-    "name": "Gorillas",
+    "name": "Hollywood Backlot Stage",
     "tags": [
-      "gorilla",
-      "monkey",
-      "ape",
-      "mammal"
+      "hollywood",
+      "stage"
     ]
   },
   {
-    "id": "gators",
+    "id": "hyperion",
     "kind": "exhibit",
-    "name": "Alligators",
+    "name": "Frozen Hyperion",
     "tags": [
-      "alligator",
-      "reptile",
-      "gator"
+      "hollywood",
+      "stage"
     ]
   },
   {
-    "id": "lions",
-    "kind": "exhibit",
-    "name": "Lions",
+    "id": "soarin_junction",
+    "kind": "intersection",
+    "name": "Soarin Junction",
     "tags": [
-      "lions",
-      "cats",
-      "mammal",
-      "africa"
+
     ]
   },
   {
-    "id": "elephant_odyssey",
+    "id": "grizzly_run",
     "kind": "exhibit",
-    "name": "Elephant Odyssey",
+    "name": "Grizzly River Run",
     "tags": [
-      "elephant",
-      "mammal",
-      "africa"
+      "woods",
+      "water"
     ]
   },
   {
-    "id": "arctic_foxes",
+    "id": "hotel",
     "kind": "exhibit",
-    "name": "Arctic Foxes",
+    "name": "Hotel",
     "tags": [
-      "arctic",
-      "fox",
-      "mammal"
-    ]
-  },
-  {
-    "id": "brown_bears",
-    "kind": "exhibit",
-    "name": "Brown Bears",
-    "tags": [
-      "forest",
-      "bear",
-      "mammal"
-    ]
-  },
-  {
-    "id": "black_bear",
-    "kind": "exhibit",
-    "name": "Black Bear",
-    "tags": [
-      "forest",
-      "bear",
-      "mammal"
-    ]
-  },
-  {
-    "id": "grizzly_bear",
-    "kind": "exhibit",
-    "name": "Grizzly Bear",
-    "tags": [
-      "forest",
-      "bear",
-      "mammal"
+      "hotel"
     ]
   }
 ]

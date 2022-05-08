@@ -1,55 +1,61 @@
 {
   "nodes": [
     { "id": "entrance_exit_gate"},
-    { "id": "entrance_plaza"},
-    { "id": "gorillas"},
-    { "id": "lions" },
-    { "id": "gators" },
-    { "id": "elephant_odyssey"},
-    { "id": "arctic_foxes"}
+    { "id": "fountain"},
+    { "id": "hollywood_backlot"},
+    { "id": "hyperion" },
+    { "id": "soarin_junction" },
+    { "id": "grizzly_run"},
+    { "id": "hotel"}
   ],
   "edges": [
     {
       "id": "edge-0",
       "source": "entrance_exit_gate",
-      "target": "entrance_plaza",
-      "weight": 10.0
+      "target": "fountain",
+      "weight": 1000.0
     },
     {
       "id": "edge-1",
-      "source": "entrance_plaza",
-      "target": "gorillas",
-      "weight": 200.0
+      "source": "entrance_exit_gate",
+      "target": "soarin_junction",
+      "weight": 750.0
     },
     {
       "id": "edge-2",
-      "source": "gorillas",
-      "target": "lions",
-      "weight": 200.0
+      "source": "soarin_junction",
+      "target": "grizzly_run",
+      "weight": 500.0
     },
     {
       "id": "edge-3",
-      "source": "lions",
-      "target": "elephant_odyssey",
-      "weight": 200.0
+      "source": "grizzly_run",
+      "target": "hotel",
+      "weight": 1500.0
     },
     {
       "id": "edge-4",
-      "source": "entrance_plaza",
-      "target": "arctic_foxes",
-      "weight": 300.0
+      "source": "fountain",
+      "target": "hyperion",
+      "weight": 1200.0
     },
     {
       "id": "edge-5",
-      "source": "entrance_plaza",
-      "target": "gators",
-      "weight": 100.0
+      "source": "fountain",
+      "target": "soarin_junction",
+      "weight": 300.0
     },
     {
       "id": "edge-6",
-      "source": "gators",
-      "target": "lions",
-      "weight": 200.0
+      "source": "hollywood_backlot",
+      "target": "hyperion",
+      "weight": 550.0
+    },
+    {
+      "id": "edge-7",
+      "source": "entrance_exit_gate",
+      "target": "hollywood_backlot",
+      "weight": 1200.0
     }
   ]
 }

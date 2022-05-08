@@ -2,6 +2,7 @@ package com.example.zooseeker_team54;
 
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
@@ -30,6 +31,7 @@ import org.junit.runner.RunWith;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
+// User Story 1 UI Tests
 public class SearchResultsTests {
 
     @Rule
@@ -37,6 +39,16 @@ public class SearchResultsTests {
 
     @Test
     public void displayAllExhibitsContainingQuery() {
+        ViewInteraction clearButton = onView(
+                allOf(withId(R.id.clear_btn), withText("clear"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                2),
+                        isDisplayed()));
+        clearButton.perform(click());
+
         ViewInteraction appCompatEditText = onView(allOf(withId(R.id.search_bar)));
         appCompatEditText.perform(replaceText("bear"), closeSoftKeyboard());
 
@@ -61,6 +73,16 @@ public class SearchResultsTests {
 
     @Test
     public void displayNoExhibitsNotContainingQuery() {
+        ViewInteraction clearButton = onView(
+                allOf(withId(R.id.clear_btn), withText("clear"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                2),
+                        isDisplayed()));
+        clearButton.perform(click());
+
         ViewInteraction appCompatEditText = onView(allOf(withId(R.id.search_bar)));
         appCompatEditText.perform(replaceText("Elephant"), closeSoftKeyboard());
 
@@ -71,6 +93,16 @@ public class SearchResultsTests {
 
     @Test
     public void displayNoExhibitsWithWeirdQuery() {
+        ViewInteraction clearButton = onView(
+                allOf(withId(R.id.clear_btn), withText("clear"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                2),
+                        isDisplayed()));
+        clearButton.perform(click());
+
         ViewInteraction appCompatEditText = onView(allOf(withId(R.id.search_bar)));
         appCompatEditText.perform(replaceText("asodjifjdsa"), closeSoftKeyboard());
 
@@ -83,6 +115,16 @@ public class SearchResultsTests {
 
     @Test
     public void displayNoOtherThanExhibits() {
+        ViewInteraction clearButton = onView(
+                allOf(withId(R.id.clear_btn), withText("clear"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                2),
+                        isDisplayed()));
+        clearButton.perform(click());
+
         ViewInteraction appCompatEditText = onView(allOf(withId(R.id.search_bar)));
         appCompatEditText.perform(replaceText("en"), closeSoftKeyboard());
 

@@ -14,9 +14,9 @@ public class DirectionsDisplayNextButton {
 
     Activity context;
 
-    public DirectionsDisplayNextButton (Activity context) {
+    public DirectionsDisplayNextButton (Activity context, DirectionsDisplayRecyclerView rview) {
         this.context = context;
-
+        this.rview = rview;
     }
 
     public void setViewModel(ViewModel viewModel) {
@@ -40,7 +40,8 @@ public class DirectionsDisplayNextButton {
 
     void configureButton(LocItem newTarget) {
         if (newTarget == null || !newTarget.kind.equals("exhibit") || !newTarget.planned) {
-            nextButton.setText("NEXT");
+            String buttonText = "NEXT\n------\n" + "No Exhibits Left!";
+            nextButton.setText(buttonText);
             nextButton.setClickable(false);
             nextButton.setEnabled(false);
         }

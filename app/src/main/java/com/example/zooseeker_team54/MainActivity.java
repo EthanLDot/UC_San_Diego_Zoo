@@ -31,7 +31,6 @@ public class MainActivity extends AppCompatActivity {
     public SearchResultAdapter searchResultAdapter;
     public PlannedLocsAdapter plannedLocsAdapter;
 
-
     private AutoCompleteTextView searchBarText;
     private Button clearBtn;
     private TextView planSizeText;

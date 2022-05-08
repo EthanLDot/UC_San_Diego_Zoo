@@ -27,11 +27,26 @@ import java.util.List;
 public class RouteDirectionTest {
     List<LocEdge> directions;
     Intent intent;
+    LocDatabase testDb;
+    LocItemDao dao;
 
     @Before
     public void setUp() {
         directions = new ArrayList<>();
         intent = new Intent(ApplicationProvider.getApplicationContext(), RouteDirectionActivity.class);
+    }
+
+    @Before
+    public void resetDatabase() {
+        Context context = ApplicationProvider.getApplicationContext();
+        testDb = Room.inMemoryDatabaseBuilder(context, LocDatabase.class)
+                .allowMainThreadQueries()
+                .build();
+        LocDatabase.injectTestDatabase(testDb);
+
+        List<LocItem> todos = LocItem.loadJSON(context, "sample_node_info.json");
+        dao = testDb.LocItemDao();
+        dao.insertAll(todos);
     }
 
     /**

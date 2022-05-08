@@ -62,7 +62,8 @@ public class NextDirectionTests {
         scenario.onActivity(activity -> {
             activity.getButton().configureButton(null);
             Button btn = activity.findViewById(R.id.next_btn);
-            assertEquals("NEXT", btn.getText());
+            String buttonText = "NEXT\n------\n" + "No Exhibits Left!";
+            assertEquals(buttonText, btn.getText());
             assertEquals(false, btn.isEnabled());
         });
     }

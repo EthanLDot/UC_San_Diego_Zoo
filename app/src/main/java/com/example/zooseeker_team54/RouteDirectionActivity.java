@@ -42,7 +42,8 @@ public class RouteDirectionActivity extends AppCompatActivity {
         routeDirectionAdapter.setLocEdges(directions);
 
         nextButton = this.findViewById(R.id.next_btn);
-        configureButton();
+        newTarget = getNewTarget();
+        configureButton(newTarget);
         nextButton.setOnClickListener(this::onNextBtnClicked);
 
         routeDirectionView = this.findViewById(R.id.route_direction);
@@ -57,13 +58,21 @@ public class RouteDirectionActivity extends AppCompatActivity {
         List<LocEdge> newDirections = route.get(newTarget.id);
         routeDirectionAdapter.setLocEdges(newDirections);
         nextButton = this.findViewById(R.id.next_btn);
-        configureButton();
+        newTarget = getNewTarget();
+        configureButton(newTarget);
     }
 
-    void configureButton()
+    LocItem getNewTarget()
     {
         // Step 1: recalculate currDist for all unvisited LocItems
         LocItem currentTarget = viewModel.getNextUnvisitedExhibit();
+        if(currentTarget == null)
+        {
+            nextButton.setText("NEXT");
+            nextButton.setClickable(false);
+            nextButton.setEnabled(false);
+            return null;
+        }
         Double currentTargetDist = currentTarget.currDist;
 
         List<LocItem> unvisited = viewModel.getAllPlannedUnvisited();
@@ -74,6 +83,12 @@ public class RouteDirectionActivity extends AppCompatActivity {
 
         //Step 2: choose next exhibit to travel to
         newTarget = viewModel.getNextUnvisitedExhibit();
+        return newTarget;
+    }
+
+    void configureButton(LocItem newTarget)
+    {
+
         if (newTarget == null || !newTarget.kind.equals("exhibit") || !newTarget.planned) {
             nextButton.setText("NEXT");
             nextButton.setClickable(false);

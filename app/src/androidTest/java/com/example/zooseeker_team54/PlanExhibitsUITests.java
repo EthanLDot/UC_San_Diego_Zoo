@@ -41,6 +41,16 @@ public class PlanExhibitsUITests {
      */
     @Test
     public void addOneExhibitToEmpty() {
+        ViewInteraction clearButton = onView(
+                allOf(withId(R.id.clear_btn), withText("clear"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                2),
+                        isDisplayed()));
+        clearButton.perform(click());
+
         ViewInteraction materialAutoCompleteTextView = onView(
                 allOf(withId(R.id.search_bar),
                         childAtPosition(
@@ -95,6 +105,16 @@ public class PlanExhibitsUITests {
      */
     @Test
     public void addExhibitToNonEmptyList() {
+        ViewInteraction clearButton = onView(
+                allOf(withId(R.id.clear_btn), withText("clear"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                2),
+                        isDisplayed()));
+        clearButton.perform(click());
+
         ViewInteraction materialAutoCompleteTextView = onView(
                 allOf(withId(R.id.search_bar),
                         childAtPosition(

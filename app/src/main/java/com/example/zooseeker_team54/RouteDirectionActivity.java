@@ -48,4 +48,8 @@ public class RouteDirectionActivity extends AppCompatActivity {
     public DirectionsDisplayRecyclerView getDisplayView() {
         return this.display;
     }
+
+    public DirectionsDisplayNextButton getButton () {
+        return this.button;
+    }
 }

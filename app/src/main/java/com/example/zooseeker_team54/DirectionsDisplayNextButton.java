@@ -38,16 +38,13 @@ public class DirectionsDisplayNextButton {
         configureButton(newTarget);
     }
 
-    void configureButton(LocItem newTarget)
-    {
-
+    void configureButton(LocItem newTarget) {
         if (newTarget == null || !newTarget.kind.equals("exhibit") || !newTarget.planned) {
             nextButton.setText("NEXT");
             nextButton.setClickable(false);
             nextButton.setEnabled(false);
         }
-        else
-        {
+        else {
             nextButton.setEnabled(true);
             String newText = "NEXT\n------\n" + newTarget.name + ", " + (int)newTarget.currDist;
             nextButton.setText(newText);

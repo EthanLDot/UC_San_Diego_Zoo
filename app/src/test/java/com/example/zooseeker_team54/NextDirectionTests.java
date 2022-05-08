@@ -60,7 +60,7 @@ public class NextDirectionTests {
 
         // Check for Correctness
         scenario.onActivity(activity -> {
-            activity.configureButton(null);
+            activity.getButton().configureButton(null);
             Button btn = activity.findViewById(R.id.next_btn);
             assertEquals("NEXT", btn.getText());
             assertEquals(false, btn.isEnabled());
@@ -80,7 +80,7 @@ public class NextDirectionTests {
             LocItem newTarget = new LocItem("Baboons", "baboons", "exhibit", null);
             newTarget.planned = true;
             newTarget.currDist = 200;
-            activity.configureButton(newTarget);
+            activity.getButton().configureButton(newTarget);
             Button btn = activity.findViewById(R.id.next_btn);
             assertEquals("NEXT\n------\nBaboons, 200", btn.getText());
             assertEquals(true, btn.isEnabled());

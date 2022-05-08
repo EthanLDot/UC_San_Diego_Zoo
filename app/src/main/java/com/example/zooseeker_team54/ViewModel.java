@@ -32,6 +32,10 @@ public class ViewModel extends AndroidViewModel {
 //=======
     public LocItem getNextUnvisitedExhibit() { return locItemDao.getNextUnvisitedExhibit(); }
 
+    public List<LocItem> getAllPlannedUnvisited() {
+        return locItemDao.getAllPlannedUnvisited();
+    }
+
     public LiveData<List<LocItem>> getAllPlannedUnvisitedLive() {
         return locItemDao.getAllPlannedUnvisitedLive();
 //>>>>>>> main

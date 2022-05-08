@@ -8,23 +8,23 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.room.Room;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
-import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
 @RunWith(AndroidJUnit4.class)
-public class RouteDirectionTest {
+public class NextDirectionTests {
     List<LocEdge> directions;
     Intent intent;
     LocDatabase testDb;
@@ -35,6 +35,7 @@ public class RouteDirectionTest {
         directions = new ArrayList<>();
         intent = new Intent(ApplicationProvider.getApplicationContext(), RouteDirectionActivity.class);
     }
+
 
     @Before
     public void resetDatabase() {
@@ -49,11 +50,8 @@ public class RouteDirectionTest {
         dao.insertAll(todos);
     }
 
-    /**
-     * Pass the RouteDirectionActivity class a single exhibit's directions to display.
-     */
     @Test
-    public void singleExhibitTest() {
+    public void noMoreExhibitsTest() {
         directions.add(new LocEdge("Tasmanian Devils", 200, "Zoo Lane", "entrance", "exit"));
 
         // Launch RouteDirectionActivity class
@@ -62,27 +60,32 @@ public class RouteDirectionTest {
 
         // Check for Correctness
         scenario.onActivity(activity -> {
-            DirectionsDisplayRecyclerView display = activity.getDisplayView();
-            assertEquals(directions.get(0), display.getDirections().get(0));
+            activity.getButton().configureButton(null);
+            Button btn = activity.findViewById(R.id.next_btn);
+            assertEquals("NEXT", btn.getText());
+            assertEquals(false, btn.isEnabled());
         });
     }
 
-    /**
-     * Pass the RouteDirectionActivity a plan with more than one exhibit.
-     * Should only display the directions for the first exhibit in the plan.
-     */
     @Test
-    public void multipleExhibitTest() {
-        directions.add(new LocEdge("Gorillas", 340, "jungle_lane", "safari_blvd", "exit"));
+    public void MoreExhibitsTest() {
         directions.add(new LocEdge("Tasmanian Devils", 200, "Zoo Lane", "entrance", "exit"));
 
+        // Launch RouteDirectionActivity class
         intent.putExtra("directions", (ArrayList<LocEdge>) directions);
         ActivityScenario<RouteDirectionActivity> scenario = ActivityScenario.launch(intent);
 
         // Check for Correctness
         scenario.onActivity(activity -> {
-            DirectionsDisplayRecyclerView display = activity.getDisplayView();
-            assertEquals(directions.get(0), display.getDirections().get(0));
+            LocItem newTarget = new LocItem("Baboons", "baboons", "exhibit", null);
+            newTarget.planned = true;
+            newTarget.currDist = 200;
+            activity.getButton().configureButton(newTarget);
+            Button btn = activity.findViewById(R.id.next_btn);
+            assertEquals("NEXT\n------\nBaboons, 200", btn.getText());
+            assertEquals(true, btn.isEnabled());
         });
     }
+
+
 }

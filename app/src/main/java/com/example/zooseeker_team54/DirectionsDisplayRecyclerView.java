@@ -5,6 +5,7 @@ import android.app.Activity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class DirectionsDisplayRecyclerView {
@@ -12,9 +13,11 @@ public class DirectionsDisplayRecyclerView {
     RouteDirectionAdapter routeDirectionAdapter;
     Activity context;
     RecyclerView routeDirectionView;
+    HashMap<String, List<LocEdge>> route;
 
-    public DirectionsDisplayRecyclerView(List<LocEdge> directions) {
+    public DirectionsDisplayRecyclerView(List<LocEdge> directions,HashMap<String, List<LocEdge>> route ) {
         this.directions = directions;
+        this.route = route;
         initializeAdapter();
     }
 
@@ -45,4 +48,6 @@ public class DirectionsDisplayRecyclerView {
     public RouteDirectionAdapter getAdapter() {
         return this.routeDirectionAdapter;
     }
+
+    public HashMap<String, List<LocEdge>> getRoute() { return this.route; }
 }

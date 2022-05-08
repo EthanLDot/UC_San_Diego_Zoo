@@ -96,5 +96,34 @@
     "tags": [
       "lame"
     ]
+  },
+  {
+    "id": "rs_racers",
+    "kind": "exhibit",
+    "name": "Radiation Springs Racers",
+    "tags": [
+      "cars",
+      "carsland"
+    ]
+  },
+  {
+    "id": "fun_wheel",
+    "kind": "exhibit",
+    "name": "Mickey's Fun Wheel",
+    "tags": [
+      "tall",
+      "ferris",
+      "pier"
+    ]
+  },
+  {
+    "id": "roller_coaster",
+    "kind": "exhibit",
+    "name": "Coaster",
+    "tags": [
+      "tall",
+      "coaster",
+      "fun"
+    ]
   }
 ]

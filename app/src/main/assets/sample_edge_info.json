@@ -58,5 +58,25 @@
   {
     "id": "edge-14",
     "street": "Junkyard Alley"
+  },
+  {
+    "id": "edge-15",
+    "street": "Starlet Path"
+  },
+  {
+    "id": "edge-16",
+    "street": "Radiation Way"
+  },
+  {
+    "id": "edge-17",
+    "street": "Pacific Hwy"
+  },
+  {
+    "id": "edge-18",
+    "street": "Pacific Hwy"
+  },
+  {
+    "id": "edge-19",
+    "street": "Theme Park Street"
   }
 ]

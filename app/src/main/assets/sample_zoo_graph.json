@@ -10,7 +10,10 @@
     { "id": "hollywood_hotel"},
     { "id": "bugs_land"},
     { "id": "junkyard_jamboree"},
-    { "id": "chew_chew"}
+    { "id": "chew_chew"},
+    { "id": "rs_racers"},
+    { "id": "fun_wheel"},
+    { "id": "roller_coaster"}
   ],
   "edges": [
     {
@@ -102,6 +105,36 @@
       "source": "chew_chew",
       "target": "junkyard_jamboree",
       "weight": 150.0
+    },
+    {
+      "id": "edge-15",
+      "source": "hollywood_hotel",
+      "target": "rs_racers",
+      "weight": 1600.0
+    },
+    {
+      "id": "edge-16",
+      "source": "chew_chew",
+      "target": "rs_racers",
+      "weight": 1000.0
+    },
+    {
+      "id": "edge-17",
+      "source": "rs_racers",
+      "target": "fun_wheel",
+      "weight": 1350.0
+    },
+    {
+      "id": "edge-18",
+      "source": "fun_wheel",
+      "target": "roller_coaster",
+      "weight": 50.0
+    },
+    {
+      "id": "edge-19",
+      "source": "hotel",
+      "target": "roller_coaster",
+      "weight": 2000.0
     }
   ]
 }

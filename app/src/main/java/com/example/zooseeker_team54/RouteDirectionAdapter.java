@@ -37,6 +37,10 @@ public class RouteDirectionAdapter extends RecyclerView.Adapter<RouteDirectionAd
     @Override
     public int getItemCount() { return locEdges.size(); }
 
+    public LocEdge getItemAtIndex(int index) {
+        return locEdges.get(index);
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder{
         private LocEdge  locEdge;
         private TextView directionGuideText;

@@ -12,14 +12,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-public class ShowRouteAdapter extends RecyclerView.Adapter<ShowRouteAdapter.ViewHolder> {
-    private List<LocItem> locItems = Collections.emptyList();
-
-    public void setLocItems(List<LocItem> newLocItems) {
-        this.locItems.clear();
-        this.locItems = newLocItems;
-        notifyDataSetChanged();
-    }
+public class ShowRouteAdapter extends GeneralRecyclerAdapter<LocItem> {
 
     @NonNull
     @Override
@@ -32,15 +25,11 @@ public class ShowRouteAdapter extends RecyclerView.Adapter<ShowRouteAdapter.View
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ShowRouteAdapter.ViewHolder holder, int position) {
-        holder.setLocItem(locItems.get(position));
+    public void onBindViewHolder(@NonNull GeneralRecyclerAdapter.ViewHolder holder, int position) {
+        ((ShowRouteAdapter.ViewHolder) holder).setItem(super.getItems().get(position));
     }
 
-    @Override
-    public int getItemCount() { return locItems.size(); }
-
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        private LocItem locItem;
+    public class ViewHolder extends GeneralRecyclerAdapter.ViewHolder {
         private TextView locNameText;
         private TextView distanceText;
 
@@ -50,8 +39,8 @@ public class ShowRouteAdapter extends RecyclerView.Adapter<ShowRouteAdapter.View
             this.distanceText = itemView.findViewById(R.id.distance);
         }
 
-        public void setLocItem(LocItem locItem) {
-            this.locItem = locItem;
+        public void setItem(LocItem locItem) {
+            super.setItem(locItem);
             this.locNameText.setText(locItem.name);
             this.distanceText.setText(locItem.getCurrDist());
         }

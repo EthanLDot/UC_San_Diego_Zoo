@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
 
         //
         viewModel.getAllPlannedLive()
-                .observe(this, plannedLocsAdapter::setLocItems);
+                .observe(this, plannedLocsAdapter::setItems);
 
         // Show the size of the plan
         planSizeText = this.findViewById(R.id.plan_size);
@@ -221,7 +221,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        HashMap<String, List<LocEdge>> directions = findRoute(plannedLocsAdapter.getLocItems());
+        HashMap<String, List<LocEdge>> directions = findRoute(plannedLocsAdapter.getItems());
         System.out.println(directions.size());
 
         Intent intent = new Intent(this, ShowRouteActivity.class);

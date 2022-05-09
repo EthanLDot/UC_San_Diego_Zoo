@@ -12,21 +12,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class PlannedLocsAdapter extends RecyclerView.Adapter<PlannedLocsAdapter.ViewHolder> {
-    private List<LocItem> locItems = Collections.emptyList();
+public class PlannedLocsAdapter extends GeneralRecyclerAdapter<LocItem> {
     private Consumer<LocItem> onDeleteClicked;
-
-    public void setLocItems(List<LocItem> newLocItems) {
-        this.locItems.clear();
-        this.locItems = newLocItems;
-        notifyDataSetChanged();
-    }
 
     public void setOnDeleteClicked(Consumer<LocItem> onDeleteClicked){
         this.onDeleteClicked = onDeleteClicked;
     }
-
-    public List<LocItem> getLocItems() { return locItems; }
 
     @NonNull
     @Override
@@ -39,14 +30,12 @@ public class PlannedLocsAdapter extends RecyclerView.Adapter<PlannedLocsAdapter.
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.setLocItem(locItems.get(position));
+    public void onBindViewHolder(@NonNull GeneralRecyclerAdapter.ViewHolder holder, int position) {
+        ((PlannedLocsAdapter.ViewHolder) holder).setItem(super.getItems().get(position));
     }
 
-    @Override
-    public int getItemCount() { return locItems.size(); }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends GeneralRecyclerAdapter.ViewHolder {
         private TextView locNameText;
         private LocItem locItem;
         private TextView delView;
@@ -62,7 +51,8 @@ public class PlannedLocsAdapter extends RecyclerView.Adapter<PlannedLocsAdapter.
             });
         }
 
-        public void setLocItem(LocItem locItem) {
+        public void setItem(LocItem locItem) {
+            super.setItem(locItem);
             this.locItem = locItem;
             this.locNameText.setText(locItem.name);
         }

@@ -17,6 +17,9 @@ import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
 
+/**
+ * Utilities class for the findShortestPathBetween function and to create Alerts
+ */
 public class Utilities {
     private static Graph<String, IdentifiedWeightedEdge> g;
     private static Map<String, ZooData.VertexInfo> vInfo;
@@ -28,6 +31,12 @@ public class Utilities {
         eInfo = ZooData.loadEdgeInfoJSON("sample_edge_info.json", context);
     }
 
+    /**
+     * Finds shortest path between two edges
+     * @param start vertex we're starting from
+     * @param goal  vertex we're trying to reach
+     * @return      a pair that consists of the path and the total weight of that path
+     */
     public static Pair<List<LocEdge>, Double> findShortestPathBetween(String start, String goal) {
 
         String current = start, temp;
@@ -35,6 +44,8 @@ public class Utilities {
         GraphPath<String, IdentifiedWeightedEdge> path = DijkstraShortestPath.findPathBetween(g, start, goal);
 
         double sumWeight = 0;
+
+        // iterate through the list of edges
         for (IdentifiedWeightedEdge e : path.getEdgeList()) {
             double weight = g.getEdgeWeight(e);
             String id = e.getId();

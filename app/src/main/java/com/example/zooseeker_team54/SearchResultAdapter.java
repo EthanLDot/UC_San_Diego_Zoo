@@ -12,16 +12,27 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
+/**
+ * Class to adapt our search results for use in MainActivity
+ */
 public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapter.ViewHolder> {
     private List<LocItem> locItems = Collections.emptyList();
     private Consumer<LocItem> onSearchResultClicked;
 
+    /**
+     * Create a new list of LocItems from a given list and notify that the data set has changed
+     * @param newLocItems the list of LocItems to be set
+     */
     public void setLocItems(List<LocItem> newLocItems) {
         this.locItems.clear();
         this.locItems = newLocItems;
         notifyDataSetChanged();
     }
 
+    /**
+     * Pass in a search result that was clicked on
+     * @param onSearchResultClicked
+     */
     public void setOnSearchResultClicked(Consumer<LocItem> onSearchResultClicked) {
         this.onSearchResultClicked = onSearchResultClicked;
     }

@@ -23,13 +23,12 @@ public class ViewModel extends AndroidViewModel {
 
     public List<LocItem> getAll() { return locItemDao.getAll(); }
 
-//<<<<<<< HEAD
     public List<LocItem> getAllExhibits() { return locItemDao.getAllExhibits(); }
 
     public LiveData<List<LocItem>> getAllPlannedLive() {
         return locItemDao.getAllPlannedLive();
     }
-//=======
+
     public LocItem getNextUnvisitedExhibit() { return locItemDao.getNextUnvisitedExhibit(); }
 
     public List<LocItem> getAllPlannedUnvisited() {
@@ -38,7 +37,6 @@ public class ViewModel extends AndroidViewModel {
 
     public LiveData<List<LocItem>> getAllPlannedUnvisitedLive() {
         return locItemDao.getAllPlannedUnvisitedLive();
-//>>>>>>> main
     }
 
     public void addPlannedLoc(LocItem locItem) {

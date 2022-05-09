@@ -10,38 +10,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
-/**
- * Class to adapt our search results for use in MainActivity
- */
-public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapter.ViewHolder> {
-    private List<LocItem> locItems = Collections.emptyList();
-    private Consumer<LocItem> onSearchResultClicked;
-
-    /**
-     * Create a new list of LocItems from a given list and notify that the data set has changed
-     * @param newLocItems the list of LocItems to be set
-     */
-    public void setLocItems(List<LocItem> newLocItems) {
-        this.locItems.clear();
-        this.locItems = newLocItems;
-        notifyDataSetChanged();
-    }
-
-    /**
-     * Pass in a search result that was clicked on
-     * @param onSearchResultClicked
-     */
-    public void setOnSearchResultClicked(Consumer<LocItem> onSearchResultClicked) {
-        this.onSearchResultClicked = onSearchResultClicked;
-    }
-
-    /**
-     * Getter method for LocItems
-     * @return a list of the current LocItems
-     */
-    public List<LocItem> getLocItems() { return locItems; }
+public class SearchResultAdapter extends GeneralRecyclerAdapter<LocItem> {
 
     @NonNull
     @Override
@@ -54,25 +26,17 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.setLocItem(locItems.get(position));
+    public void onBindViewHolder(@NonNull GeneralRecyclerAdapter.ViewHolder holder, int position) {
+        ((SearchResultAdapter.ViewHolder) holder).setItem(super.getItems().get(position));
     }
 
-    /**
-     * Getter method for the number of LocEdges
-     * @return size of locItems
-     */
-    @Override
-    public int getItemCount() {
-        return locItems.size();
-    }
+    public List<LocItem> getItems() { return super.getItems(); }
 
-    /**
-     * Nested class for ViewHolder
-     */
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public Consumer<LocItem> getItemOnClickListener() { return super.getItemOnClickListener(); }
+
+
+    public class ViewHolder extends GeneralRecyclerAdapter.ViewHolder {
         private TextView locNameText;
-        private LocItem locItem;
 
         /**
          * Constructor for ViewHolder with a given View
@@ -83,19 +47,20 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
             this.locNameText = itemView.findViewById(R.id.loc_name);
 
             this.locNameText.setOnClickListener(view -> {
-                if (onSearchResultClicked == null) return;
-                onSearchResultClicked.accept(locItem);
-                locItems.remove(locItem);
+
+                LocItem locItem = (LocItem) super.getItem();
+                getItems().remove(locItem);
                 notifyDataSetChanged();
+
+                Consumer<LocItem> itemOnClickListener = getItemOnClickListener();
+                if (itemOnClickListener== null) return;
+                itemOnClickListener.accept(locItem);
+
             });
         }
 
-        /**
-         * Setter method for a LocItem
-         * @param locItem LocItem to be set
-         */
-        public void setLocItem(LocItem locItem) {
-            this.locItem = locItem;
+        public void setItem(LocItem locItem) {
+            super.setItem(locItem);
             this.locNameText.setText(locItem.name);
         }
     }

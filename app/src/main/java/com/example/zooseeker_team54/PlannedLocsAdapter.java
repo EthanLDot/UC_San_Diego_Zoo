@@ -12,36 +12,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
-/**
- * Adapter class for use in MainActivity to give us easier access of LocItems and its containers
- */
-public class PlannedLocsAdapter extends RecyclerView.Adapter<PlannedLocsAdapter.ViewHolder> {
-    private List<LocItem> locItems = Collections.emptyList();
+public class PlannedLocsAdapter extends GeneralRecyclerAdapter<LocItem> {
     private Consumer<LocItem> onDeleteClicked;
 
-    /**
-     * Create a new list of LocItems from a given list and notify that the data set has changed
-     * @param newLocItems the list of LocItems to be set
-     */
-    public void setLocItems(List<LocItem> newLocItems) {
-        this.locItems.clear();
-        this.locItems = newLocItems;
-        notifyDataSetChanged();
-    }
-
-    /**
-     * Pass in a LocItem to be deleted
-     * @param onDeleteClicked Consumer wrapped around a LocItem to be deleted
-     */
     public void setOnDeleteClicked(Consumer<LocItem> onDeleteClicked){
         this.onDeleteClicked = onDeleteClicked;
     }
-
-    /**
-     * Getter method for LocItems
-     * @return Returns the list of current LocItems
-     */
-    public List<LocItem> getLocItems() { return locItems; }
 
     @NonNull
     @Override
@@ -59,23 +35,12 @@ public class PlannedLocsAdapter extends RecyclerView.Adapter<PlannedLocsAdapter.
      * @param position int position to be placed at
      */
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.setLocItem(locItems.get(position));
+    public void onBindViewHolder(@NonNull GeneralRecyclerAdapter.ViewHolder holder, int position) {
+        ((PlannedLocsAdapter.ViewHolder) holder).setItem(super.getItems().get(position));
     }
 
-    /**
-     * Gets number of items in the current list of LocItems
-     * @return returns the size of locItems
-     */
-    @Override
-    public int getItemCount() { return locItems.size(); }
-
-    /**
-     * Nested class for ViewHolder
-     */
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends GeneralRecyclerAdapter.ViewHolder {
         private TextView locNameText;
-        private LocItem locItem;
         private TextView delView;
 
         /**
@@ -89,16 +54,13 @@ public class PlannedLocsAdapter extends RecyclerView.Adapter<PlannedLocsAdapter.
 
             this.delView.setOnClickListener(view ->{
                 if(onDeleteClicked == null) return;
+                LocItem locItem = (LocItem) super.getItem();
                 onDeleteClicked.accept(locItem);
             });
         }
 
-        /**
-         * Setter method for a LocItem
-         * @param locItem LocItem to be set
-         */
-        public void setLocItem(LocItem locItem) {
-            this.locItem = locItem;
+        public void setItem(LocItem locItem) {
+            super.setItem(locItem);
             this.locNameText.setText(locItem.name);
         }
     }

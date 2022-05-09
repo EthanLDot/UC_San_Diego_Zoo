@@ -41,7 +41,7 @@ public class DirectionsDisplayNextButton {
      */
     public void initializeButton() {
         nextButton = context.findViewById(R.id.next_btn);
-        newTarget = getNewTarget();
+        newTarget = viewModel.getNextTarget();
         configureButton(newTarget);
         nextButton.setOnClickListener(this::onNextBtnClicked);
     }
@@ -52,7 +52,7 @@ public class DirectionsDisplayNextButton {
      */
     public void onNextBtnClicked(View view) {
         List<LocEdge> newDirections = rview.getRoute().get(newTarget.id);
-        rview.getAdapter().setLocEdges(newDirections);
+        rview.getAdapter().setItems(newDirections);
         nextButton = context.findViewById(R.id.next_btn);
         newTarget = getNewTarget();
         configureButton(newTarget);

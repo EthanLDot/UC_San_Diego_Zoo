@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
         // Create an adapter for the RecyclerView of search results
         searchResultAdapter = new SearchResultAdapter();
         searchResultAdapter.setHasStableIds(true);
-        searchResultAdapter.setOnSearchResultClicked(this::addPlannedLoc);
+        searchResultAdapter.setItemOnClickListener(this::addPlannedLoc);
 
         // Set the adapter for the actual RecyclerView
         searchResultView = this.findViewById(R.id.search_results);
@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
 
         // get all the planned live LocItems
         viewModel.getAllPlannedLive()
-                .observe(this, plannedLocsAdapter::setLocItems);
+                .observe(this, plannedLocsAdapter::setItems);
 
         // Show the size of the plan
         planSizeText = this.findViewById(R.id.plan_size);
@@ -218,7 +218,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Display nothing when query is empty
         if (query.length() == 0) {
-            searchResultAdapter.setLocItems(Collections.emptyList());
+            searchResultAdapter.setItems(Collections.emptyList());
             return;
         }
 
@@ -233,9 +233,7 @@ public class MainActivity extends AppCompatActivity {
                 searchResults.add(locItem);
             }
         }
-
-        // set LocItems using our adapter
-        searchResultAdapter.setLocItems(searchResults);
+        searchResultAdapter.setItems(searchResults);
     }
 
     /**
@@ -264,8 +262,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        // call findRoute algorithm and print out the directions
-        HashMap<String, List<LocEdge>> directions = findRoute(plannedLocsAdapter.getLocItems());
+        HashMap<String, List<LocEdge>> directions = findRoute(plannedLocsAdapter.getItems());
         System.out.println(directions.size());
 
         // launch ShowRouteActivity to display directions

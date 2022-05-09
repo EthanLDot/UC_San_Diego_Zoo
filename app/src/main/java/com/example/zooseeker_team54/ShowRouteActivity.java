@@ -47,7 +47,7 @@ public class ShowRouteActivity extends AppCompatActivity {
         showRouteView.setAdapter(showRouteAdapter);
 
         viewModel.getAllPlannedUnvisitedLive()
-                .observe(this, showRouteAdapter::setLocItems);
+                .observe(this, showRouteAdapter::setItems);
 
     }
 

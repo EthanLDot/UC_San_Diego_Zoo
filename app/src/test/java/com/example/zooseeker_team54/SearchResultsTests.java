@@ -51,7 +51,7 @@ public class SearchResultsTests {
             EditText searchBarText = activity.findViewById(R.id.search_bar);
             searchBarText.setText(query);
 
-            List<LocItem> searchResults = activity.searchResultAdapter.getLocItems();
+            List<LocItem> searchResults = activity.searchResultAdapter.getItems();
             for (LocItem locItem : searchResults) {
                 assertTrue(locItem.name.toLowerCase().contains(query));
             }
@@ -71,7 +71,7 @@ public class SearchResultsTests {
             searchBarText.setText(query);
 
             boolean error = false;
-            List<LocItem> searchResults = activity.searchResultAdapter.getLocItems();
+            List<LocItem> searchResults = activity.searchResultAdapter.getItems();
             for (LocItem locItem : searchResults) {
                 error = error || locItem.name.toLowerCase().contains(query);
             }
@@ -92,7 +92,7 @@ public class SearchResultsTests {
             searchBarText.setText(query);
 
             boolean error = false;
-            List<LocItem> searchResults = activity.searchResultAdapter.getLocItems();
+            List<LocItem> searchResults = activity.searchResultAdapter.getItems();
             for (LocItem locItem : searchResults) {
                 error = error || locItem.name.toLowerCase().contains(query);
             }

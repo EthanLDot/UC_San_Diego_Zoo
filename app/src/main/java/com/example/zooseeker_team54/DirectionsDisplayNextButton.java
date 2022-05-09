@@ -31,10 +31,11 @@ public class DirectionsDisplayNextButton {
     }
 
     public void onNextBtnClicked(View view) {
-        List<LocEdge> newDirections = rview.getRoute().get(newTarget.id);
+        LocItem currTarget = getNewTarget();
+        List<LocEdge> newDirections = rview.getRoute().get(currTarget.id);
         rview.getAdapter().setLocEdges(newDirections);
         nextButton = context.findViewById(R.id.next_btn);
-        newTarget = getNewTarget();
+        newTarget = viewModel.getNextTarget();
         configureButton(newTarget);
     }
 
@@ -47,7 +48,8 @@ public class DirectionsDisplayNextButton {
         }
         else {
             nextButton.setEnabled(true);
-            String newText = "NEXT\n------\n" + newTarget.name + ", " + (int)newTarget.currDist;
+            LocItem currentTarget = viewModel.getNextUnvisitedExhibit();
+            String newText = "NEXT\n------\n" + newTarget.name + ", " + (int) (newTarget.currDist - currentTarget.currDist);
             nextButton.setText(newText);
         }
     }

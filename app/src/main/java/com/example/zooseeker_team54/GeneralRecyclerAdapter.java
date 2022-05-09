@@ -26,6 +26,8 @@ public abstract class GeneralRecyclerAdapter<T> extends RecyclerView.Adapter<Gen
         this.itemOnClickListener = itemOnClickListener;
     }
 
+    public Consumer<T> getItemOnClickListener() { return itemOnClickListener; }
+
     @NonNull
     @Override
     public abstract GeneralRecyclerAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType);
@@ -46,5 +48,7 @@ public abstract class GeneralRecyclerAdapter<T> extends RecyclerView.Adapter<Gen
         public void setItem(T item) {
             this.item = item;
         }
+
+        public T getItem() { return item; }
     }
 }

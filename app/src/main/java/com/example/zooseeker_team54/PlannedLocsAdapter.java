@@ -37,7 +37,6 @@ public class PlannedLocsAdapter extends GeneralRecyclerAdapter<LocItem> {
 
     public class ViewHolder extends GeneralRecyclerAdapter.ViewHolder {
         private TextView locNameText;
-        private LocItem locItem;
         private TextView delView;
 
         public ViewHolder(@NonNull View itemView) {
@@ -47,13 +46,13 @@ public class PlannedLocsAdapter extends GeneralRecyclerAdapter<LocItem> {
 
             this.delView.setOnClickListener(view ->{
                 if(onDeleteClicked == null) return;
+                LocItem locItem = (LocItem) super.getItem();
                 onDeleteClicked.accept(locItem);
             });
         }
 
         public void setItem(LocItem locItem) {
             super.setItem(locItem);
-            this.locItem = locItem;
             this.locNameText.setText(locItem.name);
         }
     }

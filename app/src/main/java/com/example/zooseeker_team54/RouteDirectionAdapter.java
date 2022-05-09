@@ -12,7 +12,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Adapter class for RouteDirection for use with LocEdges
+ * Adapter class for RouteDirection for use with DirectionsDisplayRecyclerView
  */
 public class RouteDirectionAdapter extends RecyclerView.Adapter<RouteDirectionAdapter.ViewHolder> {
     private List<LocEdge> locEdges = Collections.emptyList();

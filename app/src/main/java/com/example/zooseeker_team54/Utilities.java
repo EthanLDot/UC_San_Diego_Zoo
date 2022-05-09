@@ -25,6 +25,10 @@ public class Utilities {
     private static Map<String, ZooData.VertexInfo> vInfo;
     private static Map<String, ZooData.EdgeInfo> eInfo;
 
+    /**
+     * Constructor method for Utilities
+     * @param context
+     */
     public Utilities(Context context) {
         g = ZooData.loadZooGraphJSON("sample_zoo_graph.json", context);
         vInfo = ZooData.loadVertexInfoJSON("sample_node_info.json", context);
@@ -71,6 +75,11 @@ public class Utilities {
         return new Pair<>(shortestPath, sumWeight);
     }
 
+    /**
+     * Method to make showing alerts easier
+     * @param activity Activity to display the alert in
+     * @param message message to be displayed in the alert
+     */
     public static void showAlert(Activity activity, String message) {
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(activity);
 

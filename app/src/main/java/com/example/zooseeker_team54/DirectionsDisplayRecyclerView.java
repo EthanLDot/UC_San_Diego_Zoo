@@ -28,7 +28,7 @@ public class DirectionsDisplayRecyclerView {
     public void initializeAdapter() {
         routeDirectionAdapter = new RouteDirectionAdapter();
         routeDirectionAdapter.setHasStableIds(true);
-        routeDirectionAdapter.setLocEdges(directions);
+        routeDirectionAdapter.setItems(directions);
     }
 
     public void initializeRecyclerView() {

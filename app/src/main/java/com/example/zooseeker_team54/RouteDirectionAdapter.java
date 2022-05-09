@@ -11,14 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.Collections;
 import java.util.List;
 
-public class RouteDirectionAdapter extends RecyclerView.Adapter<RouteDirectionAdapter.ViewHolder> {
-    private List<LocEdge> locEdges = Collections.emptyList();
-
-    public void setLocEdges(List<LocEdge> newLocEdges) {
-        this.locEdges.clear();
-        this.locEdges = newLocEdges;
-        notifyDataSetChanged();
-    }
+public class RouteDirectionAdapter extends GeneralRecyclerAdapter<LocEdge> {
 
     @NonNull
     @Override
@@ -30,15 +23,12 @@ public class RouteDirectionAdapter extends RecyclerView.Adapter<RouteDirectionAd
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RouteDirectionAdapter.ViewHolder holder, int position) {
-        holder.setLocEdge(locEdges.get(position));
+    public void onBindViewHolder(@NonNull GeneralRecyclerAdapter.ViewHolder holder, int position) {
+        ((RouteDirectionAdapter.ViewHolder) holder).setItem(getItems().get(position));
     }
 
-    @Override
-    public int getItemCount() { return locEdges.size(); }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
-        private LocEdge  locEdge;
+    public class ViewHolder extends GeneralRecyclerAdapter.ViewHolder{
         private TextView directionGuideText;
 
         public ViewHolder(@NonNull View itemView){
@@ -46,8 +36,8 @@ public class RouteDirectionAdapter extends RecyclerView.Adapter<RouteDirectionAd
             this.directionGuideText = itemView.findViewById(R.id.direction);
         }
 
-        public void setLocEdge(LocEdge locEdge){
-            this.locEdge = locEdge;
+        public void setItem(LocEdge locEdge){
+            super.setItem(locEdge);
             this.directionGuideText.setText(locEdge.toString());
         }
     }

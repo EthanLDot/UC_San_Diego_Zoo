@@ -32,7 +32,7 @@ public class DirectionsDisplayNextButton {
 
     public void onNextBtnClicked(View view) {
         List<LocEdge> newDirections = rview.getRoute().get(newTarget.id);
-        rview.getAdapter().setLocEdges(newDirections);
+        rview.getAdapter().setItems(newDirections);
         nextButton = context.findViewById(R.id.next_btn);
         newTarget = getNewTarget();
         configureButton(newTarget);

@@ -24,11 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-/**
- * Example local unit test, which will execute on the development machine (host).
- *
- * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
- */
+// User Story 3 Unit Tests
 @RunWith(AndroidJUnit4.class)
 public class PlanRouteTests {
     LocDatabase testDb;

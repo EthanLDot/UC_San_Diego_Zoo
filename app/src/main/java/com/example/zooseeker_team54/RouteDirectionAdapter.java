@@ -27,10 +27,13 @@ public class RouteDirectionAdapter extends GeneralRecyclerAdapter<LocEdge> {
         ((RouteDirectionAdapter.ViewHolder) holder).setItem(getItems().get(position));
     }
 
-
     public class ViewHolder extends GeneralRecyclerAdapter.ViewHolder{
         private TextView directionGuideText;
 
+        /**
+         * Constructor for ViewHolder
+         * @param itemView given View to be used
+         */
         public ViewHolder(@NonNull View itemView){
             super(itemView);
             this.directionGuideText = itemView.findViewById(R.id.direction);

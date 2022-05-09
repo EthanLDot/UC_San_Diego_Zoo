@@ -33,6 +33,10 @@ public class ShowRouteAdapter extends GeneralRecyclerAdapter<LocItem> {
         private TextView locNameText;
         private TextView distanceText;
 
+        /**
+         * Constructor method with a given View
+         * @param itemView View to be used
+         */
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             this.locNameText = itemView.findViewById(R.id.loc_name);

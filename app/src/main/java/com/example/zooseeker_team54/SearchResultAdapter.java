@@ -38,6 +38,10 @@ public class SearchResultAdapter extends GeneralRecyclerAdapter<LocItem> {
     public class ViewHolder extends GeneralRecyclerAdapter.ViewHolder {
         private TextView locNameText;
 
+        /**
+         * Constructor for ViewHolder with a given View
+         * @param itemView given View to be used
+         */
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             this.locNameText = itemView.findViewById(R.id.loc_name);

@@ -29,20 +29,28 @@ public class PlannedLocsAdapter extends GeneralRecyclerAdapter<LocItem> {
         return new PlannedLocsAdapter.ViewHolder(view);
     }
 
+    /**
+     * Sets a given LocItem from a ViewHolder to a given position
+     * @param holder ViewHolder passed in
+     * @param position int position to be placed at
+     */
     @Override
     public void onBindViewHolder(@NonNull GeneralRecyclerAdapter.ViewHolder holder, int position) {
         ((PlannedLocsAdapter.ViewHolder) holder).setItem(super.getItems().get(position));
     }
 
-
     public class ViewHolder extends GeneralRecyclerAdapter.ViewHolder {
         private TextView locNameText;
         private TextView delView;
 
+        /**
+         * ViewHolder constructor method from a given View
+         * @param itemView View to be used
+         */
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             this.locNameText = itemView.findViewById(R.id.loc_name);
-            this.delView =itemView.findViewById(R.id.loc_delete_selected);
+            this.delView = itemView.findViewById(R.id.loc_delete_selected);
 
             this.delView.setOnClickListener(view ->{
                 if(onDeleteClicked == null) return;

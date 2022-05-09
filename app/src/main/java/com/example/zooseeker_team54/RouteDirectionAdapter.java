@@ -13,7 +13,19 @@ import java.util.List;
 
 public class RouteDirectionAdapter extends RecyclerView.Adapter<RouteDirectionAdapter.ViewHolder> {
     private List<LocEdge> locEdges = Collections.emptyList();
+    public RouteDirectionAdapter(){
+        setHasStableIds(true);
+    }
 
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
     public void setLocEdges(List<LocEdge> newLocEdges) {
         this.locEdges.clear();
         this.locEdges = newLocEdges;

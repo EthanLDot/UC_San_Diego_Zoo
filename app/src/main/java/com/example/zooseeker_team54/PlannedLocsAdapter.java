@@ -16,6 +16,20 @@ public class PlannedLocsAdapter extends RecyclerView.Adapter<PlannedLocsAdapter.
     private List<LocItem> locItems = Collections.emptyList();
     private Consumer<LocItem> onDeleteClicked;
 
+    public PlannedLocsAdapter(){
+        setHasStableIds(true);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
     public void setLocItems(List<LocItem> newLocItems) {
         this.locItems.clear();
         this.locItems = newLocItems;

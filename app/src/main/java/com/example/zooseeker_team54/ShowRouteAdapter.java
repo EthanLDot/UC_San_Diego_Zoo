@@ -15,6 +15,20 @@ import java.util.List;
 public class ShowRouteAdapter extends RecyclerView.Adapter<ShowRouteAdapter.ViewHolder> {
     private List<LocItem> locItems = Collections.emptyList();
 
+    public ShowRouteAdapter(){
+        setHasStableIds(true);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
     public void setLocItems(List<LocItem> newLocItems) {
         this.locItems.clear();
         this.locItems = newLocItems;

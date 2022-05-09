@@ -19,10 +19,26 @@ public class ViewModel extends AndroidViewModel {
         locItemDao = db.LocItemDao();
     }
 
+    public LocItem getLocItemById(String id) { return locItemDao.get(id); }
+
     public List<LocItem> getAll() { return locItemDao.getAll(); }
 
-    public LiveData<List<LocItem>> getPlannedLocs() {
+//<<<<<<< HEAD
+    public List<LocItem> getAllExhibits() { return locItemDao.getAllExhibits(); }
+
+    public LiveData<List<LocItem>> getAllPlannedLive() {
         return locItemDao.getAllPlannedLive();
+    }
+//=======
+    public LocItem getNextUnvisitedExhibit() { return locItemDao.getNextUnvisitedExhibit(); }
+
+    public List<LocItem> getAllPlannedUnvisited() {
+        return locItemDao.getAllPlannedUnvisited();
+    }
+
+    public LiveData<List<LocItem>> getAllPlannedUnvisitedLive() {
+        return locItemDao.getAllPlannedUnvisitedLive();
+//>>>>>>> main
     }
 
     public void addPlannedLoc(LocItem locItem) {
@@ -32,6 +48,24 @@ public class ViewModel extends AndroidViewModel {
 
     public void removePlannedLoc(LocItem locItem) {
         locItem.planned = false;
+        locItem.visited = false;
+        locItem.currDist = 0;
+        locItemDao.update(locItem);
+    }
+
+    public void addVisitedLoc(LocItem locItem) {
+        if (!locItem.planned) return;
+        locItem.visited = true;
+        locItemDao.update(locItem);
+    }
+
+    public void removeVisitedLoc(LocItem locItem) {
+        locItem.visited = false;
+        locItemDao.update(locItem);
+    }
+
+    public void updateLocCurrentDist(LocItem locItem, double dist) {
+        locItem.currDist = dist;
         locItemDao.update(locItem);
     }
 
@@ -39,6 +73,8 @@ public class ViewModel extends AndroidViewModel {
         List<LocItem> allLocs = locItemDao.getAll();
         for (LocItem locItem : allLocs) {
             locItem.planned = false;
+            locItem.visited = false;
+            locItem.currDist = 0;
             locItemDao.update(locItem);
         }
     }

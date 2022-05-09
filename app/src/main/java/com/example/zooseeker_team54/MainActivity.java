@@ -20,7 +20,10 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class MainActivity extends AppCompatActivity {
     public RecyclerView searchResultView;
@@ -29,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
     public SearchResultAdapter searchResultAdapter;
     public PlannedLocsAdapter plannedLocsAdapter;
 
-
     private AutoCompleteTextView searchBarText;
     private Button clearBtn;
     private TextView planSizeText;
@@ -37,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private ViewModel viewModel;
     private Utilities utils;
 
+    // TODO: figure what should happen if a plan is there but users modify the plan in main
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +57,11 @@ public class MainActivity extends AppCompatActivity {
         searchBarText.addTextChangedListener(searchBarTextWatcher);
 
         //generate a list of exhibits from utilities and create the array adapter for autocomplete suggestions
-        List<String> EXHIBITS = Utilities.getExhibitList();
+        List<String> EXHIBITS = viewModel.getAllExhibits()
+                .stream()
+                .map(l -> l.name)
+                .collect(Collectors.toList());
+        System.out.println(EXHIBITS);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_list_item_1, EXHIBITS);
         searchBarText.setAdapter(adapter);
@@ -80,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
         plannedLocsView.setAdapter(plannedLocsAdapter);
 
         //
-        viewModel.getPlannedLocs()
+        viewModel.getAllPlannedLive()
                 .observe(this, plannedLocsAdapter::setLocItems);
 
         // Show the size of the plan
@@ -93,16 +100,17 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public List<LocEdge> findRoute(List<LocItem> plannedLocItems) {
+    public HashMap<String, List<LocEdge>> findRoute(List<LocItem> plannedLocItems) {
 
         // the final route to return
-        List<LocEdge> route = new ArrayList<>();
+        HashMap<String, List<LocEdge>> route = new HashMap<>();
 
         // set up a list unvisited locations
         List<String> unvisited = new ArrayList<>();
         plannedLocItems.forEach((word) -> unvisited.add(word.id));
 
         // start at the entrance of the zoo
+        double currDist = 0;
         String current = "entrance_exit_gate";
 
         // while there are still unvisited locations
@@ -110,13 +118,13 @@ public class MainActivity extends AppCompatActivity {
 
             // initialize index, distance, and the path to the shortest planned locations
             int minIndex = 0;
+            String closest = "", target = "";
             double minDist = Double.MAX_VALUE;
-            String closest = "";
             List<LocEdge> minPath = new ArrayList<>();
 
             // loop through each other planned locations
             for (int i = 0; i < unvisited.size(); i++) {
-                String target = unvisited.get(i);
+                target = unvisited.get(i);
                 Pair<List<LocEdge>, Double> pair = Utilities.findShortestPathBetween(current, target);
 
                 // if the distance is shorter than current min distance, update
@@ -128,15 +136,21 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
+            //
+            LocItem targetLocItem = viewModel.getLocItemById(closest);
+            if (!targetLocItem.visited) {
+                currDist += minDist;
+                viewModel.updateLocCurrentDist(targetLocItem, currDist);
+            }
+
+            //
             current = closest;
-            route.addAll(minPath);
             unvisited.remove(minIndex);
+            route.put(closest, minPath);
         }
 
-        //commented out for now
-        /*String target = "entrance_exit_gate";
-        Pair<List<LocEdge>, Double> pair = Utilities.findShortestPathBetween(current, target);
-        route.addAll(pair.first);*/
+        // TODO: figure out whether we need to finish at entrance/exit gate
+
         return route;
     }
 
@@ -151,7 +165,8 @@ public class MainActivity extends AppCompatActivity {
     }
     
     private void updatePlanSizeText() {
-        planSizeText.setText(Integer.toString(viewModel.countPlannedExhibits()));
+        planSizeText.setText(String.format("Planned (%s)"
+                , Integer.toString(viewModel.countPlannedExhibits())));
     }
 
     // Text Watcher for search bar textview
@@ -190,7 +205,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void onClearBtnClicked(View view) {
         viewModel.clearPlannedLocs();
-        planSizeText.setText("0");
+        planSizeText.setText("Planned (0)");
     }
 
     public void onPlanButtonClicked(View view) {
@@ -206,11 +221,11 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        List<LocEdge> route = findRoute(plannedLocsAdapter.getLocItems());
-        System.out.println(route.size());
+        HashMap<String, List<LocEdge>> directions = findRoute(plannedLocsAdapter.getLocItems());
+        System.out.println(directions.size());
 
         Intent intent = new Intent(this, ShowRouteActivity.class);
-        intent.putExtra("route", (ArrayList<LocEdge>) route);
+        intent.putExtra("route", directions);
         startActivity(intent);
     }
 }

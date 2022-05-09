@@ -38,9 +38,9 @@ public class SearchResultsTests {
                 .build();
         LocDatabase.injectTestDatabase(testDb);
 
-        List<LocItem> todos = LocItem.loadJSON(context, "sample_node_info.json");
+        List<LocItem> exhibits = LocItem.loadJSON(context, "sample_node_info.json");
         dao = testDb.LocItemDao();
-        dao.insertAll(todos);
+        dao.insertAll(exhibits);
     }
 
     @Test

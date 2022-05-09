@@ -25,7 +25,7 @@ public class DirectionsDisplayNextButton {
 
     public void initializeButton() {
         nextButton = context.findViewById(R.id.next_btn);
-        newTarget = getNewTarget();
+        newTarget = viewModel.getNextTarget();
         configureButton(newTarget);
         nextButton.setOnClickListener(this::onNextBtnClicked);
     }

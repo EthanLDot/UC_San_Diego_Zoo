@@ -13,6 +13,19 @@ import java.util.function.Consumer;
 public abstract class GeneralRecyclerAdapter<T> extends RecyclerView.Adapter<GeneralRecyclerAdapter.ViewHolder> {
     private List<T> items = Collections.emptyList();
     private Consumer<T> itemOnClickListener;
+    public GeneralRecyclerAdapter(){
+        setHasStableIds(true);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
 
     public List<T> getItems() { return items; }
 

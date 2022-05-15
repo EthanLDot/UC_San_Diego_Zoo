@@ -1,82 +1,30 @@
 [
   {
     "id": "edge-0",
-    "street": "Buena Vista St"
+    "street": "Entrance Way"
   },
   {
     "id": "edge-1",
-    "street": "Mickey St"
+    "street": "Africa Rocks Street"
   },
   {
     "id": "edge-2",
-    "street": "Mickey St"
+    "street": "Africa Rocks Street"
   },
   {
     "id": "edge-3",
-    "street": "Mickey St"
+    "street": "Africa Rocks Street"
   },
   {
     "id": "edge-4",
-    "street": "Hollywood Trail"
+    "street": "Arctic Avenue"
   },
   {
     "id": "edge-5",
-    "street": "Grizzly Path"
+    "street": "Reptile Road"
   },
   {
     "id": "edge-6",
-    "street": "Sunset Showcase"
-  },
-  {
-    "id": "edge-7",
-    "street": "Animation Road"
-  },
-  {
-    "id": "edge-8",
-    "street": "Main Park Trail"
-  },
-  {
-    "id": "edge-9",
-    "street": "Power Street"
-  },
-  {
-    "id": "edge-10",
-    "street": "Guardians Road"
-  },
-  {
-    "id": "edge-11",
-    "street": "Bugs Road"
-  },
-  {
-    "id": "edge-12",
-    "street": "Bugs Parkway"
-  },
-  {
-    "id": "edge-13",
-    "street": "Bugs Alley"
-  },
-  {
-    "id": "edge-14",
-    "street": "Junkyard Alley"
-  },
-  {
-    "id": "edge-15",
-    "street": "Starlet Path"
-  },
-  {
-    "id": "edge-16",
-    "street": "Radiation Way"
-  },
-  {
-    "id": "edge-17",
-    "street": "Pacific Hwy"
-  },
-  {
-    "id": "edge-18",
-    "street": "Pacific Hwy"
-  },
-  {
-    "id": "edge-19",
-    "street": "Theme Park Street"
+    "street": "Sharp Teeth Shortcut"
   }
 ]

@@ -2,7 +2,7 @@
   {
     "id": "entrance_exit_gate",
     "kind": "gate",
-    "name": "Front Gate",
+    "name": "Entrance and Exit Gate",
     "tags": [
       "enter",
       "leave",
@@ -13,117 +13,91 @@
     ]
   },
   {
-    "id": "fountain",
+    "id": "entrance_plaza",
     "kind": "intersection",
-    "name": "Fountain",
+    "name": "Entrance Plaza",
     "tags": []
   },
   {
-    "id": "hollywood_backlot",
+    "id": "gorillas",
     "kind": "exhibit",
-    "name": "Hollywood Backlot Stage",
+    "name": "Gorillas",
     "tags": [
-      "hollywood",
-      "stage"
+      "gorilla",
+      "monkey",
+      "ape",
+      "mammal"
     ]
   },
   {
-    "id": "hyperion",
+    "id": "gators",
     "kind": "exhibit",
-    "name": "Frozen Hyperion",
+    "name": "Alligators",
     "tags": [
-      "hollywood",
-      "stage"
+      "alligator",
+      "reptile",
+      "gator"
     ]
   },
   {
-    "id": "soarin_junction",
-    "kind": "intersection",
-    "name": "Soarin Junction",
-    "tags": [
-
-    ]
-  },
-  {
-    "id": "grizzly_run",
+    "id": "lions",
     "kind": "exhibit",
-    "name": "Grizzly River Run",
+    "name": "Lions",
     "tags": [
-      "woods",
-      "water"
+      "lions",
+      "cats",
+      "mammal",
+      "africa"
     ]
   },
   {
-    "id": "hotel",
+    "id": "elephant_odyssey",
     "kind": "exhibit",
-    "name": "Hotel",
+    "name": "Elephant Odyssey",
     "tags": [
-      "hotel"
+      "elephant",
+      "mammal",
+      "africa"
     ]
   },
   {
-    "id": "hollywood_hotel",
+    "id": "arctic_foxes",
     "kind": "exhibit",
-    "name": "Hollywood Hotel",
+    "name": "Arctic Foxes",
     "tags": [
-      "hollywood",
-      "horror",
-      "tall"
+      "arctic",
+      "fox",
+      "mammal"
     ]
   },
   {
-    "id": "bugs_land",
-    "kind": "intersection",
-    "name": "Bug's Land Junction",
-    "tags": [
-      "lame",
-      "place_to_sit"
-    ]
-  },
-  {
-    "id": "junkyard_jamboree",
+    "id": "brown_bears",
     "kind": "exhibit",
-    "name": "Junkyard Jamboree",
+    "name": "Brown Bears",
     "tags": [
-      "cars",
-      "carsland"
+      "forest",
+      "bear",
+      "mammal"
     ]
   },
   {
-    "id": "chew_chew",
+    "id": "black_bear",
     "kind": "exhibit",
-    "name": "Chew Chew Train",
+    "name": "Black Bear",
     "tags": [
-      "lame"
+      "forest",
+      "bear",
+      "mammal"
     ]
   },
   {
-    "id": "rs_racers",
+    "id": "grizzly_bear",
     "kind": "exhibit",
-    "name": "Radiation Springs Racers",
+    "name": "Grizzly Bear",
     "tags": [
-      "cars",
-      "carsland"
-    ]
-  },
-  {
-    "id": "fun_wheel",
-    "kind": "exhibit",
-    "name": "Mickey's Fun Wheel",
-    "tags": [
-      "tall",
-      "ferris",
-      "pier"
-    ]
-  },
-  {
-    "id": "roller_coaster",
-    "kind": "exhibit",
-    "name": "Coaster",
-    "tags": [
-      "tall",
-      "coaster",
-      "fun"
+      "forest",
+      "bear",
+      "mammal"
     ]
   }
 ]

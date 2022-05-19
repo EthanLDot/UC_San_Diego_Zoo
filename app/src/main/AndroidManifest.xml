@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ZooSeeker_Team54">
         <activity
+            android:name=".SettingsActivity"
+            android:exported="false" />
+        <activity
             android:name=".RouteDirectionActivity"
             android:exported="false" />
         <activity

@@ -68,4 +68,10 @@ public class RouteDirectionActivity extends AppCompatActivity {
     public DirectionsDisplayNextButton getButton () {
         return this.button;
     }
+
+    public void onSettingsClicked(View view) {
+        Intent intent = new Intent(this, SettingsActivity.class);
+        startActivity(intent);
+
+    }
 }

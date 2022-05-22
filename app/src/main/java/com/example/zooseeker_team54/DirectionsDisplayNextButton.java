@@ -15,6 +15,7 @@ public class DirectionsDisplayNextButton {
     private ViewModel viewModel;
     private DirectionsDisplayRecyclerView rview;
     LocItem newTarget;
+    LocItem currTarget;
 
     Activity context;
 
@@ -41,8 +42,8 @@ public class DirectionsDisplayNextButton {
      */
     public void initializeButton() {
         nextButton = context.findViewById(R.id.next_btn);
-        //newTarget = viewModel.getNextTarget(); TODO: Find why  this doesn't work
-        newTarget = getNewTarget();
+        newTarget = viewModel.getNextTarget();
+        currTarget = viewModel.getCurrTarget();
         configureButton(newTarget);
         nextButton.setOnClickListener(this::onNextBtnClicked);
     }
@@ -55,7 +56,8 @@ public class DirectionsDisplayNextButton {
         List<LocEdge> newDirections = rview.getRoute().get(newTarget.id);
         rview.getAdapter().setItems(newDirections);
         nextButton = context.findViewById(R.id.next_btn);
-        newTarget = getNewTarget();
+        currTarget = getNewTarget();
+        newTarget = viewModel.getNextTarget();
         configureButton(newTarget);
     }
 
@@ -74,7 +76,7 @@ public class DirectionsDisplayNextButton {
         }
         else {
             nextButton.setEnabled(true);
-            String newText = "NEXT\n------\n" + newTarget.name + ", " + (int)newTarget.currDist;
+            String newText = "NEXT\n------\n" + newTarget.name + ", " + (int) (newTarget.currDist - currTarget.currDist);
             nextButton.setText(newText);
         }
     }

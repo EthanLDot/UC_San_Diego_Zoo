@@ -37,6 +37,12 @@ public class ViewModel extends AndroidViewModel {
         return allPlannedUnvisited.get(1);
     }
 
+    public LocItem getCurrTarget() {
+        List<LocItem> allPlannedUnvisited = locItemDao.getAllPlannedUnvisited();
+        if (allPlannedUnvisited == null || allPlannedUnvisited.size() < 2) return null;
+        return allPlannedUnvisited.get(0);
+    }
+
     public List<LocItem> getAllPlannedUnvisited() {
         return locItemDao.getAllPlannedUnvisited();
     }

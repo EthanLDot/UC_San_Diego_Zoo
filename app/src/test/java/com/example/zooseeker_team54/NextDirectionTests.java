@@ -79,9 +79,17 @@ public class NextDirectionTests {
 
         // Check for Correctness
         scenario.onActivity(activity -> {
+            // Initialize the current target.
+            LocItem currTarget = new LocItem("Tasmanian Devils", "tasDev", "exhibit", null);
+            currTarget.planned = true;
+            currTarget.currDist = 0;
+            activity.getButton().currTarget = currTarget;
+
+            // Initialize the next target
             LocItem newTarget = new LocItem("Baboons", "baboons", "exhibit", null);
             newTarget.planned = true;
             newTarget.currDist = 200;
+
             activity.getButton().configureButton(newTarget);
             Button btn = activity.findViewById(R.id.next_btn);
             assertEquals("NEXT\n------\nBaboons, 200", btn.getText());

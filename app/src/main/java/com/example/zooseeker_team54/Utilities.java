@@ -28,21 +28,31 @@ public class Utilities {
     private static Map<String, ZooData.EdgeInfo> eInfo;
 
     /**
-     * Constructor method for Utilities
+     *
      * @param context
      */
-    public Utilities(Context context) {
-        g = ZooData.loadZooGraphJSON("sample_zoo_graph.json", context);
-        vInfo = ZooData.loadVertexInfoJSON("sample_node_info.json", context);
-        eInfo = ZooData.loadEdgeInfoJSON("sample_edge_info.json", context);
+    public static void loadNewZooJson(Context context) {
+        g = ZooData.loadZooGraphJSON("zoo_graph.json", context);
+        vInfo = ZooData.loadVertexInfoJSON("zoo_node_info.json", context);
+        eInfo = ZooData.loadEdgeInfoJSON("zoo_edge_info.json", context);
     }
 
+    /**
+     *
+     * @param context
+     */
     public static void loadOldZooJson(Context context) {
         g = ZooData.loadZooGraphJSON("sample_zoo_graph.json", context);
         vInfo = ZooData.loadVertexInfoJSON("sample_node_info.json", context);
         eInfo = ZooData.loadEdgeInfoJSON("sample_edge_info.json", context);
     }
 
+    /**
+     *
+     * @param query
+     * @param allLocations
+     * @return
+     */
     public static List<LocItem> findSearchResult(String query, List<LocItem> allLocations) {
         if (query.length() == 0)
             return Collections.emptyList();

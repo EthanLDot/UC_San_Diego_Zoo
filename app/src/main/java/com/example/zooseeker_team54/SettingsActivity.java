@@ -2,6 +2,7 @@ package com.example.zooseeker_team54;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,39 +14,26 @@ public class SettingsActivity extends AppCompatActivity {
 
     // booleans to detect whether to display brief or detailed directions
     private boolean isBrief;
-    private boolean isDetailed;
 
     /**
      * Getter method for isBrief
      * @return if brief directions should be displayed
      */
-    public boolean getBrief() {
+    public boolean getIsBrief() {
         return this.isBrief;
     }
 
-    /**
-     * Getter method for isDetailed
-     * @return if detailed directions should be displayed
-     */
-    public boolean getDetailed() {
-        return this.isDetailed;
-    }
+
 
     /**
      * Setter method for isBrief
      * @param bool boolean for isBrief to be set to
      */
-    public void setBrief(boolean bool) {
+    public void setIsBrief(boolean bool) {
         this.isBrief = bool;
     }
 
-    /**
-     * Setter method for isDetailed
-     * @param bool boolean for isDetailed to be set to
-     */
-    public void setDetailed(boolean bool) {
-        this.isDetailed = bool;
-    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +53,8 @@ public class SettingsActivity extends AppCompatActivity {
                 if(isChecked)
                 {
                     setBool(detailed, false);
-                    setBrief(true);
+                    setIsBrief(true);
+                    saveIsBrief();
                     Log.d("settings", "Directions: BRIEF");
                 }
                 else
@@ -83,7 +72,8 @@ public class SettingsActivity extends AppCompatActivity {
                 if(isChecked)
                 {
                     setBool(brief, false);
-                    setDetailed(true);
+                    setIsBrief(false);
+                    saveIsBrief();
                     //Log.d("settings", "Directions: DETAILED");
                 }
                 else
@@ -108,8 +98,14 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
-
     public void exitOnClick(View view) {
         finish();
+    }
+
+    public void saveIsBrief() {
+        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("isBrief", this.isBrief);
+        editor.apply();
     }
 }

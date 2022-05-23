@@ -164,6 +164,15 @@ public class MainActivity extends AppCompatActivity {
         }
 
         // TODO: figure out whether we need to finish at entrance/exit gate
+        String target = "entrance_exit_gate";
+        Pair<List<LocEdge>, Double> pair = Utilities.findShortestPathBetween(current, target);
+        route.put(target, pair.first);
+
+        LocItem targetLocItem = viewModel.getLocItemById(target);
+        viewModel.addPlannedLoc(targetLocItem);
+
+        currDist += pair.second;
+        viewModel.updateLocCurrentDist(targetLocItem, currDist);
 
         return route;
     }

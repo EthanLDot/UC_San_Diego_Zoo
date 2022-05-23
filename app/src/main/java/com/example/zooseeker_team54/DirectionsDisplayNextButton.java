@@ -64,7 +64,7 @@ public class DirectionsDisplayNextButton {
      */
     void configureButton(LocItem newTarget) {
         // if newTarget is null, or if there is no exhibits left
-        if (newTarget == null || !newTarget.kind.equals("exhibit") || !newTarget.planned) {
+        if (newTarget == null || !newTarget.planned) {
             // Tell user there are no exhibits left
             String buttonText = "NEXT\n------\n" + "No Exhibits Left!";
             nextButton.setText(buttonText);

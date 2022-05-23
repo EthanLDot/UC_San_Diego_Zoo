@@ -10,6 +10,7 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Pair;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -170,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
      * Function for when our plan button is clicked in MainActivity
      * @param view Passed in when "Plan" is clicked
      */
-    public void onPlanButtonClicked(View view) {
+    private void onPlanButtonClicked(View view) {
         // should create plan on database to display on routePlanActivity and take us there
 
         // get number of exhibits in plan from our adapter
@@ -183,12 +185,28 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        HashMap<String, List<LocEdge>> directions = Utilities.findRoute(this, plannedLocsAdapter.getItems());
+        HashMap<String, List<LocEdge>> directions = findRoute(plannedLocsAdapter.getItems());
 
         // launch ShowRouteActivity to display directions
         Intent intent = new Intent(this, ShowRouteActivity.class);
         intent.putExtra("route", directions);
         startActivity(intent);
+    }
+
+    public HashMap<String, List<LocEdge>> findRoute(List<LocItem> plannedLocItems) {
+        Pair<HashMap<String, List<LocEdge>>, HashMap<String, Double>> pair = Utilities.findRoute(plannedLocItems);
+        HashMap<String, List<LocEdge>> route = pair.first;
+        HashMap<String, Double> distances = pair.second;
+
+        for (Map.Entry<String, Double> entry : distances.entrySet()) {
+            String location = entry.getKey();
+            Double newDistance = entry.getValue();
+
+            LocItem targetLocItem = viewModel.getLocItemById(location);
+            viewModel.updateLocCurrentDist(targetLocItem, newDistance);
+        }
+
+        return route;
     }
 
     public ViewModel getViewModel() {

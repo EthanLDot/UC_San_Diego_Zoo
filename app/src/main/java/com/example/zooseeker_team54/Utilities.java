@@ -1,9 +1,7 @@
 package com.example.zooseeker_team54;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 import android.util.Pair;
 
 import androidx.appcompat.app.AlertDialog;
@@ -11,7 +9,6 @@ import androidx.appcompat.app.AlertDialog;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.HashMap;
 
@@ -130,14 +127,15 @@ public class Utilities {
     /**
      * From a given list of LocItems, find the most optimal route through the graph
      * using our findShortestPathBetween function
-     * @param mainActivity
      * @param plannedLocItems
      * @return route from the planned exhibits as a HashMap of edges
      */
-    public static HashMap<String, List<LocEdge>> findRoute(MainActivity mainActivity, List<LocItem> plannedLocItems) {
+    public static Pair<HashMap<String, List<LocEdge>>, HashMap<String, Double>>
+    findRoute(List<LocItem> plannedLocItems) {
 
         // the final route to return
-        HashMap<String, List<LocEdge>> route = new HashMap<>();
+        HashMap<String, List<LocEdge>> paths = new HashMap<>();
+        HashMap<String, Double> distances = new HashMap<>();
 
         // set up a list unvisited locations
         List<String> unvisited = new ArrayList<>();
@@ -171,20 +169,18 @@ public class Utilities {
             }
 
             //
-            LocItem targetLocItem = mainActivity.getViewModel().getLocItemById(closest);
-            if (!targetLocItem.visited) {
-                currDist += minDist;
-                mainActivity.getViewModel().updateLocCurrentDist(targetLocItem, currDist);
-            }
+            currDist += minDist;
 
             //
             current = closest;
             unvisited.remove(minIndex);
-            route.put(closest, minPath);
+
+            //
+            paths.put(closest, minPath);
+            distances.put(closest, currDist);
         }
 
         // TODO: figure out whether we need to finish at entrance/exit gate
-
-        return route;
+        return new Pair<>(paths, distances);
     }
 }

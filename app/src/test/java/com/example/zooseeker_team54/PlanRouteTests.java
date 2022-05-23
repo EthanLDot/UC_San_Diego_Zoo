@@ -18,6 +18,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 // User Story 3 Unit Tests
 @RunWith(AndroidJUnit4.class)
@@ -48,7 +49,7 @@ public class PlanRouteTests {
         scenario.onActivity(activity -> {
             Utilities.loadOldZooJson(activity);
             List<LocItem> selectedExhibits = activity.plannedLocsAdapter.getItems();
-            HashMap<String, List<LocEdge>> route = Utilities.findRoute(activity, selectedExhibits);
+            HashMap<String, List<LocEdge>> route = activity.findRoute(selectedExhibits);
             assertEquals(0, selectedExhibits.size());
             assertEquals(0, route.size());
         });
@@ -78,7 +79,7 @@ public class PlanRouteTests {
             assertEquals(1, locsAdapterContents.size());
             assertEquals("Loc {id=gorillas, name='Gorillas', planned=false, visited=false, current distance=0.0}", locsAdapterContents.get(0).toString());
 
-            HashMap<String, List<LocEdge>> route = Utilities.findRoute(activity, locsAdapterContents);
+            HashMap<String, List<LocEdge>> route = activity.findRoute(locsAdapterContents);
             assertEquals(1, route.size());
             assertEquals("{gorillas=[Proceed on 'Entrance Way' 10 meters towards 'Entrance Plaza' from 'Entrance and Exit Gate'.\n" +
                     ", Proceed on 'Africa Rocks Street' 200 meters towards 'Gorillas' from 'Entrance Plaza'.\n" +
@@ -118,7 +119,7 @@ public class PlanRouteTests {
             assertEquals("Loc {id=gators, name='Alligators', planned=false, visited=false, current distance=0.0}", locsAdapterContents.get(0).toString());
             assertEquals("Loc {id=lions, name='Lions', planned=false, visited=false, current distance=0.0}", locsAdapterContents.get(1).toString());
 
-            HashMap<String, List<LocEdge>> route = Utilities.findRoute(activity, locsAdapterContents);
+            HashMap<String, List<LocEdge>> route = activity.findRoute(locsAdapterContents);
             assertEquals(2, route.size());
             assertEquals("{lions=[Proceed on 'Sharp Teeth Shortcut' 200 meters towards 'Lions' from 'Alligators'.\n" +
                     "], gators=[Proceed on 'Entrance Way' 10 meters towards 'Entrance Plaza' from 'Entrance and Exit Gate'.\n" +

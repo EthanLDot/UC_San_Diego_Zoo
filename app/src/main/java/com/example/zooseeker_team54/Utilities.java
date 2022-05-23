@@ -9,6 +9,7 @@ import android.util.Pair;
 import androidx.appcompat.app.AlertDialog;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -93,5 +94,66 @@ public class Utilities {
 
         AlertDialog alertDialog = alertBuilder.create();
         alertDialog.show();
+    }
+
+    /**
+     * From a given list of LocItems, find the most optimal route through the graph
+     * using our findShortestPathBetween function
+     * @param mainActivity
+     * @param plannedLocItems
+     * @return route from the planned exhibits as a HashMap of edges
+     */
+    public static HashMap<String, List<LocEdge>> findRoute(MainActivity mainActivity, List<LocItem> plannedLocItems) {
+
+        // the final route to return
+        HashMap<String, List<LocEdge>> route = new HashMap<>();
+
+        // set up a list unvisited locations
+        List<String> unvisited = new ArrayList<>();
+        plannedLocItems.forEach((word) -> unvisited.add(word.id));
+
+        // start at the entrance of the zoo
+        double currDist = 0;
+        String current = "entrance_exit_gate";
+
+        // while there are still unvisited locations
+        while (unvisited.size() > 0) {
+
+            // initialize index, distance, and the path to the shortest planned locations
+            int minIndex = 0;
+            String closest = "", target = "";
+            double minDist = Double.MAX_VALUE;
+            List<LocEdge> minPath = new ArrayList<>();
+
+            // loop through each other planned locations
+            for (int i = 0; i < unvisited.size(); i++) {
+                target = unvisited.get(i);
+                Pair<List<LocEdge>, Double> pair = findShortestPathBetween(current, target);
+
+                // if the distance is shorter than current min distance, update
+                if (pair.second < minDist) {
+                    minPath = pair.first;
+                    minDist = pair.second;
+                    minIndex = i;
+                    closest = target;
+                }
+            }
+
+            //
+            LocItem targetLocItem = mainActivity.getViewModel().getLocItemById(closest);
+            if (!targetLocItem.visited) {
+                currDist += minDist;
+                mainActivity.getViewModel().updateLocCurrentDist(targetLocItem, currDist);
+            }
+
+            //
+            current = closest;
+            unvisited.remove(minIndex);
+            route.put(closest, minPath);
+        }
+
+        // TODO: figure out whether we need to finish at entrance/exit gate
+
+        return route;
     }
 }

@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -66,6 +67,9 @@ public class ShowRouteActivity extends AppCompatActivity {
     public void onDirectionBtnClicked (View view) {
         Intent intent = new Intent(this, RouteDirectionActivity.class);
 
+        //user selection of brief display vs detailed display
+        boolean isBrief = getIsBrief();
+
         // todo: discuss if we really need to pass direction
         LocItem target = viewModel.getNextUnvisitedExhibit();
 
@@ -80,10 +84,41 @@ public class ShowRouteActivity extends AppCompatActivity {
         }
         else {
             List<LocEdge> directions = route.get(target.id);
+            if(isBrief){
+                // initializing the data
+                List<LocEdge> briefDirections = new ArrayList<LocEdge>();
+                String currStreet = directions.get(0).street;
+                String source = directions.get(0).source;
+                String sink = directions.get(0).target;
+                double streetWeight = 0;
+                //looping through the route and create new route
+                for(LocEdge edge : directions){
+                    if(currStreet.equals(edge.street)){
+                        streetWeight += edge.weight;
+                    }
+                    else{
+                        //adding brief data into the new list
+                        briefDirections.add(new LocEdge("",streetWeight,currStreet,source, edge.source));
+                        currStreet = edge.street;
+                        source = edge.source;
+                        streetWeight = edge.weight;
+                        sink = edge.target;
+                    }
+                }
+                //for loop will not take care of the last item, thus we are adding it here
+                briefDirections.add(new LocEdge("",streetWeight,currStreet,source, sink));
+                directions = briefDirections;
+            }
             intent.putExtra("directions", (ArrayList<LocEdge>) directions);
             intent.putExtra("route", route);
             startActivity(intent);
         }
+    }
+    public boolean getIsBrief(){
+        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        boolean isBrief = preferences.getBoolean("isBrief", true);
+
+        return isBrief;
     }
 }
 

@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.text.Editable;
@@ -212,5 +213,15 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ShowRouteActivity.class);
         intent.putExtra("route", directions);
         startActivity(intent);
+    }
+
+    public ViewModel getViewModel() {
+        return this.viewModel;
+    }
+
+    public boolean getIsBrief(){
+        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        boolean isBrief = preferences.getBoolean("isBrief", true);
+        return isBrief;
     }
 }

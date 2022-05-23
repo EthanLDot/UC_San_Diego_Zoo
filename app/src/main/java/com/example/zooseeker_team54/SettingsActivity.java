@@ -11,6 +11,42 @@ import android.widget.ToggleButton;
 
 public class SettingsActivity extends AppCompatActivity {
 
+    // booleans to detect whether to display brief or detailed directions
+    private boolean isBrief;
+    private boolean isDetailed;
+
+    /**
+     * Getter method for isBrief
+     * @return if brief directions should be displayed
+     */
+    public boolean getBrief() {
+        return this.isBrief;
+    }
+
+    /**
+     * Getter method for isDetailed
+     * @return if detailed directions should be displayed
+     */
+    public boolean getDetailed() {
+        return this.isDetailed;
+    }
+
+    /**
+     * Setter method for isBrief
+     * @param bool boolean for isBrief to be set to
+     */
+    public void setBrief(boolean bool) {
+        this.isBrief = bool;
+    }
+
+    /**
+     * Setter method for isDetailed
+     * @param bool boolean for isDetailed to be set to
+     */
+    public void setDetailed(boolean bool) {
+        this.isDetailed = bool;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +65,7 @@ public class SettingsActivity extends AppCompatActivity {
                 if(isChecked)
                 {
                     setBool(detailed, false);
+                    setBrief(true);
                     Log.d("settings", "Directions: BRIEF");
                 }
                 else
@@ -46,6 +83,7 @@ public class SettingsActivity extends AppCompatActivity {
                 if(isChecked)
                 {
                     setBool(brief, false);
+                    setDetailed(true);
                     //Log.d("settings", "Directions: DETAILED");
                 }
                 else

@@ -152,25 +152,7 @@ public class MainActivity extends AppCompatActivity {
      * @param query String query typed in by user
      */
     private void showSearchResult(String query) {
-
-        // Display nothing when query is empty
-        if (query.length() == 0) {
-            searchResultAdapter.setItems(Collections.emptyList());
-            return;
-        }
-
-        // initialize a list of all LocItems and another list for the search results
-        List<LocItem> allLocs = viewModel.getAll();
-        List<LocItem> searchResults = new ArrayList<>();
-
-        // loops through all of the LocItems and adds it to search results if found
-        for(LocItem locItem : allLocs) {
-            if (locItem.name.toLowerCase().contains(query.toLowerCase())
-                    && !locItem.planned && locItem.kind.equals("exhibit")) {
-                searchResults.add(locItem);
-            }
-        }
-        searchResultAdapter.setItems(searchResults);
+        searchResultAdapter.setItems(Utilities.findSearchResult(query, viewModel.getAll()));
     }
 
     /**

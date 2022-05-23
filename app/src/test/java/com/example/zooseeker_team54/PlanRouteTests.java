@@ -46,6 +46,7 @@ public class PlanRouteTests {
         scenario.moveToState(Lifecycle.State.RESUMED);
 
         scenario.onActivity(activity -> {
+            Utilities.loadOldZooJson(activity);
             List<LocItem> selectedExhibits = activity.plannedLocsAdapter.getItems();
             HashMap<String, List<LocEdge>> route = Utilities.findRoute(activity, selectedExhibits);
             assertEquals(0, selectedExhibits.size());
@@ -61,6 +62,7 @@ public class PlanRouteTests {
         scenario.moveToState(Lifecycle.State.RESUMED);
 
         scenario.onActivity(activity -> {
+            Utilities.loadOldZooJson(activity);
             String query = "gorillas";
             EditText searchBarText = activity.findViewById(R.id.search_bar);
             searchBarText.setText(query);
@@ -92,6 +94,7 @@ public class PlanRouteTests {
         scenario.moveToState(Lifecycle.State.RESUMED);
 
         scenario.onActivity(activity -> {
+            Utilities.loadOldZooJson(activity);
             String query = "alligators";
             EditText searchBarText = activity.findViewById(R.id.search_bar);
             searchBarText.setText(query);

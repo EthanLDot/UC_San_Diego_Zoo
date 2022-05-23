@@ -9,10 +9,11 @@ import android.util.Pair;
 import androidx.appcompat.app.AlertDialog;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.HashMap;
 
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
@@ -31,9 +32,29 @@ public class Utilities {
      * @param context
      */
     public Utilities(Context context) {
+        g = ZooData.loadZooGraphJSON("zoo_graph.json", context);
+        vInfo = ZooData.loadVertexInfoJSON("zoo_node_info.json", context);
+        eInfo = ZooData.loadEdgeInfoJSON("zoo_edge_info.json", context);
+    }
+
+    public static void loadOldZooJson(Context context) {
         g = ZooData.loadZooGraphJSON("sample_zoo_graph.json", context);
         vInfo = ZooData.loadVertexInfoJSON("sample_node_info.json", context);
         eInfo = ZooData.loadEdgeInfoJSON("sample_edge_info.json", context);
+    }
+
+    public static List<LocItem> findSearchResult(String query, List<LocItem> allLocations) {
+        if (query.length() == 0)
+            return Collections.emptyList();
+
+        List<LocItem> searchResults = new ArrayList<>();
+        for (LocItem locItem : allLocations) {
+            if (locItem.name.toLowerCase().contains(query.toLowerCase())
+                    && !locItem.planned && locItem.kind.equals("exhibit")) {
+                searchResults.add(locItem);
+            }
+        }
+        return searchResults;
     }
 
     /**

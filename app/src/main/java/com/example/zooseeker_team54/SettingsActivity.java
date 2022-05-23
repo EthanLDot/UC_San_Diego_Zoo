@@ -70,7 +70,7 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
-
+    // return showRouteActivity
     public void exitOnClick(View view) {
         finish();
     }

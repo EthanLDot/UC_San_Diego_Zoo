@@ -168,6 +168,9 @@ public class MainActivity extends AppCompatActivity {
         return route;
     }
 
+
+
+
     /**
      * Removes the given LocItem from the viewModel
      * @param locItem LocItem to be removed

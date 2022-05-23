@@ -9,6 +9,7 @@ import android.util.Pair;
 import androidx.appcompat.app.AlertDialog;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -94,4 +95,17 @@ public class Utilities {
         AlertDialog alertDialog = alertBuilder.create();
         alertDialog.show();
     }
+
+    public HashMap<String, List<LocEdge>> BriefFindRoute(List<LocItem> plannedLocItems){
+
+        //Route to return
+        HashMap<String, List<LocEdge>> route = new HashMap<>();
+        //unvisited location
+        List<String> unvisited = new ArrayList<>();
+        plannedLocItems.forEach((word) -> unvisited.add(word.id));
+
+
+        return route;
+    }
+
 }

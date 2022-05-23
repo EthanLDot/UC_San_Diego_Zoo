@@ -1,15 +1,28 @@
 package com.example.zooseeker_team54;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -43,6 +56,9 @@ public class MainActivity extends AppCompatActivity {
     private ViewModel viewModel;
     private Utilities utils;
 
+    //permissionchecker from lab 7
+    private final PermissionChecker permissionChecker = new PermissionChecker(this);
+
     // TODO: figure what should happen if a plan is there but users modify the plan in main
 
     /**
@@ -57,54 +73,111 @@ public class MainActivity extends AppCompatActivity {
         // prevents UI difficulties resulting from a rotated screen
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        viewModel = new ViewModelProvider(this).get(ViewModel.class);
-        utils = new Utilities(getApplication().getApplicationContext());
+        {
+            viewModel = new ViewModelProvider(this).get(ViewModel.class);
+            utils = new Utilities(getApplication().getApplicationContext());
+        }
 
         // Get search bar EditText and bind a text watcher to it
-        searchBarText = this.findViewById(R.id.search_bar);
-        searchBarText.addTextChangedListener(searchBarTextWatcher);
+        {
+            searchBarText = this.findViewById(R.id.search_bar);
+            searchBarText.addTextChangedListener(searchBarTextWatcher);
+        }
 
         // generate a list of exhibits from utilities and create the array adapter for autocomplete suggestions
-        List<String> EXHIBITS = viewModel.getAllExhibits()
-                .stream()
-                .map(l -> l.name)
-                .collect(Collectors.toList());
-        System.out.println(EXHIBITS);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, EXHIBITS);
-        searchBarText.setAdapter(adapter);
+        {
+            List<String> EXHIBITS = viewModel.getAllExhibits()
+                    .stream()
+                    .map(l -> l.name)
+                    .collect(Collectors.toList());
+            System.out.println(EXHIBITS);
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                    android.R.layout.simple_list_item_1, EXHIBITS);
+            searchBarText.setAdapter(adapter);
+        }
 
         // Create an adapter for the RecyclerView of search results
-        searchResultAdapter = new SearchResultAdapter();
-        searchResultAdapter.setHasStableIds(true);
-        searchResultAdapter.setItemOnClickListener(this::addPlannedLoc);
+        {
+            searchResultAdapter = new SearchResultAdapter();
+            searchResultAdapter.setHasStableIds(true);
+            searchResultAdapter.setItemOnClickListener(this::addPlannedLoc);
+        }
 
         // Set the adapter for the actual RecyclerView
-        searchResultView = this.findViewById(R.id.search_results);
-        searchResultView.setLayoutManager(new LinearLayoutManager(this));
-        searchResultView.setAdapter(searchResultAdapter);
+        {
+            searchResultView = this.findViewById(R.id.search_results);
+            searchResultView.setLayoutManager(new LinearLayoutManager(this));
+            searchResultView.setAdapter(searchResultAdapter);
+        }
 
         // Create an adapter for the RecyclerView of search results
-        plannedLocsAdapter = new PlannedLocsAdapter();
-        plannedLocsAdapter.setOnDeleteClicked(this::removePlannedLoc);
-        plannedLocsAdapter.setHasStableIds(true);
+        {
+            plannedLocsAdapter = new PlannedLocsAdapter();
+            plannedLocsAdapter.setOnDeleteClicked(this::removePlannedLoc);
+            plannedLocsAdapter.setHasStableIds(true);
+        }
 
         // Set the adapter for the actual RecyclerView
-        plannedLocsView = this.findViewById(R.id.planned_locs);
-        plannedLocsView.setLayoutManager(new LinearLayoutManager(this));
-        plannedLocsView.setAdapter(plannedLocsAdapter);
+        {
+            plannedLocsView = this.findViewById(R.id.planned_locs);
+            plannedLocsView.setLayoutManager(new LinearLayoutManager(this));
+            plannedLocsView.setAdapter(plannedLocsAdapter);
+        }
 
         // get all the planned live LocItems
-        viewModel.getAllPlannedLive()
-                .observe(this, plannedLocsAdapter::setItems);
+        {
+            viewModel.getAllPlannedLive()
+                    .observe(this, plannedLocsAdapter::setItems);
+        }
 
         // Show the size of the plan
-        planSizeText = this.findViewById(R.id.plan_size);
-        updatePlanSizeText();
+        {
+            planSizeText = this.findViewById(R.id.plan_size);
+            updatePlanSizeText();
+        }
 
         // Set up clear button for planned locs
-        this.clearBtn = this.findViewById(R.id.clear_btn);
-        clearBtn.setOnClickListener(this::onClearBtnClicked);
+        {
+            this.clearBtn = this.findViewById(R.id.clear_btn);
+            clearBtn.setOnClickListener(this::onClearBtnClicked);
+        }
+
+        //locationlistener from lab 7
+        {
+            if (permissionChecker.ensurePermissions()) return;
+
+            {
+                var provider = LocationManager.GPS_PROVIDER;
+                var locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+                var locationListener = new LocationListener() {
+                    @Override
+                    public void onLocationChanged(@NonNull Location location) {
+                        Log.d("Location", String.format("Location changed: %s", location));
+                        var marker = new MarkerOptions()
+                                .position(new LatLng(
+                                        location.getLatitude(),
+                                        location.getLongitude()
+                                ))
+                                .title("Navigation Step");
+                    }
+                };
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                    permissionChecker.ensurePermissions();
+                    return;
+                }
+                locationManager.requestLocationUpdates(provider, 0, 0f, locationListener);
+            }
+
+
+
+        }
 
     }
 

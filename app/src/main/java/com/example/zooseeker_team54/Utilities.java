@@ -131,55 +131,6 @@ public class Utilities {
         alertDialog.show();
     }
 
-
-
-    public static HashMap<String, List<LocEdge>> BriefFindRoute( MainActivity mainActivity,List<LocItem> plannedLocItems){
-
-        boolean isBrief = mainActivity.getIsBrief();
-
-        //Route to return
-        HashMap<String, List<LocEdge>> route = new HashMap<>();
-        //unvisited location
-        List<String> unvisited = new ArrayList<>();
-        plannedLocItems.forEach((word) -> unvisited.add(word.id));
-
-        // start at the entrance of the zoo
-        double currDist = 0;
-        String current = "entrance_exit_gate";
-
-        while(unvisited.size() > 0){
-            // initialize index, distance, and the path to the shortest planned locations
-            int minIndex = 0;
-            String closest = "", target = "";
-            double minDist = Double.MAX_VALUE;
-            List<LocEdge> minPath = new ArrayList<>();
-
-            //loop through other exhibits
-            for (int i = 0; i < unvisited.size(); i++) {
-                target = unvisited.get(i);
-                Pair<List<LocEdge>, Double> pair = findShortestPathBetween(current, target);
-
-                // if the distance is shorter than current min distance, update
-                if (pair.second < minDist) {
-                    minPath = pair.first;
-                    minDist = pair.second;
-                    minIndex = i;
-                    closest = target;
-                }
-            }
-
-            LocItem targetLocItem = mainActivity.getViewModel().getLocItemById(closest);
-            if (!targetLocItem.visited) {
-
-            }
-            current = closest;
-            unvisited.remove(minIndex);
-        }
-
-
-        return route;
-    }
-
     /**
      * From a given list of LocItems, find the most optimal route through the graph
      * using our findShortestPathBetween function

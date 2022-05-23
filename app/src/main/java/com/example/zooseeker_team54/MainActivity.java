@@ -214,14 +214,4 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("route", directions);
         startActivity(intent);
     }
-
-    public ViewModel getViewModel() {
-        return this.viewModel;
-    }
-
-    public boolean getIsBrief(){
-        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
-        boolean isBrief = preferences.getBoolean("isBrief", true);
-        return isBrief;
-    }
 }

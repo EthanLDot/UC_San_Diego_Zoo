@@ -33,12 +33,29 @@ public class MainActivity extends AppCompatActivity {
     public SearchResultAdapter searchResultAdapter;
     public PlannedLocsAdapter plannedLocsAdapter;
 
+    private TextView planSizeText;
     private AutoCompleteTextView searchBarText;
     private Button clearBtn;
-    private TextView planSizeText;
+    private Button planBtn;
 
     private ViewModel viewModel;
     private Utilities utils;
+
+    /**
+     * Text Watcher for search bar textview
+     */
+    private TextWatcher searchBarTextWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+
+        @Override
+        public void afterTextChanged(Editable editable) {
+            showSearchResult(editable.toString());
+        }
+    };
 
     // TODO: figure what should happen if a plan is there but users modify the plan in main
 
@@ -99,10 +116,12 @@ public class MainActivity extends AppCompatActivity {
         planSizeText = this.findViewById(R.id.plan_size);
         updatePlanSizeText();
 
-        // Set up clear button for planned locs
+        // Set up clear button for planned locations
         this.clearBtn = this.findViewById(R.id.clear_btn);
         clearBtn.setOnClickListener(this::onClearBtnClicked);
 
+        this.planBtn = this.findViewById(R.id.plan_btn);
+        planBtn.setOnClickListener(this::onPlanButtonClicked);
     }
 
     /**
@@ -130,22 +149,6 @@ public class MainActivity extends AppCompatActivity {
         planSizeText.setText(String.format("Planned (%s)"
                 , Integer.toString(viewModel.countPlannedExhibits())));
     }
-
-    /**
-     * Text Watcher for search bar textview
-     */
-    private TextWatcher searchBarTextWatcher = new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
-
-        @Override
-        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
-
-        @Override
-        public void afterTextChanged(Editable editable) {
-            showSearchResult(editable.toString());
-        }
-    };
 
     /**
      * Using our searchResultAdapter, we display the search results from the given query
@@ -182,7 +185,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         HashMap<String, List<LocEdge>> directions = Utilities.findRoute(this, plannedLocsAdapter.getItems());
-        System.out.println(directions.size());
 
         // launch ShowRouteActivity to display directions
         Intent intent = new Intent(this, ShowRouteActivity.class);

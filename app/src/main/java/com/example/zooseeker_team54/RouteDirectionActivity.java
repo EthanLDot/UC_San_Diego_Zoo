@@ -30,6 +30,7 @@ public class RouteDirectionActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_direction);
 
         Intent intent = getIntent();

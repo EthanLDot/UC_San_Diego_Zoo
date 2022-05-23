@@ -2,6 +2,7 @@ package com.example.zooseeker_team54;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +11,29 @@ import android.widget.CompoundButton;
 import android.widget.ToggleButton;
 
 public class SettingsActivity extends AppCompatActivity {
+
+    // booleans to detect whether to display brief or detailed directions
+    private boolean isBrief;
+
+    /**
+     * Getter method for isBrief
+     * @return if brief directions should be displayed
+     */
+    public boolean getIsBrief() {
+        return this.isBrief;
+    }
+
+
+
+    /**
+     * Setter method for isBrief
+     * @param bool boolean for isBrief to be set to
+     */
+    public void setIsBrief(boolean bool) {
+        this.isBrief = bool;
+    }
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +53,8 @@ public class SettingsActivity extends AppCompatActivity {
                 if(isChecked)
                 {
                     setBool(detailed, false);
+                    setIsBrief(true);
+                    saveIsBrief();
                     Log.d("settings", "Directions: BRIEF");
                 }
                 else
@@ -46,6 +72,8 @@ public class SettingsActivity extends AppCompatActivity {
                 if(isChecked)
                 {
                     setBool(brief, false);
+                    setIsBrief(false);
+                    saveIsBrief();
                     //Log.d("settings", "Directions: DETAILED");
                 }
                 else
@@ -70,8 +98,14 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
-    // return showRouteActivity
     public void exitOnClick(View view) {
         finish();
+    }
+
+    public void saveIsBrief() {
+        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("isBrief", this.isBrief);
+        editor.apply();
     }
 }

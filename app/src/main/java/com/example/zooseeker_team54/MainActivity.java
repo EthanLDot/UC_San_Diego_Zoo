@@ -126,6 +126,27 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
+     *
+     * @param plannedLocItems
+     * @return
+     */
+    public HashMap<String, List<LocEdge>> findRoute(List<LocItem> plannedLocItems) {
+        Pair<HashMap<String, List<LocEdge>>, HashMap<String, Double>> pair = Utilities.findRoute(plannedLocItems);
+        HashMap<String, List<LocEdge>> route = pair.first;
+        HashMap<String, Double> distances = pair.second;
+
+        for (Map.Entry<String, Double> entry : distances.entrySet()) {
+            String location = entry.getKey();
+            Double newDistance = entry.getValue();
+
+            LocItem targetLocItem = viewModel.getLocItemById(location);
+            viewModel.updateLocCurrentDist(targetLocItem, newDistance);
+        }
+
+        return route;
+    }
+
+    /**
      * Removes the given LocItem from the viewModel
      * @param locItem LocItem to be removed
      */
@@ -191,25 +212,5 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ShowRouteActivity.class);
         intent.putExtra("route", directions);
         startActivity(intent);
-    }
-
-    public HashMap<String, List<LocEdge>> findRoute(List<LocItem> plannedLocItems) {
-        Pair<HashMap<String, List<LocEdge>>, HashMap<String, Double>> pair = Utilities.findRoute(plannedLocItems);
-        HashMap<String, List<LocEdge>> route = pair.first;
-        HashMap<String, Double> distances = pair.second;
-
-        for (Map.Entry<String, Double> entry : distances.entrySet()) {
-            String location = entry.getKey();
-            Double newDistance = entry.getValue();
-
-            LocItem targetLocItem = viewModel.getLocItemById(location);
-            viewModel.updateLocCurrentDist(targetLocItem, newDistance);
-        }
-
-        return route;
-    }
-
-    public ViewModel getViewModel() {
-        return this.viewModel;
     }
 }

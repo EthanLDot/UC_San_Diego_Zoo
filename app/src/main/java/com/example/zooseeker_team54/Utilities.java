@@ -35,6 +35,13 @@ public class Utilities {
         eInfo = ZooData.loadEdgeInfoJSON("zoo_edge_info.json", context);
     }
 
+    public static void loadZooJson(Context context) {
+        g = ZooData.loadZooGraphJSON("sample_zoo_graph.json", context);
+        vInfo = ZooData.loadVertexInfoJSON("sample_node_info.json", context);
+        eInfo = ZooData.loadEdgeInfoJSON("sample_edge_info.json", context);
+    }
+
+
     /**
      * Finds shortest path between two edges
      * @param start vertex we're starting from

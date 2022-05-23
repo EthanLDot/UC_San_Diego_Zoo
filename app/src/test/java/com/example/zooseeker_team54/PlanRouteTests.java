@@ -41,6 +41,8 @@ public class PlanRouteTests {
         List<LocItem> todos = LocItem.loadJSON(context, "sample_node_info.json");
         dao = testDb.LocItemDao();
         dao.insertAll(todos);
+
+//        Utilities.loadZooJson(context, "sample_zoo_graph.json");
     }
 
     @Test
@@ -51,6 +53,7 @@ public class PlanRouteTests {
         scenario.moveToState(Lifecycle.State.RESUMED);
 
         scenario.onActivity(activity -> {
+            Utilities.loadZooJson(activity);
             List<LocItem> selectedExhibits = activity.plannedLocsAdapter.getItems();
             HashMap<String, List<LocEdge>> route = activity.findRoute(selectedExhibits);
             assertEquals(0, selectedExhibits.size());
@@ -66,6 +69,7 @@ public class PlanRouteTests {
         scenario.moveToState(Lifecycle.State.RESUMED);
 
         scenario.onActivity(activity -> {
+            Utilities.loadZooJson(activity);
             String query = "gorillas";
             EditText searchBarText = activity.findViewById(R.id.search_bar);
             searchBarText.setText(query);
@@ -99,6 +103,7 @@ public class PlanRouteTests {
         scenario.moveToState(Lifecycle.State.RESUMED);
 
         scenario.onActivity(activity -> {
+            Utilities.loadZooJson(activity);
             String query = "alligators";
             EditText searchBarText = activity.findViewById(R.id.search_bar);
             searchBarText.setText(query);

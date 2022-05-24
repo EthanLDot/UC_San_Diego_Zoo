@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -20,6 +21,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -56,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
     private ViewModel viewModel;
     private Utilities utils;
 
+    private Location exactLocation;
+
     //permissionchecker from lab 7
     private final PermissionChecker permissionChecker = new PermissionChecker(this);
 
@@ -65,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
      * Create the activity from a given savedInstanceState and initialize everything
      * @param savedInstanceState the saved instance from before
      */
+    @SuppressLint("MissingPermission")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -152,33 +157,14 @@ public class MainActivity extends AppCompatActivity {
                 var locationListener = new LocationListener() {
                     @Override
                     public void onLocationChanged(@NonNull Location location) {
-                        Log.d("Location", String.format("Location changed: %s", location));
-                        var marker = new MarkerOptions()
-                                .position(new LatLng(
-                                        location.getLatitude(),
-                                        location.getLongitude()
-                                ))
-                                .title("Navigation Step");
+//                        Log.d("Location", String.format("Location changed: %s", location));
+                        exactLocation = location;
+                        Log.d("Exact Location:", String.format("Location changed: %s", exactLocation));
                     }
                 };
-                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
-                    permissionChecker.ensurePermissions();
-                    return;
-                }
                 locationManager.requestLocationUpdates(provider, 0, 0f, locationListener);
             }
-
-
-
         }
-
     }
 
     /**

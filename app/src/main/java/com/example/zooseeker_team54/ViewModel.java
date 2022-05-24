@@ -10,6 +10,7 @@ import androidx.lifecycle.LiveData;
 import java.util.List;
 
 public class ViewModel extends AndroidViewModel {
+    // Member variable LocItemDao
     private final LocItemDao locItemDao;
 
     /**
@@ -148,6 +149,7 @@ public class ViewModel extends AndroidViewModel {
      */
     public void clearPlannedLocs() {
         List<LocItem> allLocs = locItemDao.getAll();
+        // iterate through all of the LocItems
         for (LocItem locItem : allLocs) {
             locItem.planned = false;
             locItem.visited = false;

@@ -122,14 +122,15 @@ public class MainActivity extends AppCompatActivity {
         this.clearBtn = this.findViewById(R.id.clear_btn);
         clearBtn.setOnClickListener(this::onClearBtnClicked);
 
+        // Set up plan button to take us to the route activity
         this.planBtn = this.findViewById(R.id.plan_btn);
         planBtn.setOnClickListener(this::onPlanButtonClicked);
     }
 
     /**
-     *
-     * @param plannedLocItems
-     * @return
+     * Finds route from a given list of LocItems
+     * @param plannedLocItems List of LocItems to find a route for
+     * @return HashMap of the route to be displayed
      */
     public HashMap<String, List<LocEdge>> findRoute(List<LocItem> plannedLocItems) {
         Pair<HashMap<String, List<LocEdge>>, HashMap<String, Double>> pair = Utilities.findRoute(plannedLocItems);

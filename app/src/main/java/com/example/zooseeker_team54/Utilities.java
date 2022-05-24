@@ -32,8 +32,8 @@ public class Utilities {
     private static Map<String, ZooData.EdgeInfo> eInfo;
 
     /**
-     *
-     * @param context
+     * Used to load new Zoo JSON information for use
+     * @param context activity to be called from
      */
     public static void loadNewZooJson(Context context) {
         g = ZooData.loadZooGraphJSON("zoo_graph.json", context);
@@ -42,8 +42,8 @@ public class Utilities {
     }
 
     /**
-     *
-     * @param context
+     * Used to get the old Zoo JSON info for use on initial creation of MainActivity
+     * @param context activity to be called from
      */
     public static void loadOldZooJson(Context context) {
         g = ZooData.loadZooGraphJSON("sample_zoo_graph.json", context);
@@ -52,10 +52,10 @@ public class Utilities {
     }
 
     /**
-     *
-     * @param query
-     * @param allLocations
-     * @return
+     * Find search results from a given search bar query
+     * @param query String obtained from user input
+     * @param allLocations List of all LocItems within zoo
+     * @return List of LocItems to be displayed in the search results RecyclerView
      */
     public static List<LocItem> findSearchResult(String query, List<LocItem> allLocations) {
         if (query.length() == 0)
@@ -134,7 +134,7 @@ public class Utilities {
     /**
      * From a given list of LocItems, find the most optimal route through the graph
      * using our findShortestPathBetween function
-     * @param plannedLocItems
+     * @param plannedLocItems List of LocItems within plan to find a route for
      * @return route from the planned exhibits as a HashMap of edges
      */
     public static Pair<HashMap<String, List<LocEdge>>, HashMap<String, Double>>
@@ -175,14 +175,14 @@ public class Utilities {
                 }
             }
 
-            //
+            // add minimum distance to the current distance
             currDist += minDist;
 
-            //
+            // set closest to be current and remove the top element from unvisited
             current = closest;
             unvisited.remove(minIndex);
 
-            //
+            // add the next path to paths and add the next distance to distances
             paths.put(closest, minPath);
             distances.put(closest, currDist);
         }

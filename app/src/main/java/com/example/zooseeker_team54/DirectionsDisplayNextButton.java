@@ -106,4 +106,9 @@ public class DirectionsDisplayNextButton {
         newTarget = viewModel.getNextUnvisitedExhibit();
         return newTarget;
     }
+
+    // Method to set current target. Used for testing
+    public void setCurrTarget(LocItem currTarget) {
+        this.currTarget = currTarget;
+    }
 }

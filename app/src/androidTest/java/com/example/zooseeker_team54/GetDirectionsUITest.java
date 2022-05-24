@@ -203,10 +203,38 @@ public class GetDirectionsUITest {
         textView3.check(matches(withText("Proceed on 'Arctic Avenue' 300 meters towards 'Arctic Foxes' from 'Entrance Plaza'.\n")));
 
         ViewInteraction button3 = onView(
-                allOf(withId(R.id.next_btn), withText("NEXT\n------\nNO EXHIBITS LEFT!"),
+                allOf(withId(R.id.next_btn), withText("NEXT\n------\nENTRANCE AND EXIT GATE, 310"),
                         withParent(withParent(withId(android.R.id.content))),
                         isDisplayed()));
         button3.check(matches(isDisplayed()));
+
+        ViewInteraction materialButton5 = onView(
+                allOf(withId(R.id.next_btn), withText("NEXT\n------\nENTRANCE AND EXIT GATE, 310"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                2),
+                        isDisplayed()));
+        materialButton5.perform(click());
+
+        ViewInteraction textView4 = onView(
+                allOf(withId(R.id.direction), withText("Proceed on 'Arctic Avenue' 300 meters towards 'Entrance Plaza' from 'Arctic Foxes'.\n"),
+                        withParent(withParent(withId(R.id.route_direction))),
+                        isDisplayed()));
+        textView4.check(matches(withText("Proceed on 'Arctic Avenue' 300 meters towards 'Entrance Plaza' from 'Arctic Foxes'.\n")));
+
+        ViewInteraction textView5 = onView(
+                allOf(withId(R.id.direction), withText("Proceed on 'Entrance Way' 10 meters towards 'Entrance and Exit Gate' from 'Entrance Plaza'.\n"),
+                        withParent(withParent(withId(R.id.route_direction))),
+                        isDisplayed()));
+        textView5.check(matches(withText("Proceed on 'Entrance Way' 10 meters towards 'Entrance and Exit Gate' from 'Entrance Plaza'.\n")));
+
+        ViewInteraction button4 = onView(
+                allOf(withId(R.id.next_btn), withText("NEXT\n------\nNO EXHIBITS LEFT!"),
+                        withParent(withParent(withId(android.R.id.content))),
+                        isDisplayed()));
+        button4.check(matches(isDisplayed()));
     }
 
     private static Matcher<View> childAtPosition(

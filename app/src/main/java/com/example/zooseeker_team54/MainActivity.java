@@ -144,6 +144,8 @@ public class MainActivity extends AppCompatActivity {
             viewModel.updateLocCurrentDist(targetLocItem, newDistance);
         }
 
+        LocItem targetLocItem = viewModel.getLocItemById("entrance_exit_gate");
+        viewModel.addPlannedLoc(targetLocItem);
         return route;
     }
 
@@ -151,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
      * Removes the given LocItem from the viewModel
      * @param locItem LocItem to be removed
      */
-    private void removePlannedLoc(LocItem locItem) {
+    public void removePlannedLoc(LocItem locItem) {
         viewModel.removePlannedLoc(locItem);
         updatePlanSizeText();
     }
@@ -160,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
      * Adds the given LocItem to the viewModel
      * @param locItem LocItem to be added
      */
-    private void addPlannedLoc(LocItem locItem) {
+    public void addPlannedLoc(LocItem locItem) {
         viewModel.addPlannedLoc(locItem);
         updatePlanSizeText();
     }

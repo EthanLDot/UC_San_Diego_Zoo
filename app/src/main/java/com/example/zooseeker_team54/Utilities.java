@@ -186,8 +186,13 @@ public class Utilities {
             paths.put(closest, minPath);
             distances.put(closest, currDist);
         }
+        String target = "entrance_exit_gate";
+        Pair<List<LocEdge>, Double> pair = Utilities.findShortestPathBetween(current, target);
+        paths.put(target, pair.first);
 
-        // TODO: figure out whether we need to finish at entrance/exit gate
+        currDist += pair.second;
+        distances.put(target, currDist);
+
         return new Pair<>(paths, distances);
     }
 

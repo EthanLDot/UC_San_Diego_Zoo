@@ -51,7 +51,7 @@ public class PlanRouteTests {
             List<LocItem> selectedExhibits = activity.plannedLocsAdapter.getItems();
             HashMap<String, List<LocEdge>> route = activity.findRoute(selectedExhibits);
             assertEquals(0, selectedExhibits.size());
-            assertEquals(0, route.size());
+            assertEquals(1, route.size());
         });
     }
 
@@ -80,8 +80,10 @@ public class PlanRouteTests {
             assertEquals("Loc {id=gorillas, name='Gorillas', planned=false, visited=false, current distance=0.0}", locsAdapterContents.get(0).toString());
 
             HashMap<String, List<LocEdge>> route = activity.findRoute(locsAdapterContents);
-            assertEquals(1, route.size());
-            assertEquals("{gorillas=[Proceed on 'Entrance Way' 10 meters towards 'Entrance Plaza' from 'Entrance and Exit Gate'.\n" +
+            assertEquals(2, route.size());
+            assertEquals("{entrance_exit_gate=[Proceed on 'Africa Rocks Street' 200 meters towards 'Entrance Plaza' from 'Gorillas'.\n" +
+                    ", Proceed on 'Entrance Way' 10 meters towards 'Entrance and Exit Gate' from 'Entrance Plaza'.\n" +
+                    "], gorillas=[Proceed on 'Entrance Way' 10 meters towards 'Entrance Plaza' from 'Entrance and Exit Gate'.\n" +
                     ", Proceed on 'Africa Rocks Street' 200 meters towards 'Gorillas' from 'Entrance Plaza'.\n" +
                     "]}", route.toString());
         });
@@ -120,8 +122,11 @@ public class PlanRouteTests {
             assertEquals("Loc {id=lions, name='Lions', planned=false, visited=false, current distance=0.0}", locsAdapterContents.get(1).toString());
 
             HashMap<String, List<LocEdge>> route = activity.findRoute(locsAdapterContents);
-            assertEquals(2, route.size());
+            assertEquals(3, route.size());
             assertEquals("{lions=[Proceed on 'Sharp Teeth Shortcut' 200 meters towards 'Lions' from 'Alligators'.\n" +
+                    "], entrance_exit_gate=[Proceed on 'Sharp Teeth Shortcut' 200 meters towards 'Alligators' from 'Lions'.\n" +
+                    ", Proceed on 'Reptile Road' 100 meters towards 'Entrance Plaza' from 'Alligators'.\n" +
+                    ", Proceed on 'Entrance Way' 10 meters towards 'Entrance and Exit Gate' from 'Entrance Plaza'.\n" +
                     "], gators=[Proceed on 'Entrance Way' 10 meters towards 'Entrance Plaza' from 'Entrance and Exit Gate'.\n" +
                     ", Proceed on 'Reptile Road' 100 meters towards 'Alligators' from 'Entrance Plaza'.\n" +
                     "]}", route.toString());

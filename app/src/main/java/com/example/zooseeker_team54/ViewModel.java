@@ -164,5 +164,20 @@ public class ViewModel extends AndroidViewModel {
      */
     public int countPlannedExhibits() { return locItemDao.countPlannedExhibits(); }
 
+    /**
+     *
+     */
+    public void arriveCurrentTarget() {
+        LocItem currTarget = getCurrTarget();
+        List<LocItem> unvisited = getAllPlannedUnvisited();
+
+        for (LocItem locItem : unvisited) {
+            double newDist = locItem.currDist - currTarget.currDist;
+            updateLocCurrentDist(locItem, newDist);
+        }
+
+        addVisitedLoc(currTarget);
+    }
+
 }
 

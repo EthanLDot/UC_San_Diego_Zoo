@@ -196,4 +196,51 @@ public class Utilities {
         return new Pair<>(paths, distances);
     }
 
+    /**
+     *
+     * @param route
+     * @param target
+     * @param isBrief
+     * @return
+     */
+    public static List<LocEdge> findDirections(HashMap<String, List<LocEdge>> route, LocItem target, boolean isBrief) {
+        List<LocEdge> directions = route.get(target.id);
+        if (!isBrief) { return directions; }
+        return getBriefDirections(directions);
+    }
+
+    /**
+     *
+     * @param directions
+     * @return
+     */
+    public static List<LocEdge> getBriefDirections(List<LocEdge> directions) {
+        List<LocEdge> briefDirections = new ArrayList<>();
+
+        // initialize the data
+        LocEdge firstPath = directions.get(0);
+        String currStreet = firstPath.street;
+        String source = firstPath.source;
+        String sink = firstPath.target;
+        double streetWeight = 0;
+
+        // loop through the directions and create brief direction
+        for (LocEdge edge : directions) {
+            if (currStreet.equals(edge.street)) {
+                streetWeight += edge.weight;
+            } else {
+                // add brief data into the new list
+                briefDirections.add(new LocEdge("", streetWeight, currStreet, source, edge.source));
+                currStreet = edge.street;
+                source = edge.source;
+                streetWeight = edge.weight;
+                sink = edge.target;
+            }
+        }
+
+        // for loop will not take care of the last item, thus we are adding it here
+        briefDirections.add(new LocEdge("", streetWeight, currStreet, source, sink));
+        return briefDirections;
+    }
+
 }

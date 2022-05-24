@@ -29,6 +29,7 @@ public class ShowRouteActivity extends AppCompatActivity {
 
     /**
      * Create the activity from a given savedInstanceState and initialize everything
+     *
      * @param savedInstanceState the saved instance from before
      */
     @Override
@@ -54,71 +55,43 @@ public class ShowRouteActivity extends AppCompatActivity {
 
     /**
      * Back out of the activity when the "Back" button is clicked
+     *
      * @param view View that's passed in
      */
-    public void onBackButtonClicked (View view) {
+    public void onBackButtonClicked(View view) {
         finish();
     }
 
     /**
      * Function for when the Direction button is clicked, and launches the RouteDirectionActivity
+     *
      * @param view
      */
-    public void onDirectionBtnClicked (View view) {
-        Intent intent = new Intent(this, RouteDirectionActivity.class);
+    public void onDirectionBtnClicked(View view) {
 
-        //user selection of brief display vs detailed display
-        boolean isBrief = getIsBrief();
-
-        // todo: discuss if we really need to pass direction
+        // user selection of brief display vs detailed display
         LocItem target = viewModel.getNextUnvisitedExhibit();
+        Intent intent = new Intent(this, RouteDirectionActivity.class);
 
         // show an alert if target doesn't exist or is null
         if (target == null) {
             String alertMessage = "All exhibits visited! " + "" +
-                                "Please clear all selections on the previous page " +
-                                "with the CLEAR button " +
-                                "and select more exhibits to visit.";
+                    "Please clear all selections on the previous page " +
+                    "with the CLEAR button " +
+                    "and select more exhibits to visit.";
             Utilities.showAlert(this, alertMessage);
             return;
         }
-        else {
-            List<LocEdge> directions = route.get(target.id);
-            if(isBrief){
-                // initializing the data
-                List<LocEdge> briefDirections = new ArrayList<LocEdge>();
-                String currStreet = directions.get(0).street;
-                String source = directions.get(0).source;
-                String sink = directions.get(0).target;
-                double streetWeight = 0;
-                //looping through the route and create new route
-                for(LocEdge edge : directions){
-                    if(currStreet.equals(edge.street)){
-                        streetWeight += edge.weight;
-                    }
-                    else{
-                        //adding brief data into the new list
-                        briefDirections.add(new LocEdge("",streetWeight,currStreet,source, edge.source));
-                        currStreet = edge.street;
-                        source = edge.source;
-                        streetWeight = edge.weight;
-                        sink = edge.target;
-                    }
-                }
-                //for loop will not take care of the last item, thus we are adding it here
-                briefDirections.add(new LocEdge("",streetWeight,currStreet,source, sink));
-                directions = briefDirections;
-            }
-            intent.putExtra("directions", (ArrayList<LocEdge>) directions);
-            intent.putExtra("route", route);
-            startActivity(intent);
-        }
-    }
-    public boolean getIsBrief(){
-        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
-        boolean isBrief = preferences.getBoolean("isBrief", true);
 
-        return isBrief;
+        //
+        List<LocEdge> directions = Utilities.findDirections(route, target, getIsBrief());
+        intent.putExtra("directions", (ArrayList<LocEdge>) directions);
+        intent.putExtra("route", route);
+        startActivity(intent);
+    }
+
+    public boolean getIsBrief() {
+        return getPreferences(MODE_PRIVATE).getBoolean("isBrief", true);
     }
 }
 

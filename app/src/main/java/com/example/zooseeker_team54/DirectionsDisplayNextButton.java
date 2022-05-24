@@ -102,7 +102,7 @@ public class DirectionsDisplayNextButton {
         }
         viewModel.addVisitedLoc(currentTarget);
 
-        //Step 2: choose next exhibit to travel to
+        // Step 2: choose next exhibit to travel to
         newTarget = viewModel.getNextUnvisitedExhibit();
         return newTarget;
     }

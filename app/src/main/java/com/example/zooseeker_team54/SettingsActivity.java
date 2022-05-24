@@ -7,105 +7,82 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ToggleButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    // booleans to detect whether to display brief or detailed directions
-    private boolean isBrief;
+    private ToggleButton brief;
+    private ToggleButton detailed;
+    private Button exitBtn;
 
     /**
-     * Getter method for isBrief
-     * @return if brief directions should be displayed
+     *
+     * @param savedInstanceState
      */
-    public boolean getIsBrief() {
-        return this.isBrief;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_settings);
+
+        exitBtn = this.findViewById(R.id.exit_btn);
+        exitBtn.setOnClickListener(this::onExitBtnClicked);
+
+        brief = this.findViewById(R.id.briefDirectionsButton);
+        detailed = this.findViewById(R.id.detailedDirectionsButton);
+
+        brief.setOnCheckedChangeListener(getToggleListener(detailed));
+        detailed.setOnCheckedChangeListener(getToggleListener(brief));
     }
-
-
 
     /**
      * Setter method for isBrief
      * @param bool boolean for isBrief to be set to
      */
     public void setIsBrief(boolean bool) {
-        this.isBrief = bool;
+        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("isBrief", bool);
+        editor.apply();
     }
 
-
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings);
-        ToggleButton brief = this.findViewById(R.id.briefDirectionsButton);
-        ToggleButton detailed = this.findViewById(R.id.detailedDirectionsButton);
-
-        //check correct value here, BRIEF by default
-
-
-        brief.setOnCheckedChangeListener( new CompoundButton.OnCheckedChangeListener()
-        {
-            @Override
-            public void onCheckedChanged(CompoundButton toggleButton, boolean isChecked)
-            {
-                if(isChecked)
-                {
-                    setBool(detailed, false);
-                    setIsBrief(true);
-                    saveIsBrief();
-                    Log.d("settings", "Directions: BRIEF");
-                }
-                else
-                {
-                    setBool(detailed, true);
-                    Log.d("settings", "Directions: DETAILED");
-                }
+    /**
+     *
+     * @param otherBtn
+     * @return
+     */
+    private OnCheckedChangeListener getToggleListener(CompoundButton otherBtn) {
+        return (compoundButton, isChecked) -> {
+            if (isChecked) {
+                setToggleButton(otherBtn, false);
+                setIsBrief(otherBtn.equals(detailed));
             }
-        });
-        detailed.setOnCheckedChangeListener( new CompoundButton.OnCheckedChangeListener()
-        {
-            @Override
-            public void onCheckedChanged(CompoundButton toggleButton, boolean isChecked)
-            {
-                if(isChecked)
-                {
-                    setBool(brief, false);
-                    setIsBrief(false);
-                    saveIsBrief();
-                    //Log.d("settings", "Directions: DETAILED");
-                }
-                else
-                {
-                    setBool(brief, true);
-                    //Log.d("settings", "Directions: BRIEF");
-                }
+            else {
+                setToggleButton(otherBtn, true);
             }
-        });
+        };
     }
 
-    protected void setBool(CompoundButton toggleButton, boolean isChecked)
+    /**
+     *
+     * @param toggleButton
+     * @param isChecked
+     */
+    private void setToggleButton(CompoundButton toggleButton, boolean isChecked)
     {
         toggleButton.setChecked(isChecked);
-        if(isChecked)
-        {
-            toggleButton.setBackgroundColor(Color.parseColor("#8BC34A"));
-        }
-        else
-        {
-            toggleButton.setBackgroundColor(Color.parseColor("#40737373"));
-        }
+        String color = isChecked ? "#8BC34A" : "#40737373";
+        toggleButton.setBackgroundColor(Color.parseColor(color));
     }
 
-    public void exitOnClick(View view) {
+    /**
+     *
+     * @param view
+     */
+    private void onExitBtnClicked(View view) {
         finish();
     }
 
-    public void saveIsBrief() {
-        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("isBrief", this.isBrief);
-        editor.apply();
-    }
 }

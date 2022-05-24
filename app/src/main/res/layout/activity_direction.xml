@@ -51,7 +51,6 @@
         app:icon="@android:drawable/ic_menu_preferences"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:onClick="onSettingsClicked"
         android:textOff="penis"
         android:textOn="PENIS"
         tools:ignore="SpeakableTextPresentCheck" />

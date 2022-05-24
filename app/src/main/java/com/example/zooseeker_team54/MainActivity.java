@@ -36,11 +36,11 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView planSizeText;
     private AutoCompleteTextView searchBarText;
+
     private Button clearBtn;
     private Button planBtn;
 
     private ViewModel viewModel;
-    private Utilities utils;
 
     /**
      * Text Watcher for search bar textview
@@ -85,8 +85,7 @@ public class MainActivity extends AppCompatActivity {
                 .stream()
                 .map(l -> l.name)
                 .collect(Collectors.toList());
-        System.out.println(EXHIBITS);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_list_item_1, EXHIBITS);
         searchBarText.setAdapter(adapter);
 

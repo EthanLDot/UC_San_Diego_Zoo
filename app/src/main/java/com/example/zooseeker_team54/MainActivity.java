@@ -155,12 +155,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onLocationChanged(@NonNull Location location) {
                         Log.d("Location", String.format("Location changed: %s", location));
                         currLatLng.setText(location.getLatitude() + ", " + location.getLongitude());
-                        var marker = new MarkerOptions()
-                                .position(new LatLng(
-                                        location.getLatitude(),
-                                        location.getLongitude()
-                                ))
-                                .title("Navigation Step");
+
                     }
                 };
                 if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {

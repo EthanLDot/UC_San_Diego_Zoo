@@ -55,12 +55,10 @@ public class SettingsActivity extends AppCompatActivity {
      */
     private OnCheckedChangeListener getToggleListener(CompoundButton otherBtn) {
         return (compoundButton, isChecked) -> {
-            if (isChecked) {
+            if (!isChecked) {
                 setToggleButton(otherBtn, false);
+                setToggleButton(compoundButton, true);
                 setIsBrief(otherBtn.equals(detailed));
-            }
-            else {
-                setToggleButton(otherBtn, true);
             }
         };
     }
@@ -72,9 +70,9 @@ public class SettingsActivity extends AppCompatActivity {
      */
     private void setToggleButton(CompoundButton toggleButton, boolean isChecked)
     {
-        toggleButton.setChecked(isChecked);
         String color = isChecked ? "#8BC34A" : "#40737373";
         toggleButton.setBackgroundColor(Color.parseColor(color));
+        toggleButton.setChecked(!isChecked);
     }
 
     /**

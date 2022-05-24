@@ -1,17 +1,13 @@
 package com.example.zooseeker_team54;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -21,7 +17,8 @@ import java.util.List;
 public class RouteDirectionActivity extends AppCompatActivity {
     private ViewModel viewModel;
     DirectionsDisplayRecyclerView display;
-    DirectionsDisplayNextButton button;
+    DirectionsDisplayNextButton nextBtn;
+    Button settingsBtn;
 
     /**
      * Create the activity from a given savedInstanceState and initialize everything
@@ -43,8 +40,12 @@ public class RouteDirectionActivity extends AppCompatActivity {
         display.initializeRecyclerView();
 
         // Initialize New Button
-        button = new DirectionsDisplayNextButton(this, display, viewModel);
-        button.initializeButton();
+        nextBtn = new DirectionsDisplayNextButton(this, display, viewModel);
+        nextBtn.initializeButton();
+
+        //
+        settingsBtn = this.findViewById(R.id.settings_button);
+        settingsBtn.setOnClickListener(this::onSettingsClicked);
     }
 
     /**
@@ -58,20 +59,23 @@ public class RouteDirectionActivity extends AppCompatActivity {
      * @return RecyclerView of the directions
      */
     public DirectionsDisplayRecyclerView getDisplayView() {
-        return this.display;
+        return display;
     }
 
     /**
      * Getter method for the button
      * @return Button for "Next"
      */
-    public DirectionsDisplayNextButton getButton () {
-        return this.button;
+    public DirectionsDisplayNextButton getNextBtn() {
+        return nextBtn;
     }
 
-    public void onSettingsClicked(View view) {
+    /**
+     *
+     * @param view
+     */
+    private void onSettingsClicked(View view) {
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
-
     }
 }

@@ -13,6 +13,7 @@ import java.util.function.Consumer;
 public abstract class GeneralRecyclerAdapter<T> extends RecyclerView.Adapter<GeneralRecyclerAdapter.ViewHolder> {
     private List<T> items = Collections.emptyList();
     private Consumer<T> itemOnClickListener;
+
     public GeneralRecyclerAdapter(){
         setHasStableIds(true);
     }

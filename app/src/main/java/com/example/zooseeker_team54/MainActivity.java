@@ -1,13 +1,18 @@
 package com.example.zooseeker_team54;
 
+import androidx.activity.ComponentActivity;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -20,6 +25,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -32,6 +38,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -56,6 +63,15 @@ public class MainActivity extends AppCompatActivity {
     private ViewModel viewModel;
     private Utilities utils;
 
+    private LocationManager locationManager;
+    LatLng currLoc;
+    final ActivityResultLauncher<String[]> requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), perms ->
+        {
+            perms.forEach((perm, isGranted) ->
+            {
+                Log.i("Perms", String.format("Permission %s granted: %s", perm, isGranted));
+            });
+        });
     //permissionchecker from lab 7
     private final PermissionChecker permissionChecker = new PermissionChecker(this);
 
@@ -142,40 +158,57 @@ public class MainActivity extends AppCompatActivity {
             clearBtn.setOnClickListener(this::onClearBtnClicked);
         }
 
-        //locationlistener from lab 7
         {
-            TextView currLatLng = this.findViewById(R.id.currLatLng);
-            if (permissionChecker.ensurePermissions()) return;
+            locationManager = (LocationManager)getApplicationContext().getSystemService(LOCATION_SERVICE);
+            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                getLocation();
 
-            {
-                var provider = LocationManager.GPS_PROVIDER;
-                var locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-                var locationListener = new LocationListener() {
-                    @Override
-                    public void onLocationChanged(@NonNull Location location) {
-                        Log.d("Location", String.format("Location changed: %s", location));
-                        currLatLng.setText(location.getLatitude() + ", " + location.getLongitude());
-
-                    }
-                };
-                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
-                    permissionChecker.ensurePermissions();
-                    return;
-                }
-                locationManager.requestLocationUpdates(provider, 0, 0f, locationListener);
             }
-
-
 
         }
 
+        {
+            final Handler handler = new Handler();
+            final int delay = 1000; // 1000 milliseconds == 1 second
+
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    getLocation();// Do your work here
+                    handler.postDelayed(this, delay);
+                }
+            }, delay);
+        }
+
+    }
+
+    private void getLocation() {
+        permissionChecker.ensurePermissions();
+        /*if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                currLoc = new LatLng(0, 0);
+        }*/
+        List<String> providers = locationManager.getProviders(true);
+        Location bestLocation = null;
+        for (String provider : providers) {
+            @SuppressLint("MissingPermission") Location l = locationManager.getLastKnownLocation(provider);
+            if (l == null) {
+                continue;
+            }
+            if (bestLocation == null || l.getAccuracy() < bestLocation.getAccuracy()) {
+                // Found best last known location: %s", l);
+                bestLocation = l;
+            }
+        }
+        if(bestLocation != null)
+        {
+            currLoc = new LatLng(bestLocation.getLatitude(), bestLocation.getLongitude());
+        }
+        else
+        {
+            currLoc = new LatLng(0, 0);
+        }
+        TextView ll = this.findViewById(R.id.currLatLng);
+        String coords= "(" + currLoc.latitude + ", " + currLoc.longitude + ")";
+        ll.setText(coords);
     }
 
     /**

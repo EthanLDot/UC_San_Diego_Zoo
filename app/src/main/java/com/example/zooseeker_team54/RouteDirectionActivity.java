@@ -18,16 +18,16 @@ import java.util.List;
  *  Class to represent the functionality of RouteDirectionActivity
  */
 public class RouteDirectionActivity extends AppCompatActivity {
-    private ViewModel viewModel;
 
-    private RecyclerView routeDirectionView;
-    private GeneralRecyclerAdapter<LocEdge> routeDirectionAdapter;
+    public RecyclerView routeDirectionView;
+    public RouteDirectionAdapter routeDirectionAdapter;
+
+    private ViewModel viewModel;
 
     private Button nextBtn;
     private Button backBtn;
     private Button settingsBtn;
 
-    private List<LocEdge> directions;
     private HashMap<String, List<LocEdge>> route;
 
     /**
@@ -42,27 +42,29 @@ public class RouteDirectionActivity extends AppCompatActivity {
 
         viewModel = new ViewModelProvider(this).get(ViewModel.class);
 
-        directions = (List<LocEdge>) intent.getSerializableExtra("directions");
         route = (HashMap<String, List<LocEdge>>) intent.getSerializableExtra("route");
 
         // Create an adapter for the RecyclerView of route direction
         routeDirectionAdapter = new RouteDirectionAdapter();
         routeDirectionAdapter.setHasStableIds(true);
+        List<LocEdge> directions = Utilities.findDirections(route, viewModel.getCurrTarget(), getIsBrief());
         routeDirectionAdapter.setItems(directions);
 
+        // Set the adapter for the actual RecyclerView
         routeDirectionView = findViewById(R.id.route_direction);
         routeDirectionView.setLayoutManager(new LinearLayoutManager(this));
         routeDirectionView.setAdapter(routeDirectionAdapter);
 
+        // Initialize the next button
         nextBtn = findViewById(R.id.next_btn);
         nextBtn.setOnClickListener(this::onNextBtnClicked);
         updateNextBtn(viewModel.getCurrTarget(), viewModel.getNextTarget());
 
-        //
+        // Initialize the back button
         backBtn = this.findViewById(R.id.back_to_plan);
         backBtn.setOnClickListener(this::onBackToPlanBtnClicked);
 
-        //
+        // Initialize the settings button
         settingsBtn = this.findViewById(R.id.settings_button);
         settingsBtn.setOnClickListener(this::onSettingsClicked);
     }
@@ -72,11 +74,18 @@ public class RouteDirectionActivity extends AppCompatActivity {
      * @param view
      */
     public void onNextBtnClicked(View view) {
+
+        // update database
         viewModel.arriveCurrentTarget();
+
+        // update nextButton
         LocItem currTarget = viewModel.getCurrTarget();
         LocItem nextTarget = viewModel.getNextTarget();
         updateNextBtn(currTarget, nextTarget);
-        routeDirectionAdapter.setItems(route.get(currTarget.id));
+
+        // Update directions
+        List<LocEdge> newDirections = Utilities.findDirections(route, currTarget, getIsBrief());
+        routeDirectionAdapter.setItems(newDirections);
     }
 
     /**
@@ -84,7 +93,7 @@ public class RouteDirectionActivity extends AppCompatActivity {
      * @param currTarget
      * @param nextTarget
      */
-    private void updateNextBtn(LocItem currTarget, LocItem nextTarget) {
+    public void updateNextBtn(LocItem currTarget, LocItem nextTarget) {
         String buttonText;
         if (nextTarget == null || !nextTarget.planned) {
             buttonText = "NEXT\n------\n" + "No Exhibits Left!";
@@ -111,5 +120,13 @@ public class RouteDirectionActivity extends AppCompatActivity {
     private void onSettingsClicked(View view) {
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
+    }
+
+    /**
+     *
+     * @return
+     */
+    private boolean getIsBrief() {
+        return getPreferences(MODE_PRIVATE).getBoolean("isBrief", true);
     }
 }

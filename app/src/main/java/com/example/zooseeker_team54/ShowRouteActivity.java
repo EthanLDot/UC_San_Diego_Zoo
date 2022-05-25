@@ -84,8 +84,6 @@ public class ShowRouteActivity extends AppCompatActivity {
         }
 
         //
-        List<LocEdge> directions = Utilities.findDirections(route, target, getIsBrief());
-        intent.putExtra("directions", (ArrayList<LocEdge>) directions);
         intent.putExtra("route", route);
         startActivity(intent);
     }

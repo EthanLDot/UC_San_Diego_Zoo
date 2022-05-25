@@ -11,6 +11,7 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -197,14 +198,9 @@ public class MainActivity extends AppCompatActivity {
      * @param view Passed in when "Plan" is clicked
      */
     private void onPlanButtonClicked(View view) {
-        // should create plan on database to display on routePlanActivity and take us there
-
-        // get number of exhibits in plan from our adapter
-        String planSizeString = Integer.toString(plannedLocsAdapter.getItemCount());
-        int planSize = Integer.parseInt(planSizeString);
 
         // show an alert if plan size is 0
-        if (planSize == 0) {
+        if (plannedLocsAdapter.getItemCount() == 0) {
             Utilities.showAlert(this, "Plan list is empty, can't create plan!");
             return;
         }
@@ -215,5 +211,15 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ShowRouteActivity.class);
         intent.putExtra("route", directions);
         startActivity(intent);
+
+        LocationTracker locationTracker = new LocationTracker(this, false);
+//        locationTracker.getUserCoordLive().observe(this, (coord) -> {
+//            List<LocItem> items = viewModel.getAllPlannedUnvisited();
+//            for (var item : items) {
+//                // TODO: Try to print the distance between the user and the exhibits
+//                Log.d("FOOBAR", "User moves more than the threshold!");
+//            }
+//        });
+
     }
 }

@@ -29,6 +29,8 @@ import java.util.stream.Collectors;
  */
 public class MainActivity extends AppCompatActivity {
 
+    public LocationTracker locationTracker;
+
     public RecyclerView searchResultView;
     public RecyclerView plannedLocsView;
 
@@ -80,6 +82,9 @@ public class MainActivity extends AppCompatActivity {
         // Get search bar EditText and bind a text watcher to it
         searchBarText = this.findViewById(R.id.search_bar);
         searchBarText.addTextChangedListener(searchBarTextWatcher);
+
+        locationTracker = new LocationTracker(this, false);
+        locationTracker.startMockingRoute(Utilities.getMockRoute());
 
         // generate a list of exhibits from utilities and create the array adapter for autocomplete suggestions
         List<String> EXHIBITS = viewModel.getAllExhibits()
@@ -211,15 +216,5 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ShowRouteActivity.class);
         intent.putExtra("route", directions);
         startActivity(intent);
-
-        LocationTracker locationTracker = new LocationTracker(this, false);
-//        locationTracker.getUserCoordLive().observe(this, (coord) -> {
-//            List<LocItem> items = viewModel.getAllPlannedUnvisited();
-//            for (var item : items) {
-//                // TODO: Try to print the distance between the user and the exhibits
-//                Log.d("FOOBAR", "User moves more than the threshold!");
-//            }
-//        });
-
     }
 }

@@ -50,7 +50,7 @@ public interface LocItemDao {
     @Query("SELECT * FROM loc_items WHERE planned = 1 AND visited = 0 AND currDist = (SELECT MIN(currDist) FROM loc_items WHERE planned = 1 AND visited = 0)")
     LocItem getNextUnvisitedExhibit();
 
-    @Query("SELECT COUNT(*) FROM loc_items WHERE planned = 1 ORDER BY id")
+    @Query("SELECT COUNT(*) FROM loc_items WHERE planned = 1 AND id != 'entrance_exit_gate' ORDER BY id")
     int countPlannedExhibits();
 
 }

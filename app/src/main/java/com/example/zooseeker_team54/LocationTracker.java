@@ -42,9 +42,11 @@ public class LocationTracker {
         model.getLastKnownCoords().observe(activity, (coord) -> {
             Log.i(TAG, String.format("Observing location model update to %s", coord));
         });
+    }
 
+    public void startMockingRoute(List<Coord> route) {
         if (!this.useLocationService) {
-            model.mockRoute(getMockRoute(), 500, TimeUnit.MILLISECONDS);
+            model.mockRoute(route, 500, TimeUnit.MILLISECONDS);
         }
     }
 
@@ -54,17 +56,6 @@ public class LocationTracker {
      */
     public LiveData<Coord> getUserCoordLive() {
         return model.getLastKnownCoords();
-    }
-
-    /**
-     *
-     * @return
-     */
-    private List<Coord> getMockRoute() {
-        // TODO: find a way to prompt the user and paste the JSON text or an URL
-        return Coords
-                .interpolate(Coords.UCSD, Coords.ZOO, 12)
-                .collect(Collectors.toList());
     }
 
     @VisibleForTesting

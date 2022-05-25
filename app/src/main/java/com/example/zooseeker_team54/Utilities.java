@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.stream.Collectors;
 
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
@@ -242,6 +243,17 @@ public class Utilities {
         // for loop will not take care of the last item, thus we are adding it here
         briefDirections.add(new LocEdge("", streetWeight, currStreet, source, sink));
         return briefDirections;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public static List<Coord> getMockRoute() {
+        // TODO: find a way to prompt the user and paste the JSON text or an URL
+        return Coords
+                .interpolate(Coords.UCSD, Coords.ZOO, 12)
+                .collect(Collectors.toList());
     }
 
 }

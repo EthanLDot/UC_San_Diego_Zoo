@@ -204,6 +204,7 @@ public class Utilities {
      * @return
      */
     public static List<LocEdge> findDirections(HashMap<String, List<LocEdge>> route, LocItem target, boolean isBrief) {
+        if (target == null) { return Collections.emptyList(); }
         List<LocEdge> directions = route.get(target.id);
         if (!isBrief) { return directions; }
         return getBriefDirections(directions);

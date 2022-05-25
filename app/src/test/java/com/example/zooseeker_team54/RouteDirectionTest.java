@@ -1,6 +1,7 @@
 package com.example.zooseeker_team54;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import android.content.Context;
 import android.content.Intent;
@@ -26,15 +27,14 @@ import java.util.List;
 // User Story 4 Unit Tests
 @RunWith(AndroidJUnit4.class)
 public class RouteDirectionTest {
-    List<LocEdge> directions;
-    Intent intent;
-    LocDatabase testDb;
     LocItemDao dao;
+    LocDatabase testDb;
+    Intent mainIntent, routeDirectionIntent;
 
     @Before
     public void setUp() {
-        directions = new ArrayList<>();
-        intent = new Intent(ApplicationProvider.getApplicationContext(), RouteDirectionActivity.class);
+        mainIntent = new Intent(ApplicationProvider.getApplicationContext(), MainActivity.class);
+        routeDirectionIntent = new Intent(ApplicationProvider.getApplicationContext(), RouteDirectionActivity.class);
     }
 
     @Before
@@ -55,17 +55,34 @@ public class RouteDirectionTest {
      */
     @Test
     public void singleExhibitTest() {
-        directions.add(new LocEdge("Tasmanian Devils", 200, "Zoo Lane", "entrance", "exit"));
 
-        // Launch RouteDirectionActivity class
-        intent.putExtra("directions", (ArrayList<LocEdge>) directions);
-        ActivityScenario<RouteDirectionActivity> scenario = ActivityScenario.launch(intent);
+        // Launch MainActivity class
+        ActivityScenario<MainActivity> mainActivityActivityScenario = ActivityScenario.launch(mainIntent);
+        mainActivityActivityScenario.onActivity(activity -> {
 
-        // Check for Correctness
-        scenario.onActivity(activity -> {
-            DirectionsDisplayRecyclerView display = activity.getDisplayView();
-            assertEquals(directions.get(0), display.getDirections().get(0));
+            LocItem lions = dao.get("lions");
+
+            List<LocItem> testItems = new ArrayList<>();
+            testItems.add(lions);
+            activity.plannedLocsAdapter.setItems(testItems);
+
+            activity.addPlannedLoc(lions);
+
+            HashMap<String, List<LocEdge>> route = activity.findRoute(activity.plannedLocsAdapter.getItems());
+            routeDirectionIntent.putExtra("route", route);
+            System.out.println(Utilities.findDirections(route, lions, true));
         });
+
+        ActivityScenario<RouteDirectionActivity> routeDirectionActivityActivityScenario = ActivityScenario.launch(routeDirectionIntent);
+        routeDirectionActivityActivityScenario.onActivity(activity -> {
+            String expectedDirections = "[Proceed on 'Entrance Way' 10 meters towards 'Entrance Plaza' from 'Entrance and Exit Gate'.\n" +
+                    ", Proceed on 'Reptile Road' 100 meters towards 'Alligators' from 'Entrance Plaza'.\n" +
+                    ", Proceed on 'Sharp Teeth Shortcut' 200 meters towards 'Lions' from 'Alligators'.\n" +
+                    "]";
+            List<LocEdge> directions = activity.routeDirectionAdapter.getItems();
+            assertEquals(expectedDirections, directions.toString());
+        });
+
     }
 
     /**
@@ -74,16 +91,33 @@ public class RouteDirectionTest {
      */
     @Test
     public void multipleExhibitTest() {
-        directions.add(new LocEdge("Gorillas", 340, "jungle_lane", "safari_blvd", "exit"));
-        directions.add(new LocEdge("Tasmanian Devils", 200, "Zoo Lane", "entrance", "exit"));
 
-        intent.putExtra("directions", (ArrayList<LocEdge>) directions);
-        ActivityScenario<RouteDirectionActivity> scenario = ActivityScenario.launch(intent);
+        // Launch MainActivity class
+        ActivityScenario<MainActivity> mainActivityActivityScenario = ActivityScenario.launch(mainIntent);
+        mainActivityActivityScenario.onActivity(activity -> {
 
-        // Check for Correctness
-        scenario.onActivity(activity -> {
-            DirectionsDisplayRecyclerView display = activity.getDisplayView();
-            assertEquals(directions.get(0), display.getDirections().get(0));
+            LocItem lions = dao.get("lions");
+            LocItem gators = dao.get("gators");
+
+            List<LocItem> testItems = new ArrayList<>();
+            testItems.add(lions);
+            testItems.add(gators);
+            activity.plannedLocsAdapter.setItems(testItems);
+
+            activity.addPlannedLoc(lions);
+            activity.addPlannedLoc(gators);
+
+            HashMap<String, List<LocEdge>> route = activity.findRoute(activity.plannedLocsAdapter.getItems());
+            routeDirectionIntent.putExtra("route", route);
+        });
+
+        ActivityScenario<RouteDirectionActivity> routeDirectionActivityActivityScenario = ActivityScenario.launch(routeDirectionIntent);
+        routeDirectionActivityActivityScenario.onActivity(activity -> {
+            String expectedDirections = "[Proceed on 'Entrance Way' 10 meters towards 'Entrance Plaza' from 'Entrance and Exit Gate'.\n" +
+                    ", Proceed on 'Reptile Road' 100 meters towards 'Alligators' from 'Entrance Plaza'.\n" +
+                    "]";
+            List<LocEdge> directions = activity.routeDirectionAdapter.getItems();
+            assertEquals(expectedDirections, directions.toString());
         });
     }
 }

@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
@@ -44,6 +45,8 @@ public class LocItem implements Serializable {
     public boolean planned, visited;
     public List<String> tags;
     public double currDist;
+    public double lat;
+    public double lng;
 
     /**
      * Gets the representation of the LocItem as a string
@@ -68,7 +71,7 @@ public class LocItem implements Serializable {
      * @param kind  the kind of LocItem it is
      * @param tags  List of tags for the LocItem
      */
-    LocItem(@NonNull String name, String id, String kind, List<String> tags) {
+    LocItem(@NonNull String name, String id, String kind, List<String> tags, double lat, double lng) {
         this.name = name;
         this.kind = kind;
         this.id = id;
@@ -76,6 +79,8 @@ public class LocItem implements Serializable {
         this.planned = false;
         this.visited = false;
         this.currDist = 0;
+        this.lat = lat;
+        this.lng = lng;
     }
 
     /**

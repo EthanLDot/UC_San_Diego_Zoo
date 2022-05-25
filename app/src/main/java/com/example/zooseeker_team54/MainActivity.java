@@ -149,6 +149,7 @@ public class MainActivity extends AppCompatActivity {
 
         //locationlistener from lab 7
         {
+            TextView currLatLng = this.findViewById(R.id.currLatLng);
             if (permissionChecker.ensurePermissions()) return;
 
             {
@@ -157,9 +158,8 @@ public class MainActivity extends AppCompatActivity {
                 var locationListener = new LocationListener() {
                     @Override
                     public void onLocationChanged(@NonNull Location location) {
-//                        Log.d("Location", String.format("Location changed: %s", location));
-                        exactLocation = location;
-                        Log.d("Exact Location:", String.format("Location changed: %s", exactLocation));
+                        Log.d("Location", String.format("Location changed: %s", location));
+                        currLatLng.setText(location.getLatitude() + ", " + location.getLongitude());
                     }
                 };
                 locationManager.requestLocationUpdates(provider, 0, 0f, locationListener);

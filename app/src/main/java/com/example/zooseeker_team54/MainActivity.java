@@ -65,13 +65,6 @@ public class MainActivity extends AppCompatActivity {
 
     private LocationManager locationManager;
     LatLng currLoc;
-    final ActivityResultLauncher<String[]> requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), perms ->
-        {
-            perms.forEach((perm, isGranted) ->
-            {
-                Log.i("Perms", String.format("Permission %s granted: %s", perm, isGranted));
-            });
-        });
     //permissionchecker from lab 7
     private final PermissionChecker permissionChecker = new PermissionChecker(this);
 
@@ -81,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
      * Create the activity from a given savedInstanceState and initialize everything
      * @param savedInstanceState the saved instance from before
      */
+    @SuppressLint("MissingPermission")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -177,8 +171,8 @@ public class MainActivity extends AppCompatActivity {
                     handler.postDelayed(this, delay);
                 }
             }, delay);
-        }
 
+        }
     }
 
     private void getLocation() {

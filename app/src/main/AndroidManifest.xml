@@ -19,11 +19,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ZooSeeker_Team54">
 
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="${MAPS_API_KEY}" />
-
-
         <activity
             android:name=".SettingsActivity"
             android:exported="false" />

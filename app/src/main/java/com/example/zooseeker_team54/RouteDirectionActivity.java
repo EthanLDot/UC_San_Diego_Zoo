@@ -19,8 +19,7 @@ import java.util.List;
  */
 public class RouteDirectionActivity extends AppCompatActivity {
 
-    public RecyclerView routeDirectionView;
-    public RouteDirectionAdapter routeDirectionAdapter;
+    public RecyclerViewPresenter<LocEdge> routeDirectionPresenter;
 
     private ViewModel viewModel;
 
@@ -45,14 +44,13 @@ public class RouteDirectionActivity extends AppCompatActivity {
         route = (HashMap<String, List<LocEdge>>) intent.getSerializableExtra("route");
 
         // Create an adapter for the RecyclerView of route direction
-        routeDirectionAdapter = new RouteDirectionAdapter();
-        List<LocEdge> directions = Utilities.findDirections(route, viewModel.getCurrTarget(), getIsBrief());
-        routeDirectionAdapter.setItems(directions);
+        routeDirectionPresenter = new RecyclerViewPresenterBuilder<LocEdge>()
+                .setAdapter(new RouteDirectionAdapter())
+                .setRecyclerView(findViewById(R.id.route_direction))
+                .getRecyclerViewPresenter();
 
-        // Set the adapter for the actual RecyclerView
-        routeDirectionView = findViewById(R.id.route_direction);
-        routeDirectionView.setLayoutManager(new LinearLayoutManager(this));
-        routeDirectionView.setAdapter(routeDirectionAdapter);
+        List<LocEdge> directions = Utilities.findDirections(route, viewModel.getCurrTarget(), getIsBrief());
+        routeDirectionPresenter.setItems(directions);
 
         // Initialize the next button
         nextBtn = findViewById(R.id.next_btn);
@@ -84,7 +82,7 @@ public class RouteDirectionActivity extends AppCompatActivity {
 
         // Update directions
         List<LocEdge> newDirections = Utilities.findDirections(route, currTarget, getIsBrief());
-        routeDirectionAdapter.setItems(newDirections);
+        routeDirectionPresenter.setItems(newDirections);
     }
 
     /**

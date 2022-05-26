@@ -20,10 +20,9 @@ import java.util.List;
  * on MainActivity
  */
 public class ShowRouteActivity extends AppCompatActivity {
-    public RecyclerView showRouteView;
 
     private ViewModel viewModel;
-    private ShowRouteAdapter showRouteAdapter;
+    public RecyclerViewPresenter<LocItem> showRoutePresenter;
 
     private HashMap<String, List<LocEdge>> route;
 
@@ -41,14 +40,13 @@ public class ShowRouteActivity extends AppCompatActivity {
 
         viewModel = new ViewModelProvider(this).get(ViewModel.class);
 
-        showRouteAdapter = new ShowRouteAdapter();
-
-        showRouteView = this.findViewById(R.id.planned_route);
-        showRouteView.setLayoutManager(new LinearLayoutManager(this));
-        showRouteView.setAdapter(showRouteAdapter);
+        showRoutePresenter = new RecyclerViewPresenterBuilder<LocItem>()
+                .setAdapter(new ShowRouteAdapter())
+                .setRecyclerView(this.findViewById(R.id.planned_route))
+                .getRecyclerViewPresenter();
 
         viewModel.getAllPlannedUnvisitedLive()
-                .observe(this, showRouteAdapter::setItems);
+                .observe(this, showRoutePresenter::setItems);
 
     }
 

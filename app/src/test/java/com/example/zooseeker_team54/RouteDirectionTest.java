@@ -79,7 +79,7 @@ public class RouteDirectionTest {
                     ", Proceed on 'Reptile Road' 100 meters towards 'Alligators' from 'Entrance Plaza'.\n" +
                     ", Proceed on 'Sharp Teeth Shortcut' 200 meters towards 'Lions' from 'Alligators'.\n" +
                     "]";
-            List<LocEdge> directions = activity.routeDirectionAdapter.getItems();
+            List<LocEdge> directions = activity.routeDirectionPresenter.getItems();
             assertEquals(expectedDirections, directions.toString());
         });
 
@@ -116,7 +116,7 @@ public class RouteDirectionTest {
             String expectedDirections = "[Proceed on 'Entrance Way' 10 meters towards 'Entrance Plaza' from 'Entrance and Exit Gate'.\n" +
                     ", Proceed on 'Reptile Road' 100 meters towards 'Alligators' from 'Entrance Plaza'.\n" +
                     "]";
-            List<LocEdge> directions = activity.routeDirectionAdapter.getItems();
+            List<LocEdge> directions = activity.routeDirectionPresenter.getItems();
             assertEquals(expectedDirections, directions.toString());
         });
     }

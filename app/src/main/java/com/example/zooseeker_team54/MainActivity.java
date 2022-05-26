@@ -74,20 +74,16 @@ public class MainActivity extends AppCompatActivity {
         // get view model from ViewModelProvider
         viewModel = new ViewModelProvider(this).get(ViewModel.class);
 
+        locationTracker = new LocationTracker(this, false);
+        // locationTracker.startMockingRoute(Utilities.getMockRoute());
+
         // Get search bar EditText and bind a text watcher to it
         searchBarText = this.findViewById(R.id.search_bar);
         searchBarText.addTextChangedListener(searchBarTextWatcher);
 
-        locationTracker = new LocationTracker(this, false);
-        locationTracker.startMockingRoute(Utilities.getMockRoute());
-
         // generate a list of exhibits from utilities and create the array adapter for autocomplete suggestions
-        List<String> EXHIBITS = viewModel.getAllExhibits()
-                .stream()
-                .map(l -> l.name)
-                .collect(Collectors.toList());
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1, EXHIBITS);
+        List<String> exhibitNames = viewModel.getAllExhibitNames();
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, exhibitNames);
         searchBarText.setAdapter(adapter);
 
         searchResultPresenter = new RecyclerViewPresenterBuilder<LocItem>()

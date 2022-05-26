@@ -8,6 +8,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ViewModel extends AndroidViewModel {
     // Member variable LocItemDao
@@ -179,5 +180,12 @@ public class ViewModel extends AndroidViewModel {
         addVisitedLoc(currTarget);
     }
 
+    /**
+     *
+     * @return
+     */
+    public List<String> getAllExhibitNames() {
+        return locItemDao.getAllExhibitNames();
+    }
 }
 

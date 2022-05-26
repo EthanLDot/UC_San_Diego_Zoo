@@ -42,7 +42,6 @@ public class ShowRouteActivity extends AppCompatActivity {
         viewModel = new ViewModelProvider(this).get(ViewModel.class);
 
         showRouteAdapter = new ShowRouteAdapter();
-        showRouteAdapter.setHasStableIds(true);
 
         showRouteView = this.findViewById(R.id.planned_route);
         showRouteView.setLayoutManager(new LinearLayoutManager(this));

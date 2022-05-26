@@ -46,7 +46,6 @@ public class RouteDirectionActivity extends AppCompatActivity {
 
         // Create an adapter for the RecyclerView of route direction
         routeDirectionAdapter = new RouteDirectionAdapter();
-        routeDirectionAdapter.setHasStableIds(true);
         List<LocEdge> directions = Utilities.findDirections(route, viewModel.getCurrTarget(), getIsBrief());
         routeDirectionAdapter.setItems(directions);
 

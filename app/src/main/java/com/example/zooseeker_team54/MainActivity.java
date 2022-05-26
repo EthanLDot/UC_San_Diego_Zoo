@@ -97,7 +97,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Create an adapter for the RecyclerView of search results
         searchResultAdapter = new SearchResultAdapter();
-        searchResultAdapter.setHasStableIds(true);
         searchResultAdapter.setItemOnClickListener(this::addPlannedLoc);
 
         // Set the adapter for the actual RecyclerView
@@ -108,7 +107,6 @@ public class MainActivity extends AppCompatActivity {
         // Create an adapter for the RecyclerView of search results
         plannedLocsAdapter = new PlannedLocsAdapter();
         plannedLocsAdapter.setOnDeleteClicked(this::removePlannedLoc);
-        plannedLocsAdapter.setHasStableIds(true);
 
         // Set the adapter for the actual RecyclerView
         plannedLocsView = this.findViewById(R.id.planned_locs);

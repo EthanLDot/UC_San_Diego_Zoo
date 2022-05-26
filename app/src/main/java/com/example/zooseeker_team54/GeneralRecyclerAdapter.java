@@ -13,6 +13,7 @@ import java.util.function.Consumer;
 public abstract class GeneralRecyclerAdapter<T> extends RecyclerView.Adapter<GeneralRecyclerAdapter.ViewHolder> {
     private List<T> items = Collections.emptyList();
     private Consumer<T> itemOnClickListener;
+    private Consumer<T> itemOnDeleteListener;
 
     public GeneralRecyclerAdapter(){
         setHasStableIds(true);
@@ -41,6 +42,14 @@ public abstract class GeneralRecyclerAdapter<T> extends RecyclerView.Adapter<Gen
     }
 
     public Consumer<T> getItemOnClickListener() { return itemOnClickListener; }
+
+    public void setItemOnDeleteListener(Consumer<T> onDeleteClicked){
+        this.itemOnDeleteListener = onDeleteClicked;
+    }
+
+    public Consumer<T> getItemOnDeleteListener() {
+        return itemOnDeleteListener;
+    }
 
     @NonNull
     @Override

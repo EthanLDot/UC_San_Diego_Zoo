@@ -6,12 +6,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -106,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Create an adapter for the RecyclerView of search results
         plannedLocsAdapter = new PlannedLocsAdapter();
-        plannedLocsAdapter.setOnDeleteClicked(this::removePlannedLoc);
+        plannedLocsAdapter.setItemOnDeleteListener(this::removePlannedLoc);
 
         // Set the adapter for the actual RecyclerView
         plannedLocsView = this.findViewById(R.id.planned_locs);

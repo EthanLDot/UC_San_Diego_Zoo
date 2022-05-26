@@ -64,11 +64,11 @@ public class RouteDirectionTest {
 
             List<LocItem> testItems = new ArrayList<>();
             testItems.add(lions);
-            activity.plannedLocsAdapter.setItems(testItems);
+            activity.plannedLocsPresenter.setItems(testItems);
 
             activity.addPlannedLoc(lions);
 
-            HashMap<String, List<LocEdge>> route = activity.findRoute(activity.plannedLocsAdapter.getItems());
+            HashMap<String, List<LocEdge>> route = activity.findRoute(activity.plannedLocsPresenter.getItems());
             routeDirectionIntent.putExtra("route", route);
             System.out.println(Utilities.findDirections(route, lions, true));
         });
@@ -102,12 +102,12 @@ public class RouteDirectionTest {
             List<LocItem> testItems = new ArrayList<>();
             testItems.add(lions);
             testItems.add(gators);
-            activity.plannedLocsAdapter.setItems(testItems);
+            activity.plannedLocsPresenter.setItems(testItems);
 
             activity.addPlannedLoc(lions);
             activity.addPlannedLoc(gators);
 
-            HashMap<String, List<LocEdge>> route = activity.findRoute(activity.plannedLocsAdapter.getItems());
+            HashMap<String, List<LocEdge>> route = activity.findRoute(activity.plannedLocsPresenter.getItems());
             routeDirectionIntent.putExtra("route", route);
         });
 

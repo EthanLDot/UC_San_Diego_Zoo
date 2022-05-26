@@ -29,11 +29,8 @@ public class MainActivity extends AppCompatActivity {
 
     public LocationTracker locationTracker;
 
-    public RecyclerView searchResultView;
-    public RecyclerView plannedLocsView;
-
-    public SearchResultAdapter searchResultAdapter;
-    public PlannedLocsAdapter plannedLocsAdapter;
+    public RecyclerViewPresenter<LocItem> searchResultPresenter;
+    public RecyclerViewPresenter<LocItem> plannedLocsPresenter;
 
     private TextView planSizeText;
     private AutoCompleteTextView searchBarText;
@@ -93,27 +90,21 @@ public class MainActivity extends AppCompatActivity {
                 android.R.layout.simple_list_item_1, EXHIBITS);
         searchBarText.setAdapter(adapter);
 
-        // Create an adapter for the RecyclerView of search results
-        searchResultAdapter = new SearchResultAdapter();
-        searchResultAdapter.setItemOnClickListener(this::addPlannedLoc);
+        searchResultPresenter = new RecyclerViewPresenterBuilder<LocItem>()
+                .setAdapter(new SearchResultAdapter())
+                .setRecyclerView(this.findViewById(R.id.search_results))
+                .setItemOnClickListener(this::addPlannedLoc)
+                .getRecyclerViewPresenter();
 
-        // Set the adapter for the actual RecyclerView
-        searchResultView = this.findViewById(R.id.search_results);
-        searchResultView.setLayoutManager(new LinearLayoutManager(this));
-        searchResultView.setAdapter(searchResultAdapter);
-
-        // Create an adapter for the RecyclerView of search results
-        plannedLocsAdapter = new PlannedLocsAdapter();
-        plannedLocsAdapter.setItemOnDeleteListener(this::removePlannedLoc);
-
-        // Set the adapter for the actual RecyclerView
-        plannedLocsView = this.findViewById(R.id.planned_locs);
-        plannedLocsView.setLayoutManager(new LinearLayoutManager(this));
-        plannedLocsView.setAdapter(plannedLocsAdapter);
+        plannedLocsPresenter = new RecyclerViewPresenterBuilder<LocItem>()
+                .setAdapter(new PlannedLocsAdapter())
+                .setRecyclerView(this.findViewById(R.id.planned_locs))
+                .setItemOnDeleteListener(this::removePlannedLoc)
+                .getRecyclerViewPresenter();
 
         // get all the planned live LocItems
         viewModel.getAllPlannedLive()
-                .observe(this, plannedLocsAdapter::setItems);
+                .observe(this, plannedLocsPresenter::setItems);
 
         // Show the size of the plan
         planSizeText = this.findViewById(R.id.plan_size);
@@ -182,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
      * @param query String query typed in by user
      */
     private void showSearchResult(String query) {
-        searchResultAdapter.setItems(Utilities.findSearchResult(query, viewModel.getAll()));
+        searchResultPresenter.setItems(Utilities.findSearchResult(query, viewModel.getAll()));
     }
 
     /**
@@ -201,12 +192,12 @@ public class MainActivity extends AppCompatActivity {
     private void onPlanButtonClicked(View view) {
 
         // show an alert if plan size is 0
-        if (plannedLocsAdapter.getItemCount() == 0) {
+        if (plannedLocsPresenter.getAdapter().getItemCount() == 0) {
             Utilities.showAlert(this, "Plan list is empty, can't create plan!");
             return;
         }
 
-        HashMap<String, List<LocEdge>> directions = findRoute(plannedLocsAdapter.getItems());
+        HashMap<String, List<LocEdge>> directions = findRoute(plannedLocsPresenter.getAdapter().getItems());
 
         // launch ShowRouteActivity to display directions
         Intent intent = new Intent(this, ShowRouteActivity.class);

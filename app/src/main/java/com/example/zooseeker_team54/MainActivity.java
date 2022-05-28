@@ -7,14 +7,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.location.Location;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.HashMap;
@@ -37,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Button clearBtn;
     private Button planBtn;
+    private Button disableLocationServices;
 
     private ViewModel viewModel;
 
@@ -74,7 +78,12 @@ public class MainActivity extends AppCompatActivity {
         // get view model from ViewModelProvider
         viewModel = new ViewModelProvider(this).get(ViewModel.class);
 
-        locationTracker = new LocationTracker(this, false);
+        // Code for Route Mocking
+        {
+            // Doesn't location service by default.
+            locationTracker = new LocationTracker(this, false);
+        }
+        // locationTracker = new LocationTracker(this, false);
         // locationTracker.startMockingRoute(Utilities.getMockRoute());
 
         // Get search bar EditText and bind a text watcher to it

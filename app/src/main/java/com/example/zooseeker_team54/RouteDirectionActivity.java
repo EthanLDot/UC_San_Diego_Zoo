@@ -2,8 +2,10 @@ package com.example.zooseeker_team54;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -26,6 +28,9 @@ public class RouteDirectionActivity extends AppCompatActivity {
     private Button nextBtn;
     private Button backBtn;
     private Button settingsBtn;
+
+    private EditText mockRouteInput;
+    private Button mockStep;
 
     private HashMap<String, List<LocEdge>> route;
 
@@ -64,6 +69,13 @@ public class RouteDirectionActivity extends AppCompatActivity {
         // Initialize the settings button
         settingsBtn = this.findViewById(R.id.settings_button);
         settingsBtn.setOnClickListener(this::onSettingsClicked);
+
+        // Initialize the mock route input
+        mockRouteInput = this.findViewById(R.id.mock_route_input);
+
+        // Initialize the start mock button
+        mockStep = this.findViewById(R.id.start_mock);
+        mockStep.setOnClickListener(this::onMockStepClicked);
     }
 
     /**
@@ -126,4 +138,15 @@ public class RouteDirectionActivity extends AppCompatActivity {
     private boolean getIsBrief() {
         return getPreferences(MODE_PRIVATE).getBoolean("isBrief", true);
     }
+
+    /**
+     * Mocks the next location in the route.
+     * @param view
+     */
+    private void onMockStepClicked(View view) {
+        // Log.d("NEXT ROUTE!!", mockRouteInput.getText().toString());
+        String nextLocation = mockRouteInput.getText().toString();
+        Log.d("Next Route:", nextLocation.split(",")[0] + ", " + nextLocation.split(",")[1]);
+    }
+
 }

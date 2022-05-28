@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,6 +26,9 @@ public class ShowRouteActivity extends AppCompatActivity {
     public RecyclerViewPresenter<LocItem> showRoutePresenter;
 
     private HashMap<String, List<LocEdge>> route;
+
+    private Button directionBtn;
+    private Button backBtn;
 
     /**
      * Create the activity from a given savedInstanceState and initialize everything
@@ -48,6 +52,11 @@ public class ShowRouteActivity extends AppCompatActivity {
         viewModel.getAllPlannedUnvisitedLive()
                 .observe(this, showRoutePresenter::setItems);
 
+        directionBtn = findViewById(R.id.direction_btn);
+        directionBtn.setOnClickListener(this::onDirectionBtnClicked);
+
+        backBtn = findViewById(R.id.go_back_btn);
+        backBtn.setOnClickListener(this::onBackButtonClicked);
     }
 
     /**
@@ -55,7 +64,7 @@ public class ShowRouteActivity extends AppCompatActivity {
      *
      * @param view View that's passed in
      */
-    public void onBackButtonClicked(View view) {
+    private void onBackButtonClicked(View view) {
         finish();
     }
 
@@ -64,7 +73,7 @@ public class ShowRouteActivity extends AppCompatActivity {
      *
      * @param view
      */
-    public void onDirectionBtnClicked(View view) {
+    private void onDirectionBtnClicked(View view) {
 
         // user selection of brief display vs detailed display
         LocItem target = viewModel.getNextUnvisitedExhibit();
@@ -83,10 +92,6 @@ public class ShowRouteActivity extends AppCompatActivity {
         //
         intent.putExtra("route", route);
         startActivity(intent);
-    }
-
-    public boolean getIsBrief() {
-        return getPreferences(MODE_PRIVATE).getBoolean("isBrief", true);
     }
 }
 

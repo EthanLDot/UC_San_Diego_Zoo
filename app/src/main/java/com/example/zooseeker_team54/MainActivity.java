@@ -29,9 +29,6 @@ import java.util.stream.Collectors;
  * Class to represent the functionality of the MainActivity that is displayed on launch of our app
  */
 public class MainActivity extends AppCompatActivity {
-
-    public LocationTracker locationTracker;
-
     public RecyclerViewPresenter<LocItem> searchResultPresenter;
     public RecyclerViewPresenter<LocItem> plannedLocsPresenter;
 
@@ -40,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
 
     private Button clearBtn;
     private Button planBtn;
-    private Button disableLocationServices;
 
     private ViewModel viewModel;
 
@@ -77,14 +73,6 @@ public class MainActivity extends AppCompatActivity {
 
         // get view model from ViewModelProvider
         viewModel = new ViewModelProvider(this).get(ViewModel.class);
-
-        // Code for Route Mocking
-        {
-            // Doesn't location service by default.
-            locationTracker = new LocationTracker(this, false);
-        }
-        // locationTracker = new LocationTracker(this, false);
-        // locationTracker.startMockingRoute(Utilities.getMockRoute());
 
         // Get search bar EditText and bind a text watcher to it
         searchBarText = this.findViewById(R.id.search_bar);

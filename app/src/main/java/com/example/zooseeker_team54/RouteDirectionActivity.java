@@ -34,6 +34,8 @@ public class RouteDirectionActivity extends AppCompatActivity {
 
     private HashMap<String, List<LocEdge>> route;
 
+    public LocationTracker locationTracker;
+
     /**
      * Create the activity from a given savedInstanceState and initialize everything
      * @param savedInstanceState saved instance from before
@@ -76,6 +78,9 @@ public class RouteDirectionActivity extends AppCompatActivity {
         // Initialize the start mock button
         mockStep = this.findViewById(R.id.start_mock);
         mockStep.setOnClickListener(this::onMockStepClicked);
+
+        // Initialize Location Tracker
+        locationTracker = new LocationTracker(this, false);
     }
 
     /**
@@ -140,13 +145,14 @@ public class RouteDirectionActivity extends AppCompatActivity {
     }
 
     /**
-     * Mocks the next location in the route.
+     * Mocks the next location in the route by calling locationtracker
      * @param view
      */
     private void onMockStepClicked(View view) {
-        // Log.d("NEXT ROUTE!!", mockRouteInput.getText().toString());
-        String nextLocation = mockRouteInput.getText().toString();
-        Log.d("Next Route:", nextLocation.split(",")[0] + ", " + nextLocation.split(",")[1]);
+        String [] nextLocation = mockRouteInput.getText().toString().split(",");
+        Coord locationCoord = new Coord (Double.parseDouble(nextLocation[0]), Double.parseDouble(nextLocation[1]));
+        // Log.d("NEXT Coord: ", String.valueOf(locationCoord));
+        locationTracker.mockLocation(locationCoord);
     }
 
 }

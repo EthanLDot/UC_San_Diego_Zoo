@@ -113,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
         // Set up plan button to take us to the route activity
         this.planBtn = this.findViewById(R.id.plan_btn);
         planBtn.setOnClickListener(this::onPlanButtonClicked);
+
     }
 
     /**
@@ -180,6 +181,7 @@ public class MainActivity extends AppCompatActivity {
         viewModel.clearPlannedLocs();
         planSizeText.setText("Planned (0)");
     }
+
 
     /**
      * Function for when our plan button is clicked in MainActivity

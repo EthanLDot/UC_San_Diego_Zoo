@@ -5,18 +5,13 @@ import static org.junit.Assert.assertTrue;
 
 import android.content.Context;
 import android.content.Intent;
-import android.widget.Button;
-import android.widget.EditText;
 
-import androidx.lifecycle.Lifecycle;
 import androidx.room.Room;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
-import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -34,7 +29,7 @@ public class RouteDirectionTest {
     @Before
     public void setUp() {
         mainIntent = new Intent(ApplicationProvider.getApplicationContext(), MainActivity.class);
-        routeDirectionIntent = new Intent(ApplicationProvider.getApplicationContext(), RouteDirectionActivity.class);
+        routeDirectionIntent = new Intent(ApplicationProvider.getApplicationContext(), ShowDirectionActivity.class);
     }
 
     @Before
@@ -73,7 +68,7 @@ public class RouteDirectionTest {
             System.out.println(Utilities.findDirections(route, lions, true));
         });
 
-        ActivityScenario<RouteDirectionActivity> routeDirectionActivityActivityScenario = ActivityScenario.launch(routeDirectionIntent);
+        ActivityScenario<ShowDirectionActivity> routeDirectionActivityActivityScenario = ActivityScenario.launch(routeDirectionIntent);
         routeDirectionActivityActivityScenario.onActivity(activity -> {
             String expectedDirections = "[Proceed on 'Entrance Way' 10 meters towards 'Entrance Plaza' from 'Entrance and Exit Gate'.\n" +
                     ", Proceed on 'Reptile Road' 100 meters towards 'Alligators' from 'Entrance Plaza'.\n" +
@@ -111,7 +106,7 @@ public class RouteDirectionTest {
             routeDirectionIntent.putExtra("route", route);
         });
 
-        ActivityScenario<RouteDirectionActivity> routeDirectionActivityActivityScenario = ActivityScenario.launch(routeDirectionIntent);
+        ActivityScenario<ShowDirectionActivity> routeDirectionActivityActivityScenario = ActivityScenario.launch(routeDirectionIntent);
         routeDirectionActivityActivityScenario.onActivity(activity -> {
             String expectedDirections = "[Proceed on 'Entrance Way' 10 meters towards 'Entrance Plaza' from 'Entrance and Exit Gate'.\n" +
                     ", Proceed on 'Reptile Road' 100 meters towards 'Alligators' from 'Entrance Plaza'.\n" +

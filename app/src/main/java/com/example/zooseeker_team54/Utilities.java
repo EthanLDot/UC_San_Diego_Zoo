@@ -1,9 +1,12 @@
 package com.example.zooseeker_team54;
 
+import static android.content.Context.CLIPBOARD_SERVICE;
 import static android.content.Context.MODE_PRIVATE;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
@@ -243,6 +246,12 @@ public class Utilities {
         // for loop will not take care of the last item, thus we are adding it here
         briefDirections.add(new LocEdge("", streetWeight, currStreet, source, sink));
         return briefDirections;
+    }
+
+    public static String getTextFromBoard(Context context){
+        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(CLIPBOARD_SERVICE);
+        ClipData textData = clipboard.getPrimaryClip();
+        return textData.toString();
     }
 
     /**

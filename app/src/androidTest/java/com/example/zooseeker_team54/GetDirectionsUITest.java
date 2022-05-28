@@ -177,23 +177,11 @@ public class GetDirectionsUITest {
         button2.check(matches(isDisplayed()));
 
         ViewInteraction materialButton3 = onView(
-                allOf(withId(R.id.next_btn), withText("NEXT\n------\nLions, 200"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                2),
-                        isDisplayed()));
+                allOf(withId(R.id.next_btn), withText("NEXT\n------\nLions, 200")));
         materialButton3.perform(click());
 
         ViewInteraction materialButton4 = onView(
-                allOf(withId(R.id.next_btn), withText("NEXT\n------\nArctic Foxes, 600"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                2),
-                        isDisplayed()));
+                allOf(withId(R.id.next_btn), withText("NEXT\n------\nArctic Foxes, 600")));
         materialButton4.perform(click());
 
         ViewInteraction textView3 = onView(
@@ -209,13 +197,7 @@ public class GetDirectionsUITest {
         button3.check(matches(isDisplayed()));
 
         ViewInteraction materialButton5 = onView(
-                allOf(withId(R.id.next_btn), withText("NEXT\n------\nENTRANCE AND EXIT GATE, 310"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                2),
-                        isDisplayed()));
+                allOf(withId(R.id.next_btn), withText("NEXT\n------\nENTRANCE AND EXIT GATE, 310")));
         materialButton5.perform(click());
 
         ViewInteraction textView4 = onView(

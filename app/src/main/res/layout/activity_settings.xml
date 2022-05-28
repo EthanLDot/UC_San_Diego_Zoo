@@ -28,31 +28,29 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <ToggleButton
+    <Button
         android:id="@+id/briefDirectionsButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="172dp"
-        android:layout_marginEnd="60dp"
-        android:width="150dp"
+        android:layout_marginStart="60dp"
+        android:width="130dp"
         android:background="#8BC34A"
-        android:checked="true"
         android:textColorHighlight="#8BC34A"
-        android:textOff="BRIEF DIRECTIONS"
-        android:textOn="BRIEF DIRECTIONS"
-        app:layout_constraintEnd_toStartOf="@+id/detailedDirectionsButton"
+        android:text="BRIEF"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ToggleButton
+    <Button
         android:id="@+id/detailedDirectionsButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
-        android:width="150dp"
+        android:layout_marginTop="172dp"
+        android:layout_marginEnd="60dp"
+        android:width="130dp"
         android:background="#40737373"
-        android:textOff="DETAILED DIRECTIONS"
-        android:textOn="DETAILED DIRECTIONS"
-        app:layout_constraintBaseline_toBaselineOf="@+id/briefDirectionsButton"
+        android:text="DETAILED"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
 

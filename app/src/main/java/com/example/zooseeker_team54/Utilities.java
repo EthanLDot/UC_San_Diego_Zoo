@@ -258,11 +258,20 @@ public class Utilities {
      *
      * @return
      */
-    public static List<Coord> getMockRoute() {
+    public static List<Coord> getMockRoute(String [] locations) {
         // TODO: find a way to prompt the user and paste the JSON text or an URL
-        return Coords
-                .interpolate(Coords.UCSD, Coords.ZOO, 12)
-                .collect(Collectors.toList());
+        // return Coords
+        //      .interpolate(Coords.UCSD, Coords.ZOO, 12)
+        //      .collect(Collectors.toList());
+
+        List<Coord> coords = new ArrayList<>();
+
+        for (int i = 0; i < locations.length; i++) {
+
+        }
+
+        return coords;
     }
+
 
 }

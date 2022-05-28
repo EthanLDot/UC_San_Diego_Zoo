@@ -7,14 +7,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.location.Location;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.HashMap;
@@ -26,9 +29,6 @@ import java.util.stream.Collectors;
  * Class to represent the functionality of the MainActivity that is displayed on launch of our app
  */
 public class MainActivity extends AppCompatActivity {
-
-    public LocationTracker locationTracker;
-
     public RecyclerViewPresenter<LocItem> searchResultPresenter;
     public RecyclerViewPresenter<LocItem> plannedLocsPresenter;
 
@@ -73,9 +73,6 @@ public class MainActivity extends AppCompatActivity {
 
         // get view model from ViewModelProvider
         viewModel = new ViewModelProvider(this).get(ViewModel.class);
-
-        locationTracker = new LocationTracker(this, false);
-        // locationTracker.startMockingRoute(Utilities.getMockRoute());
 
         // Get search bar EditText and bind a text watcher to it
         searchBarText = this.findViewById(R.id.search_bar);

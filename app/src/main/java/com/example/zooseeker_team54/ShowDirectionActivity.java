@@ -2,8 +2,10 @@ package com.example.zooseeker_team54;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -24,7 +26,12 @@ public class ShowDirectionActivity extends AppCompatActivity {
     private Button backBtn;
     private Button settingsBtn;
 
+    private EditText mockRouteInput;
+    private Button mockStep;
+
     private HashMap<String, List<LocEdge>> route;
+
+    public LocationTracker locationTracker;
 
     /**
      * Create the activity from a given savedInstanceState and initialize everything
@@ -61,6 +68,16 @@ public class ShowDirectionActivity extends AppCompatActivity {
         // Initialize the settings button
         settingsBtn = this.findViewById(R.id.settings_button);
         settingsBtn.setOnClickListener(this::onSettingsClicked);
+
+        // Initialize the mock route input
+        mockRouteInput = this.findViewById(R.id.mock_route_input);
+
+        // Initialize the start mock button
+        mockStep = this.findViewById(R.id.start_mock);
+        mockStep.setOnClickListener(this::onMockStepClicked);
+
+        // Initialize Location Tracker
+        locationTracker = new LocationTracker(this, false);
     }
 
     /**
@@ -123,4 +140,16 @@ public class ShowDirectionActivity extends AppCompatActivity {
     private boolean getIsBrief() {
         return getPreferences(MODE_PRIVATE).getBoolean("isBrief", true);
     }
+
+    /**
+     * Mocks the next location in the route by calling locationtracker
+     * @param view
+     */
+    private void onMockStepClicked(View view) {
+        String [] nextLocation = mockRouteInput.getText().toString().split(",");
+        Coord locationCoord = new Coord (Double.parseDouble(nextLocation[0]), Double.parseDouble(nextLocation[1]));
+        // Log.d("NEXT Coord: ", String.valueOf(locationCoord));
+        locationTracker.mockLocation(locationCoord);
+    }
+
 }

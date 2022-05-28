@@ -21,7 +21,8 @@
 
         <activity
             android:name=".SettingsActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan"/>
 
         <activity
             android:name=".ShowDirectionActivity"
@@ -29,7 +30,8 @@
 
         <activity
             android:name=".ShowRouteActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan"/>
 
         <activity
             android:name=".MainActivity"

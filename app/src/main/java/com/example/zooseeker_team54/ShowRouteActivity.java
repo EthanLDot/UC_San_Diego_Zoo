@@ -2,19 +2,11 @@ package com.example.zooseeker_team54;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 /**
  * Activity to show the route of exhibits on our plan. Launched when "Plan" is clicked
@@ -25,7 +17,7 @@ public class ShowRouteActivity extends AppCompatActivity {
     private ViewModel viewModel;
     public RecyclerViewPresenter<LocItem> showRoutePresenter;
 
-    private HashMap<String, List<LocEdge>> route;
+    private RouteInfo routeInfo;
 
     private Button directionBtn;
     private Button backBtn;
@@ -40,7 +32,7 @@ public class ShowRouteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route_plan);
         Intent intent = getIntent();
-        route = (HashMap<String, List<LocEdge>>) intent.getSerializableExtra("route");
+        routeInfo = (RouteInfo) intent.getSerializableExtra("routeInfo");
 
         viewModel = new ViewModelProvider(this).get(ViewModel.class);
 
@@ -90,7 +82,7 @@ public class ShowRouteActivity extends AppCompatActivity {
         }
 
         //
-        intent.putExtra("route", route);
+        intent.putExtra("routeInfo", routeInfo);
         startActivity(intent);
     }
 }

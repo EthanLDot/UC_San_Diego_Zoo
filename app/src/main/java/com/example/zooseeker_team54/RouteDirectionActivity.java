@@ -27,7 +27,7 @@ public class RouteDirectionActivity extends AppCompatActivity {
     private Button backBtn;
     private Button settingsBtn;
 
-    private HashMap<String, List<LocEdge>> route;
+    private RouteInfo routeInfo;
 
     /**
      * Create the activity from a given savedInstanceState and initialize everything
@@ -41,7 +41,7 @@ public class RouteDirectionActivity extends AppCompatActivity {
 
         viewModel = new ViewModelProvider(this).get(ViewModel.class);
 
-        route = (HashMap<String, List<LocEdge>>) intent.getSerializableExtra("route");
+        routeInfo = (RouteInfo) intent.getSerializableExtra("routeInfo");
 
         // Create an adapter for the RecyclerView of route direction
         routeDirectionPresenter = new RecyclerViewPresenterBuilder<LocEdge>()
@@ -49,7 +49,7 @@ public class RouteDirectionActivity extends AppCompatActivity {
                 .setRecyclerView(findViewById(R.id.route_direction))
                 .getRecyclerViewPresenter();
 
-        List<LocEdge> directions = Utilities.findDirections(route, viewModel.getCurrTarget(), getIsBrief());
+        List<LocEdge> directions = Utilities.findDirections(routeInfo, viewModel.getCurrTarget(), getIsBrief());
         routeDirectionPresenter.setItems(directions);
 
         // Initialize the next button
@@ -81,7 +81,7 @@ public class RouteDirectionActivity extends AppCompatActivity {
         updateNextBtn(currTarget, nextTarget);
 
         // Update directions
-        List<LocEdge> newDirections = Utilities.findDirections(route, currTarget, getIsBrief());
+        List<LocEdge> newDirections = Utilities.findDirections(routeInfo, currTarget, getIsBrief());
         routeDirectionPresenter.setItems(newDirections);
     }
 

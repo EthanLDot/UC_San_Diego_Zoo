@@ -81,8 +81,8 @@ public class NextDirectionTests {
             activity.addPlannedLoc(lions);
             activity.addPlannedLoc(gators);
 
-            HashMap<String, List<LocEdge>> route = activity.findRoute(activity.plannedLocsPresenter.getItems());
-            routeDirectionIntent.putExtra("route", route);
+            RouteInfo routeInfo = activity.findRoute(activity.plannedLocsPresenter.getItems());
+            routeDirectionIntent.putExtra("routeInfo", routeInfo);
         });
 
         ActivityScenario<RouteDirectionActivity> routeDirectionActivityActivityScenario = ActivityScenario.launch(routeDirectionIntent);

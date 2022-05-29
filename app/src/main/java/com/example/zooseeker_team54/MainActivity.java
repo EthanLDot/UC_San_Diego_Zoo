@@ -120,22 +120,18 @@ public class MainActivity extends AppCompatActivity {
      * @param plannedLocItems List of LocItems to find a route for
      * @return HashMap of the route to be displayed
      */
-    public HashMap<String, List<LocEdge>> findRoute(List<LocItem> plannedLocItems) {
-        Pair<HashMap<String, List<LocEdge>>, HashMap<String, Double>> pair = Utilities.findRoute(plannedLocItems);
-        HashMap<String, List<LocEdge>> route = pair.first;
-        HashMap<String, Double> distances = pair.second;
+    public RouteInfo findRoute(List<LocItem> plannedLocItems) {
+        RouteInfo routeInfo = Utilities.findRoute(plannedLocItems);
 
-        for (Map.Entry<String, Double> entry : distances.entrySet()) {
-            String location = entry.getKey();
-            Double newDistance = entry.getValue();
-
+        for (String location : routeInfo.getLocations()) {
+            Double newDistance = routeInfo.getDistance(location);
             LocItem targetLocItem = viewModel.getLocItemById(location);
             viewModel.updateLocCurrentDist(targetLocItem, newDistance);
         }
 
         LocItem targetLocItem = viewModel.getLocItemById("entrance_exit_gate");
         viewModel.addPlannedLoc(targetLocItem);
-        return route;
+        return routeInfo;
     }
 
     /**
@@ -193,11 +189,11 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        HashMap<String, List<LocEdge>> directions = findRoute(plannedLocsPresenter.getAdapter().getItems());
+        RouteInfo routeInfo = findRoute(plannedLocsPresenter.getAdapter().getItems());
 
         // launch ShowRouteActivity to display directions
         Intent intent = new Intent(this, ShowRouteActivity.class);
-        intent.putExtra("route", directions);
+        intent.putExtra("routeInfo", routeInfo);
         startActivity(intent);
     }
 }

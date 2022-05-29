@@ -120,13 +120,6 @@ public class MainActivity extends AppCompatActivity {
      */
     public RouteInfo findRoute(List<LocItem> plannedLocItems) {
         RouteInfo routeInfo = Utilities.findRoute(plannedLocItems);
-
-        for (String location : routeInfo.getLocations()) {
-            Double newDistance = routeInfo.getDistance(location);
-            LocItem targetLocItem = viewModel.getLocItemById(location);
-            viewModel.updateLocCurrentDist(targetLocItem, newDistance);
-        }
-
         LocItem targetLocItem = viewModel.getLocItemById("entrance_exit_gate");
         viewModel.addPlannedLoc(targetLocItem);
         return routeInfo;
@@ -174,7 +167,6 @@ public class MainActivity extends AppCompatActivity {
         viewModel.clearPlannedLocs();
         planSizeText.setText("Planned (0)");
     }
-
 
     /**
      * Function for when our plan button is clicked in MainActivity

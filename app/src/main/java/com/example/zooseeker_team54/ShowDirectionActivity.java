@@ -86,7 +86,7 @@ public class ShowDirectionActivity extends AppCompatActivity {
     public void onNextBtnClicked(View view) {
 
         // update database
-        viewModel.arriveCurrentTarget();
+        routeInfo.arriveCurrentTarget();
 
         // update nextButton
         LocItem currTarget = viewModel.getCurrTarget();
@@ -111,7 +111,7 @@ public class ShowDirectionActivity extends AppCompatActivity {
             nextBtn.setEnabled(false);
         }
         else {
-            buttonText = "NEXT\n------\n" + nextTarget.name + ", " + (int) (nextTarget.currDist - currTarget.currDist);
+            buttonText = "NEXT\n------\n" + nextTarget.name + ", " + routeInfo.getDistance(nextTarget.id).intValue();
             nextBtn.setEnabled(true);
         }
         nextBtn.setText(buttonText);

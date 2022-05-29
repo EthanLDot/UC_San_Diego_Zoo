@@ -1,6 +1,7 @@
 package com.example.zooseeker_team54;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
@@ -41,12 +42,17 @@ public class ShowRouteActivity extends AppCompatActivity {
         viewModel = new ViewModelProvider(this).get(ViewModel.class);
 
         showRoutePresenter = new RecyclerViewPresenterBuilder<LocItem>()
-                .setAdapter(new ShowRouteAdapter())
+                .setAdapter(new ShowRouteAdapter(routeInfo))
                 .setRecyclerView(this.findViewById(R.id.planned_route))
                 .getRecyclerViewPresenter();
 
         viewModel.getAllPlannedUnvisitedLive()
-                .observe(this, showRoutePresenter::setItems);
+                .observe(this, new Observer<List<LocItem>>() {
+                    @Override
+                    public void onChanged(List<LocItem> locItems) {
+
+                    }
+                });
 
         directionBtn = findViewById(R.id.direction_btn);
         directionBtn.setOnClickListener(this::onDirectionBtnClicked);
@@ -72,7 +78,7 @@ public class ShowRouteActivity extends AppCompatActivity {
     private void onDirectionBtnClicked(View view) {
 
         // user selection of brief display vs detailed display
-        LocItem target = viewModel.getNextUnvisitedExhibit();
+        String target = routeInfo.getNextUnvisitedExhibit();
         Intent intent = new Intent(this, ShowDirectionActivity.class);
 
         // show an alert if target doesn't exist or is null

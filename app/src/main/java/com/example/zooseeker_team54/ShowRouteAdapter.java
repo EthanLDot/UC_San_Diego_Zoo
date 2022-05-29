@@ -13,6 +13,12 @@ import java.util.HashMap;
 import java.util.List;
 
 public class ShowRouteAdapter extends GeneralRecyclerAdapter<LocItem> {
+    private RouteInfo routeInfo;
+
+    public ShowRouteAdapter(RouteInfo routeInfo) {
+        super();
+        setRouteInfo(routeInfo);
+    }
 
     @NonNull
     @Override
@@ -27,6 +33,10 @@ public class ShowRouteAdapter extends GeneralRecyclerAdapter<LocItem> {
     @Override
     public void onBindViewHolder(@NonNull GeneralRecyclerAdapter.ViewHolder holder, int position) {
         ((ShowRouteAdapter.ViewHolder) holder).setItem(super.getItems().get(position));
+    }
+
+    public void setRouteInfo(RouteInfo routeInfo) {
+        this.routeInfo = routeInfo;
     }
 
     public class ViewHolder extends GeneralRecyclerAdapter.ViewHolder {
@@ -46,7 +56,7 @@ public class ShowRouteAdapter extends GeneralRecyclerAdapter<LocItem> {
         public void setItem(LocItem locItem) {
             super.setItem(locItem);
             this.locNameText.setText(locItem.name);
-            this.distanceText.setText(locItem.getCurrDist());
+            this.distanceText.setText(String.format("- %d meters", routeInfo.getDistance(locItem.id).intValue()));
         }
     }
 }

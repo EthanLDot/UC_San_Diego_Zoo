@@ -1,11 +1,15 @@
 package com.example.zooseeker_team54;
 
+import android.util.Log;
+
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 
 public class RouteInfo implements Serializable {
     private Map<String, List<LocEdge>> directions;
@@ -47,6 +51,47 @@ public class RouteInfo implements Serializable {
             locations.add(location);
         }
         return locations;
+    }
+
+    public String getCurrentLocation() {
+        for (Entry<String, Double> entry : distances.entrySet()) {
+            if (entry.getValue() == 0)
+                return entry.getKey();
+        }
+
+        Log.d("FOOBAR", "No next unvisited exhibit");
+        return null;
+    }
+
+    public String getNextUnvisitedExhibit() {
+        String currentLocation = getCurrentLocation();
+
+        for (Entry<String, List<LocEdge>> entry : directions.entrySet()) {
+            String location = entry.getKey();
+            List<LocEdge> path = entry.getValue();
+
+            if (path.size() > 0 && Objects.equals(location, path.get(0).source)) {
+                return path.get(0).target;
+            }
+        }
+
+        Log.d("FOOBAR", "No next unvisited exhibit");
+        return null;
+    }
+
+    public void arriveCurrentTarget() {
+        String nextLocation = getNextUnvisitedExhibit();
+        Double previousDistance = distances.get(nextLocation);
+
+        for (Entry<String, Double> entry : distances.entrySet()) {
+            String location = entry.getKey();
+            Double originalDistance = entry.getValue();
+            distances.put(location, originalDistance - previousDistance);
+        }
+    }
+
+    public List<String> getSortedLocations(List<String> unsortedLocations) {
+        return Collections.emptyList();
     }
 
     public static <K, V extends Comparable<? super V>> Map<K, V> sortByValue(Map<K, V> map) {

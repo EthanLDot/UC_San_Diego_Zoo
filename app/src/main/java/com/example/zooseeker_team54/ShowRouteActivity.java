@@ -64,7 +64,7 @@ public class ShowRouteActivity extends AppCompatActivity {
     }
 
     /**
-     * Function for when the Direction button is clicked, and launches the RouteDirectionActivity
+     * Function for when the Direction button is clicked, and launches the ShowDirectionActivity
      *
      * @param view
      */

@@ -63,7 +63,6 @@ public class NextDirectionTests {
 
     @Test
     public void MoreExhibitsTest() {
-
         // Launch MainActivity class
         ActivityScenario<MainActivity> mainActivityActivityScenario = ActivityScenario.launch(mainIntent);
         mainActivityActivityScenario.onActivity(activity -> {

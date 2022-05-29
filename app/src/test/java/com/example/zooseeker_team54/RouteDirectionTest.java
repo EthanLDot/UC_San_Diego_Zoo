@@ -46,7 +46,7 @@ public class RouteDirectionTest {
     }
 
     /**
-     * Pass the RouteDirectionActivity class a single exhibit's directions to display.
+     * Pass the ShowDirectionActivity class a single exhibit's directions to display.
      */
     @Test
     public void singleExhibitTest() {
@@ -81,7 +81,7 @@ public class RouteDirectionTest {
     }
 
     /**
-     * Pass the RouteDirectionActivity a plan with more than one exhibit.
+     * Pass the ShowDirectionActivity. a plan with more than one exhibit.
      * Should only display the directions for the first exhibit in the plan.
      */
     @Test

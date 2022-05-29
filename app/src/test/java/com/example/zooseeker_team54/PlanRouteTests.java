@@ -37,6 +37,8 @@ public class PlanRouteTests {
         List<LocItem> todos = LocItem.loadJSON(context, "sample_node_info.json");
         dao = testDb.LocItemDao();
         dao.insertAll(todos);
+
+//        Utilities.loadZooJson(context, "sample_zoo_graph.json");
     }
 
     @Test

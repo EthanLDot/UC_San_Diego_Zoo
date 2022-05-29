@@ -1,6 +1,12 @@
 package com.example.zooseeker_team54;
 
+import static android.content.Context.CLIPBOARD_SERVICE;
+import static android.content.Context.MODE_PRIVATE;
+
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 
 import android.util.Pair;
@@ -239,15 +245,30 @@ public class Utilities {
         return briefDirections;
     }
 
+    public static String getTextFromBoard(Context context){
+        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(CLIPBOARD_SERVICE);
+        ClipData textData = clipboard.getPrimaryClip();
+        return textData.toString();
+    }
+
     /**
      *
      * @return
      */
-    public static List<Coord> getMockRoute() {
+    public static List<Coord> getMockRoute(String [] locations) {
         // TODO: find a way to prompt the user and paste the JSON text or an URL
-        return Coords
-                .interpolate(Coords.UCSD, Coords.ZOO, 12)
-                .collect(Collectors.toList());
+        // return Coords
+        //      .interpolate(Coords.UCSD, Coords.ZOO, 12)
+        //      .collect(Collectors.toList());
+
+        List<Coord> coords = new ArrayList<>();
+
+        for (int i = 0; i < locations.length; i++) {
+
+        }
+
+        return coords;
     }
+
 
 }

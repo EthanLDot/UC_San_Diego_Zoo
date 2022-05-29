@@ -8,6 +8,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import java.util.HashMap;
+import java.util.List;
+
+
 /**
  * Activity to show the route of exhibits on our plan. Launched when "Plan" is clicked
  * on MainActivity
@@ -69,7 +73,7 @@ public class ShowRouteActivity extends AppCompatActivity {
 
         // user selection of brief display vs detailed display
         LocItem target = viewModel.getNextUnvisitedExhibit();
-        Intent intent = new Intent(this, RouteDirectionActivity.class);
+        Intent intent = new Intent(this, ShowDirectionActivity.class);
 
         // show an alert if target doesn't exist or is null
         if (target == null) {

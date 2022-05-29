@@ -120,6 +120,13 @@ public class MainActivity extends AppCompatActivity {
      */
     public RouteInfo findRoute(List<LocItem> plannedLocItems) {
         RouteInfo routeInfo = Utilities.findRoute(plannedLocItems);
+
+        System.out.println(routeInfo);
+
+        // Skip the ones that are visited
+        for (String currTarget = routeInfo.getCurrentTarget(); currTarget != null && viewModel.getLocItemById(currTarget).visited; currTarget = routeInfo.getCurrentTarget())
+            routeInfo.arriveCurrentTarget();
+
         LocItem targetLocItem = viewModel.getLocItemById("entrance_exit_gate");
         viewModel.addPlannedLoc(targetLocItem);
         return routeInfo;

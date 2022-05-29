@@ -1,15 +1,11 @@
 package com.example.zooseeker_team54;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
-import static android.content.Context.MODE_PRIVATE;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.util.Log;
 
 import android.util.Pair;
 
@@ -20,7 +16,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
-import java.util.stream.Collectors;
 
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
@@ -41,8 +36,8 @@ public class Utilities {
      */
     public static void loadNewZooJson(Context context) {
         g = ZooData.loadZooGraphJSON("zoo_graph.json", context);
-        vInfo = ZooData.loadVertexInfoJSON("zoo_node_info.json", context);
-        eInfo = ZooData.loadEdgeInfoJSON("zoo_edge_info.json", context);
+        vInfo = ZooData.loadVertexInfoJSON("exhibit_info.json", context);
+        eInfo = ZooData.loadEdgeInfoJSON("trail_info.json", context);
     }
 
     /**

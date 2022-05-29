@@ -82,7 +82,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/search_results"
         android:layout_width="358dp"
-        android:layout_height="251dp"
+        android:layout_height="0dp"
         android:layout_marginStart="28dp"
         android:layout_marginEnd="28dp"
         app:layout_constraintBottom_toBottomOf="parent"

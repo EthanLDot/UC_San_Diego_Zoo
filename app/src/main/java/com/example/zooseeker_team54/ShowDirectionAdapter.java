@@ -6,25 +6,21 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.Collections;
-import java.util.List;
-
-public class RouteDirectionAdapter extends GeneralRecyclerAdapter<LocEdge> {
+public class ShowDirectionAdapter extends GeneralRecyclerAdapter<LocEdge> {
 
     @NonNull
     @Override
-    public RouteDirectionAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType){
+    public ShowDirectionAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType){
         View view = LayoutInflater
                 .from(parent.getContext())
                 .inflate(R.layout.loc_edge, parent, false);
-        return new RouteDirectionAdapter.ViewHolder(view);
+        return new ShowDirectionAdapter.ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull GeneralRecyclerAdapter.ViewHolder holder, int position) {
-        ((RouteDirectionAdapter.ViewHolder) holder).setItem(getItems().get(position));
+        ((ShowDirectionAdapter.ViewHolder) holder).setItem(getItems().get(position));
     }
 
     public class ViewHolder extends GeneralRecyclerAdapter.ViewHolder{

@@ -1,14 +1,13 @@
 package com.example.zooseeker_team54;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import android.content.Context;
 import android.content.Intent;
 import android.widget.Button;
-import android.widget.EditText;
 
-import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.room.Room;
 import androidx.test.core.app.ActivityScenario;
 import androidx.test.core.app.ApplicationProvider;
@@ -19,22 +18,20 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
 // User Story 5, 6 Unit Tests
 @RunWith(AndroidJUnit4.class)
 public class NextDirectionTests {
-    List<LocEdge> directions;
-    Intent intent;
-    LocDatabase testDb;
     LocItemDao dao;
+    LocDatabase testDb;
+    Intent mainIntent, routeDirectionIntent;
 
     @Before
     public void setUp() {
-        directions = new ArrayList<>();
-        intent = new Intent(ApplicationProvider.getApplicationContext(), RouteDirectionActivity.class);
+        mainIntent = new Intent(ApplicationProvider.getApplicationContext(), MainActivity.class);
+        routeDirectionIntent = new Intent(ApplicationProvider.getApplicationContext(), ShowDirectionActivity.class);
     }
 
 
@@ -53,47 +50,45 @@ public class NextDirectionTests {
 
     @Test
     public void noMoreExhibitsTest() {
-        directions.add(new LocEdge("Tasmanian Devils", 200, "Zoo Lane", "entrance", "exit"));
 
-        // Launch RouteDirectionActivity class
-        intent.putExtra("directions", (ArrayList<LocEdge>) directions);
-        ActivityScenario<RouteDirectionActivity> scenario = ActivityScenario.launch(intent);
-
-        // Check for Correctness
-        scenario.onActivity(activity -> {
-            activity.getButton().configureButton(null);
-            Button btn = activity.findViewById(R.id.next_btn);
-            String buttonText = "NEXT\n------\n" + "No Exhibits Left!";
-            assertEquals(buttonText, btn.getText());
-            assertEquals(false, btn.isEnabled());
+        ActivityScenario<ShowDirectionActivity> routeDirectionActivityActivityScenario = ActivityScenario.launch(routeDirectionIntent);
+        routeDirectionActivityActivityScenario.onActivity(activity -> {
+            String nextBtnText = "NEXT\n------\n" + "No Exhibits Left!";
+            Button nextBtn = activity.findViewById(R.id.next_btn);
+            assertEquals(nextBtnText, nextBtn.getText());
+            assertFalse(nextBtn.isEnabled());
         });
+
     }
 
     @Test
     public void MoreExhibitsTest() {
-        directions.add(new LocEdge("Tasmanian Devils", 200, "Zoo Lane", "entrance", "exit"));
+        // Launch MainActivity class
+        ActivityScenario<MainActivity> mainActivityActivityScenario = ActivityScenario.launch(mainIntent);
+        mainActivityActivityScenario.onActivity(activity -> {
 
-        // Launch RouteDirectionActivity class
-        intent.putExtra("directions", (ArrayList<LocEdge>) directions);
-        ActivityScenario<RouteDirectionActivity> scenario = ActivityScenario.launch(intent);
+            LocItem lions = dao.get("lions");
+            LocItem gators = dao.get("gators");
 
-        // Check for Correctness
-        scenario.onActivity(activity -> {
-            // Initialize the current target.
-            LocItem currTarget = new LocItem("Tasmanian Devils", "tasDev", "exhibit", null);
-            currTarget.planned = true;
-            currTarget.currDist = 0;
-            activity.getButton().currTarget = currTarget;
+            List<LocItem> testItems = new ArrayList<>();
+            testItems.add(lions);
+            testItems.add(gators);
+            activity.plannedLocsPresenter.setItems(testItems);
 
-            // Initialize the next target
-            LocItem newTarget = new LocItem("Baboons", "baboons", "exhibit", null);
-            newTarget.planned = true;
-            newTarget.currDist = 200;
+            activity.addPlannedLoc(lions);
+            activity.addPlannedLoc(gators);
 
-            activity.getButton().configureButton(newTarget);
-            Button btn = activity.findViewById(R.id.next_btn);
-            assertEquals("NEXT\n------\nBaboons, 200", btn.getText());
-            assertEquals(true, btn.isEnabled());
+            HashMap<String, List<LocEdge>> route = activity.findRoute(activity.plannedLocsPresenter.getItems());
+            routeDirectionIntent.putExtra("route", route);
         });
+
+        ActivityScenario<ShowDirectionActivity> routeDirectionActivityActivityScenario = ActivityScenario.launch(routeDirectionIntent);
+        routeDirectionActivityActivityScenario.onActivity(activity -> {
+            Button nextBtn = activity.findViewById(R.id.next_btn);
+            String expectedBtnText = "NEXT\n------\nLions, 200";
+            assertEquals(expectedBtnText, nextBtn.getText());
+            assertTrue(nextBtn.isEnabled());
+        });
+
     }
 }

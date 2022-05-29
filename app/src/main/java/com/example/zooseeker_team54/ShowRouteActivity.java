@@ -2,15 +2,12 @@ package com.example.zooseeker_team54;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -19,15 +16,18 @@ import java.util.List;
  * on MainActivity
  */
 public class ShowRouteActivity extends AppCompatActivity {
-    public RecyclerView showRouteView;
 
     private ViewModel viewModel;
-    private ShowRouteAdapter showRouteAdapter;
+    public RecyclerViewPresenter<LocItem> showRoutePresenter;
 
     private HashMap<String, List<LocEdge>> route;
 
+    private Button directionBtn;
+    private Button backBtn;
+
     /**
      * Create the activity from a given savedInstanceState and initialize everything
+     *
      * @param savedInstanceState the saved instance from before
      */
     @Override
@@ -39,51 +39,54 @@ public class ShowRouteActivity extends AppCompatActivity {
 
         viewModel = new ViewModelProvider(this).get(ViewModel.class);
 
-        showRouteAdapter = new ShowRouteAdapter();
-        showRouteAdapter.setHasStableIds(true);
-
-        showRouteView = this.findViewById(R.id.planned_route);
-        showRouteView.setLayoutManager(new LinearLayoutManager(this));
-        showRouteView.setAdapter(showRouteAdapter);
+        showRoutePresenter = new RecyclerViewPresenterBuilder<LocItem>()
+                .setAdapter(new ShowRouteAdapter())
+                .setRecyclerView(this.findViewById(R.id.planned_route))
+                .getRecyclerViewPresenter();
 
         viewModel.getAllPlannedUnvisitedLive()
-                .observe(this, showRouteAdapter::setItems);
+                .observe(this, showRoutePresenter::setItems);
 
+        directionBtn = findViewById(R.id.direction_btn);
+        directionBtn.setOnClickListener(this::onDirectionBtnClicked);
+
+        backBtn = findViewById(R.id.go_back_btn);
+        backBtn.setOnClickListener(this::onBackButtonClicked);
     }
 
     /**
      * Back out of the activity when the "Back" button is clicked
+     *
      * @param view View that's passed in
      */
-    public void onBackButtonClicked (View view) {
+    private void onBackButtonClicked(View view) {
         finish();
     }
 
     /**
-     * Function for when the Direction button is clicked, and launches the RouteDirectionActivity
+     * Function for when the Direction button is clicked, and launches the ShowDirectionActivity
+     *
      * @param view
      */
-    public void onDirectionBtnClicked (View view) {
-        Intent intent = new Intent(this, RouteDirectionActivity.class);
+    private void onDirectionBtnClicked(View view) {
 
-        // todo: discuss if we really need to pass direction
+        // user selection of brief display vs detailed display
         LocItem target = viewModel.getNextUnvisitedExhibit();
+        Intent intent = new Intent(this, ShowDirectionActivity.class);
 
         // show an alert if target doesn't exist or is null
         if (target == null) {
             String alertMessage = "All exhibits visited! " + "" +
-                                "Please clear all selections on the previous page " +
-                                "with the CLEAR button " +
-                                "and select more exhibits to visit.";
+                    "Please clear all selections on the previous page " +
+                    "with the CLEAR button " +
+                    "and select more exhibits to visit.";
             Utilities.showAlert(this, alertMessage);
             return;
         }
-        else {
-            List<LocEdge> directions = route.get(target.id);
-            intent.putExtra("directions", (ArrayList<LocEdge>) directions);
-            intent.putExtra("route", route);
-            startActivity(intent);
-        }
+
+        //
+        intent.putExtra("route", route);
+        startActivity(intent);
     }
 }
 

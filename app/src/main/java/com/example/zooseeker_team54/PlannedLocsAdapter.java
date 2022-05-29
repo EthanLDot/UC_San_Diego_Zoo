@@ -6,18 +6,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.function.Consumer;
 
 public class PlannedLocsAdapter extends GeneralRecyclerAdapter<LocItem> {
-    private Consumer<LocItem> onDeleteClicked;
-
-    public void setOnDeleteClicked(Consumer<LocItem> onDeleteClicked){
-        this.onDeleteClicked = onDeleteClicked;
-    }
 
     @NonNull
     @Override
@@ -53,9 +45,10 @@ public class PlannedLocsAdapter extends GeneralRecyclerAdapter<LocItem> {
             this.delView = itemView.findViewById(R.id.loc_delete_selected);
 
             this.delView.setOnClickListener(view ->{
-                if(onDeleteClicked == null) return;
+                Consumer<LocItem> itemOnDeleteListener = getItemOnDeleteListener();
+                if(itemOnDeleteListener == null) return;
                 LocItem locItem = (LocItem) super.getItem();
-                onDeleteClicked.accept(locItem);
+                itemOnDeleteListener.accept(locItem);
             });
         }
 

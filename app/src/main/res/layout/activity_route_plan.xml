@@ -13,32 +13,25 @@
         android:layout_marginTop="50dp"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="0dp" />
-<!--<<<<<<< HEAD-->
-<!--        android:layout_marginTop="70dp"-->
-<!--        app:layout_constraintTop_toTopOf="parent" />-->
-<!--=======-->
 
     <Button
         android:id="@+id/direction_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:onClick="onDirectionBtnClicked"
+        android:layout_marginBottom="20dp"
         android:text="Direction"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/planned_route" />
-<!--&gt;>>>>>> main-->
+        app:layout_constraintBottom_toTopOf="@+id/go_back_btn" />
 
     <Button
         android:id="@+id/go_back_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:onClick="onBackButtonClicked"
+        android:layout_marginBottom="50dp"
         android:text="Back"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/direction_btn" />
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

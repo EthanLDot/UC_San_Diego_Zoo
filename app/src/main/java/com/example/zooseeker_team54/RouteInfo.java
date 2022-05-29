@@ -4,7 +4,6 @@ import android.util.Log;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,23 +54,39 @@ public class RouteInfo implements Serializable {
 
     public String getCurrentLocation() {
         for (Entry<String, Double> entry : distances.entrySet()) {
-            if (entry.getValue() == 0)
+            if (entry.getValue() == 0.0)
                 return entry.getKey();
         }
 
         Log.d("FOOBAR", "No next unvisited exhibit");
-        return null;
+        return "entrance_exit_gate";
     }
 
-    public String getNextUnvisitedExhibit() {
+    public String getCurrentTarget() {
         String currentLocation = getCurrentLocation();
 
         for (Entry<String, List<LocEdge>> entry : directions.entrySet()) {
             String location = entry.getKey();
             List<LocEdge> path = entry.getValue();
 
-            if (path.size() > 0 && Objects.equals(location, path.get(0).source)) {
-                return path.get(0).target;
+            if (path.size() > 0 && Objects.equals(currentLocation, path.get(0).source_id) && distances.get(location) > 0) {
+                return location;
+            }
+        }
+
+        Log.d("FOOBAR", "No next unvisited exhibit");
+        return null;
+    }
+
+    public String getNextTarget() {
+        String currentLocation = getCurrentTarget();
+
+        for (Entry<String, List<LocEdge>> entry : directions.entrySet()) {
+            String location = entry.getKey();
+            List<LocEdge> path = entry.getValue();
+
+            if (path.size() > 0 && Objects.equals(currentLocation, path.get(0).source_id) && distances.get(location) > 0) {
+                return location;
             }
         }
 
@@ -80,7 +95,7 @@ public class RouteInfo implements Serializable {
     }
 
     public void arriveCurrentTarget() {
-        String nextLocation = getNextUnvisitedExhibit();
+        String nextLocation = getCurrentTarget();
         Double previousDistance = distances.get(nextLocation);
 
         for (Entry<String, Double> entry : distances.entrySet()) {
@@ -91,7 +106,21 @@ public class RouteInfo implements Serializable {
     }
 
     public List<String> getSortedLocations(List<String> unsortedLocations) {
-        return Collections.emptyList();
+
+        Map<String, Double> unsortedDistances = new HashMap<>();
+        for (String location : unsortedLocations) {
+            unsortedDistances.put(location, distances.get(location));
+        }
+
+        List<Entry<String, Double>> sortedDistances = new ArrayList<>(unsortedDistances.entrySet());
+        sortedDistances.sort(Entry.comparingByValue());
+
+        List<String> sortedLocations = new ArrayList<>();
+        for (Entry<String, Double> entry: sortedDistances) {
+            sortedLocations.add(entry.getKey());
+        }
+
+        return sortedLocations;
     }
 
     public static <K, V extends Comparable<? super V>> Map<K, V> sortByValue(Map<K, V> map) {

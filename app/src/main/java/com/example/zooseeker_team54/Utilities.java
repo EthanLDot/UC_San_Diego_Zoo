@@ -1,9 +1,7 @@
 package com.example.zooseeker_team54;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
-import static android.content.Context.MODE_PRIVATE;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -18,7 +16,6 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
@@ -81,7 +78,8 @@ public class Utilities {
      */
     public static Pair<List<LocEdge>, Double> findShortestPathBetween(String start, String goal) {
 
-        String current = start, temp;
+        String current = start;
+        ZooData.VertexInfo temp;
         List<LocEdge> shortestPath = new LinkedList<>();
         GraphPath<String, IdentifiedWeightedEdge> path = DijkstraShortestPath.findPathBetween(g, start, goal);
 
@@ -92,8 +90,8 @@ public class Utilities {
             double weight = g.getEdgeWeight(e);
             String id = e.getId();
             String street = eInfo.get(id).street;
-            String source = vInfo.get(g.getEdgeSource(e)).name;
-            String target = vInfo.get(g.getEdgeTarget(e)).name;
+            ZooData.VertexInfo source = vInfo.get(g.getEdgeSource(e));
+            ZooData.VertexInfo target = vInfo.get(g.getEdgeTarget(e));
 
             // we need to swap source or target if the edge we are going is opposite
             if (!current.equals(g.getEdgeSource(e))) {
@@ -106,7 +104,7 @@ public class Utilities {
                 current = g.getEdgeTarget(e);
             }
 
-            shortestPath.add(new LocEdge(id, weight, street, source, target));
+            shortestPath.add(new LocEdge(id, weight, street, source.name, source.id, target.name, target.id));
             sumWeight += weight;
         }
 
@@ -223,7 +221,9 @@ public class Utilities {
         LocEdge firstPath = directions.get(0);
         String currStreet = firstPath.street;
         String source = firstPath.source;
+        String source_id = firstPath.source_id;
         String sink = firstPath.target;
+        String sink_id = firstPath.target_id;
         double streetWeight = 0;
 
         // loop through the directions and create brief direction
@@ -232,16 +232,18 @@ public class Utilities {
                 streetWeight += edge.weight;
             } else {
                 // add brief data into the new list
-                briefDirections.add(new LocEdge("", streetWeight, currStreet, source, edge.source));
+                briefDirections.add(new LocEdge("", streetWeight, currStreet, source, source_id, edge.source, edge.source_id));
                 currStreet = edge.street;
                 source = edge.source;
+                source_id = edge.source_id;
                 streetWeight = edge.weight;
                 sink = edge.target;
+                sink_id = edge.target_id;
             }
         }
 
         // for loop will not take care of the last item, thus we are adding it here
-        briefDirections.add(new LocEdge("", streetWeight, currStreet, source, sink));
+        briefDirections.add(new LocEdge("", streetWeight, currStreet, source, source_id, sink, sink_id));
         return briefDirections;
     }
 

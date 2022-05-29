@@ -30,7 +30,12 @@ public class ViewModel extends AndroidViewModel {
      * @param id ID of a wanted LocItem
      * @return LocItem retrieved from the Dao.get() method
      */
-    public LocItem getLocItemById(String id) { return locItemDao.get(id); }
+    public LocItem getLocItemById(String id) {
+        if (id != null)
+            return locItemDao.get(id);
+        else
+            return null;
+    }
 
     /**
      * Getter method for retrieving all of the LocItems
@@ -59,27 +64,27 @@ public class ViewModel extends AndroidViewModel {
 //     */
 //    public LocItem getNextUnvisitedExhibit() { return locItemDao.getNextUnvisitedExhibit(); }
 
-    /**
-     * Getter method for the next target LocItem
-     * @return LocItem that is the next target
-     */
-    public LocItem getNextTarget() {
-        List<LocItem> allPlannedUnvisited = locItemDao.getAllPlannedUnvisited();
-        // If there or less than 2 unvisited LocItems left in the plan, return null
-        if (allPlannedUnvisited == null || allPlannedUnvisited.size() < 2) return null;
-        return allPlannedUnvisited.get(1);
-    }
+//    /**
+//     * Getter method for the next target LocItem
+//     * @return LocItem that is the next target
+//     */
+//    public LocItem getNextTarget() {
+//        List<LocItem> allPlannedUnvisited = locItemDao.getAllPlannedUnvisited();
+//        // If there or less than 2 unvisited LocItems left in the plan, return null
+//        if (allPlannedUnvisited == null || allPlannedUnvisited.size() < 2) return null;
+//        return allPlannedUnvisited.get(1);
+//    }
 
-    /**
-     * Getter method for the current target LocItem
-     * @return LocItem that is the current target LocItem
-     */
-    public LocItem getCurrTarget() {
-        List<LocItem> allPlannedUnvisited = locItemDao.getAllPlannedUnvisited();
-        // If there is less than 1 unvisited LocItems left in the plan, return null
-        if (allPlannedUnvisited == null || allPlannedUnvisited.size() < 1) return null;
-        return allPlannedUnvisited.get(0);
-    }
+//    /**
+//     * Getter method for the current target LocItem
+//     * @return LocItem that is the current target LocItem
+//     */
+//    public LocItem getCurrTarget() {
+//        List<LocItem> allPlannedUnvisited = locItemDao.getAllPlannedUnvisited();
+//        // If there is less than 1 unvisited LocItems left in the plan, return null
+//        if (allPlannedUnvisited == null || allPlannedUnvisited.size() < 1) return null;
+//        return allPlannedUnvisited.get(0);
+//    }
 
     /**
      * Getter method to retrieve all of the unvisited LocItems in the plan

@@ -77,7 +77,7 @@ public class PlanRouteTests {
             assertEquals(1, activity.plannedLocsPresenter.getItemCount());
             List<LocItem> locsAdapterContents = activity.plannedLocsPresenter.getItems();
             assertEquals(1, locsAdapterContents.size());
-            assertEquals("Loc {id=gorillas, name='Gorillas', planned=false, visited=false, current distance=0.0}", locsAdapterContents.get(0).toString());
+            assertEquals("Loc {id=gorillas, name='Gorillas', planned=false, visited=false}", locsAdapterContents.get(0).toString());
 
             RouteInfo routeInfo = activity.findRoute(locsAdapterContents);
             assertEquals(2, routeInfo.getLocations().size());
@@ -118,8 +118,8 @@ public class PlanRouteTests {
             List<LocItem> locsAdapterContents = activity.plannedLocsPresenter.getItems();
             assertEquals(2, locsAdapterContents.size());
 
-            assertEquals("Loc {id=gators, name='Alligators', planned=false, visited=false, current distance=0.0}", locsAdapterContents.get(0).toString());
-            assertEquals("Loc {id=lions, name='Lions', planned=false, visited=false, current distance=0.0}", locsAdapterContents.get(1).toString());
+            assertEquals("Loc {id=gators, name='Alligators', planned=false, visited=false}", locsAdapterContents.get(0).toString());
+            assertEquals("Loc {id=lions, name='Lions', planned=false, visited=false}", locsAdapterContents.get(1).toString());
 
             RouteInfo routeInfo = activity.findRoute(locsAdapterContents);
             assertEquals(3, routeInfo.getLocations().size());

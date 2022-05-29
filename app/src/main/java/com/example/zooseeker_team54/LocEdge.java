@@ -10,7 +10,7 @@ public class LocEdge implements Serializable {
 
     // member variables of LocEdge
     public double weight;
-    public String id, source, target, street;
+    public String id, source, source_id, target, target_id, street;
 
     /**
      * Constructor method for LocEdge given its properties
@@ -20,12 +20,14 @@ public class LocEdge implements Serializable {
      * @param source    name of the source as a string
      * @param target    name of the target as a string
      */
-    public LocEdge(String id, double weight, String street, String source, String target) {
+    public LocEdge(String id, double weight, String street, String source, String source_id, String target, String target_id) {
         this.id = id;
         this.weight = weight;
         this.street = street;
         this.source = source;
+        this.source_id = source_id;
         this.target = target;
+        this.target_id = target_id;
     }
 
     /**

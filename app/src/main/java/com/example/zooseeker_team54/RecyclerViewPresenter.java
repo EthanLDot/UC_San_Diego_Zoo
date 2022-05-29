@@ -28,6 +28,10 @@ public class RecyclerViewPresenter<T> {
         adapter.setItemOnDeleteListener(itemOnDeleteListener);
     }
 
+    public void setAdapter(GeneralRecyclerAdapter<T> newAdapter) {
+       this.adapter = newAdapter;
+    }
+
     public GeneralRecyclerAdapter<T> getAdapter() {
         return adapter;
     }

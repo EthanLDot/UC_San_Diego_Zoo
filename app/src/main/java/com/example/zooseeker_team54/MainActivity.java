@@ -182,12 +182,12 @@ public class MainActivity extends AppCompatActivity {
     private void onPlanButtonClicked(View view) {
 
         // show an alert if plan size is 0
-        if (plannedLocsPresenter.getAdapter().getItemCount() == 0) {
+        if (plannedLocsPresenter.getItemCount() == 0) {
             Utilities.showAlert(this, "Plan list is empty, can't create plan!");
             return;
         }
 
-        RouteInfo routeInfo = findRoute(plannedLocsPresenter.getAdapter().getItems());
+        RouteInfo routeInfo = findRoute(plannedLocsPresenter.getItems());
 
         // launch ShowRouteActivity to display directions
         Intent intent = new Intent(this, ShowRouteActivity.class);

@@ -247,6 +247,22 @@ public class Utilities {
         return briefDirections;
     }
 
+    /**
+     *
+     * @param direction
+     * @return
+     */
+    public static List<LocEdge> getReversedDirections(List<LocEdge> direction) {
+        LinkedList<LocEdge> reversedDirections = new LinkedList<>();
+        for (LocEdge edge : direction) { reversedDirections.addFirst(LocEdge.getReversedLocEdge(edge)); }
+        return reversedDirections;
+    }
+
+    /**
+     *
+     * @param context
+     * @return
+     */
     public static String getTextFromBoard(Context context){
         ClipboardManager clipboard = (ClipboardManager) context.getSystemService(CLIPBOARD_SERVICE);
         ClipData textData = clipboard.getPrimaryClip();

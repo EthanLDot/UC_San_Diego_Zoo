@@ -146,7 +146,7 @@ public class RouteInfo implements Serializable {
         Double oldDistance = distances.get(getNextTarget());
         Double diff = oldDistance - newDistance;
 
-        addDirection(getCurrentTarget(), newDirection);
+        addDirection(getNextTarget(), newDirection);
         for(Entry<String, Double> entry: distances.entrySet()){
             if(entry.getValue() > 0){
                 distances.put(entry.getKey(), entry.getValue()- diff);

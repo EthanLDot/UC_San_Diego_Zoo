@@ -175,5 +175,6 @@ public class ShowDirectionActivity extends AppCompatActivity {
         viewModel.removePlannedLoc(viewModel.getLocItemById(target));
         routeInfo.removeLocation(target);
         routeDirectionPresenter.setItems(routeInfo.getDirection(routeInfo.getCurrentTarget()));
+        updateNextBtn(routeInfo.getCurrentTarget(), routeInfo.getNextTarget());
     }
 }

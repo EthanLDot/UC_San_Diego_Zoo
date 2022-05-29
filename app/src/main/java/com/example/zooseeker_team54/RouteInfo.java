@@ -5,6 +5,7 @@ import android.util.Log;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -62,47 +63,26 @@ public class RouteInfo implements Serializable {
         return "entrance_exit_gate";
     }
 
-    public String getCurrentTarget() {
-        String currentLocation = getCurrentLocation();
-
-        for (Entry<String, List<LocEdge>> entry : directions.entrySet()) {
+    public String getNextExhibitOf(String targetLocation) {
+        for (Entry<String, List<LocEdge>> entry: directions.entrySet()) {
             String location = entry.getKey();
             List<LocEdge> path = entry.getValue();
 
-            if (path.size() > 0 && Objects.equals(currentLocation, path.get(0).source_id) && distances.get(location) > 0) {
+            if (path.size() > 0 && path.get(0).source_id.equals(targetLocation) && distances.get(location) > 0) {
                 return location;
             }
         }
-
-        Log.d("FOOBAR", "No next unvisited exhibit");
         return null;
+    }
+
+    public String getCurrentTarget() {
+        String currentLocation = getCurrentLocation();
+        return getNextExhibitOf(currentLocation);
     }
 
     public String getNextTarget() {
-        String currentLocation = getCurrentTarget();
-
-        for (Entry<String, List<LocEdge>> entry : directions.entrySet()) {
-            String location = entry.getKey();
-            List<LocEdge> path = entry.getValue();
-
-            if (path.size() > 0 && Objects.equals(currentLocation, path.get(0).source_id) && distances.get(location) > 0) {
-                return location;
-            }
-        }
-
-        Log.d("FOOBAR", "No next unvisited exhibit");
-        return null;
-    }
-
-    public void arriveCurrentTarget() {
-        String nextLocation = getCurrentTarget();
-        Double previousDistance = distances.get(nextLocation);
-
-        for (Entry<String, Double> entry : distances.entrySet()) {
-            String location = entry.getKey();
-            Double originalDistance = entry.getValue();
-            distances.put(location, originalDistance - previousDistance);
-        }
+        String currentTarget = getCurrentTarget();
+        return getNextExhibitOf(currentTarget);
     }
 
     public List<String> getSortedLocations(List<String> unsortedLocations) {
@@ -121,6 +101,17 @@ public class RouteInfo implements Serializable {
         }
 
         return sortedLocations;
+    }
+
+    public void arriveCurrentTarget() {
+        String nextLocation = getCurrentTarget();
+        Double previousDistance = distances.get(nextLocation);
+
+        for (Entry<String, Double> entry : distances.entrySet()) {
+            String location = entry.getKey();
+            Double originalDistance = entry.getValue();
+            distances.put(location, originalDistance - previousDistance);
+        }
     }
 
     public static <K, V extends Comparable<? super V>> Map<K, V> sortByValue(Map<K, V> map) {

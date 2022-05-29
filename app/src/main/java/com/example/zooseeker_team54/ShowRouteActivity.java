@@ -2,17 +2,12 @@ package com.example.zooseeker_team54;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -77,7 +72,7 @@ public class ShowRouteActivity extends AppCompatActivity {
 
         // user selection of brief display vs detailed display
         LocItem target = viewModel.getNextUnvisitedExhibit();
-        Intent intent = new Intent(this, RouteDirectionActivity.class);
+        Intent intent = new Intent(this, ShowDirectionActivity.class);
 
         // show an alert if target doesn't exist or is null
         if (target == null) {

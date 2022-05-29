@@ -9,17 +9,14 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 
 /**
  *  Class to represent the functionality of RouteDirectionActivity
  */
-public class RouteDirectionActivity extends AppCompatActivity {
+public class ShowDirectionActivity extends AppCompatActivity {
 
     public RecyclerViewPresenter<LocEdge> routeDirectionPresenter;
 
@@ -51,7 +48,7 @@ public class RouteDirectionActivity extends AppCompatActivity {
 
         // Create an adapter for the RecyclerView of route direction
         routeDirectionPresenter = new RecyclerViewPresenterBuilder<LocEdge>()
-                .setAdapter(new RouteDirectionAdapter())
+                .setAdapter(new ShowDirectionAdapter())
                 .setRecyclerView(findViewById(R.id.route_direction))
                 .getRecyclerViewPresenter();
 

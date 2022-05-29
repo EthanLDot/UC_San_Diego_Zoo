@@ -20,8 +20,6 @@ import org.junit.runner.RunWith;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
 // User Story 5, 6 Unit Tests
 @RunWith(AndroidJUnit4.class)
@@ -33,7 +31,7 @@ public class NextDirectionTests {
     @Before
     public void setUp() {
         mainIntent = new Intent(ApplicationProvider.getApplicationContext(), MainActivity.class);
-        routeDirectionIntent = new Intent(ApplicationProvider.getApplicationContext(), RouteDirectionActivity.class);
+        routeDirectionIntent = new Intent(ApplicationProvider.getApplicationContext(), ShowDirectionActivity.class);
     }
 
 
@@ -53,7 +51,7 @@ public class NextDirectionTests {
     @Test
     public void noMoreExhibitsTest() {
 
-        ActivityScenario<RouteDirectionActivity> routeDirectionActivityActivityScenario = ActivityScenario.launch(routeDirectionIntent);
+        ActivityScenario<ShowDirectionActivity> routeDirectionActivityActivityScenario = ActivityScenario.launch(routeDirectionIntent);
         routeDirectionActivityActivityScenario.onActivity(activity -> {
             String nextBtnText = "NEXT\n------\n" + "No Exhibits Left!";
             Button nextBtn = activity.findViewById(R.id.next_btn);
@@ -85,7 +83,7 @@ public class NextDirectionTests {
             routeDirectionIntent.putExtra("route", route);
         });
 
-        ActivityScenario<RouteDirectionActivity> routeDirectionActivityActivityScenario = ActivityScenario.launch(routeDirectionIntent);
+        ActivityScenario<ShowDirectionActivity> routeDirectionActivityActivityScenario = ActivityScenario.launch(routeDirectionIntent);
         routeDirectionActivityActivityScenario.onActivity(activity -> {
             Button nextBtn = activity.findViewById(R.id.next_btn);
             String expectedBtnText = "NEXT\n------\nLions, 200";

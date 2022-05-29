@@ -47,20 +47,18 @@
         app:layout_constraintTop_toTopOf="@id/next_btn"
         app:layout_constraintBottom_toBottomOf="@id/next_btn"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/guideline" />
+        app:layout_constraintEnd_toStartOf="@+id/next_btn"/>
 
     <Button
         android:id="@+id/next_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
-        android:layout_marginStart="60dp"
-        android:layout_marginEnd="60dp"
-        android:text="NEXT"
-        app:layout_constraintWidth_max="200dp"
+        android:text="NEXT\n------\nENTRANCE AND EXIT GATE, 310"
+        app:layout_constraintWidth_max="180dp"
         app:layout_constraintBottom_toTopOf="@id/back_to_plan"
-        app:layout_constraintStart_toEndOf="@id/previous_btn"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintStart_toStartOf="@id/skip_btn"
+        app:layout_constraintEnd_toEndOf="@id/settings_button"/>
 
     <Button
         android:id="@+id/back_to_plan"
@@ -95,11 +93,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         tools:ignore="SpeakableTextPresentCheck" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.5" />
+<!--    <androidx.constraintlayout.widget.Guideline-->
+<!--        android:id="@+id/guideline"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="vertical"-->
+<!--        app:layout_constraintGuide_percent="0.5" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -204,7 +204,7 @@ public class Utilities {
      */
     public static List<LocEdge> findDirections(RouteInfo routeInfo, LocItem target, boolean isBrief) {
         if (target == null) { return Collections.emptyList(); }
-        List<LocEdge> directions = routeInfo.getPath(target.id);
+        List<LocEdge> directions = routeInfo.getDirection(target.id);
         if (!isBrief) { return directions; }
         return getBriefDirections(directions);
     }

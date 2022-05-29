@@ -2,6 +2,7 @@ package com.example.zooseeker_team54;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,6 +25,7 @@ public class ShowDirectionActivity extends AppCompatActivity {
     private Button nextBtn;
     private Button backBtn;
     private Button settingsBtn;
+    private Button skipBtn;
 
     private RouteInfo routeInfo;
     private EditText mockRouteInput;
@@ -77,6 +79,10 @@ public class ShowDirectionActivity extends AppCompatActivity {
         // Initialize the start mock button
         mockStep = this.findViewById(R.id.start_mock);
         mockStep.setOnClickListener(this::onMockStepClicked);
+
+        //Initialize the skip button
+        skipBtn = this.findViewById(R.id.skipBtn);
+        skipBtn.setOnClickListener(this::onSkipBtnClicked);
 
         // Initialize Location Tracker
         locationTracker = new LocationTracker(this, false);
@@ -164,4 +170,10 @@ public class ShowDirectionActivity extends AppCompatActivity {
         locationTracker.mockLocation(locationCoord);
     }
 
+    private void onSkipBtnClicked(View view){
+        String target = routeInfo.getCurrentTarget();
+        viewModel.removePlannedLoc(viewModel.getLocItemById(target));
+        routeInfo.removeLocation(target);
+        routeDirectionPresenter.setItems(routeInfo.getDirection(routeInfo.getCurrentTarget()));
+    }
 }

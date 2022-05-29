@@ -1,6 +1,7 @@
 package com.example.zooseeker_team54;
 
 import android.util.Log;
+import android.util.Pair;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -27,7 +28,7 @@ public class RouteInfo implements Serializable {
         distances.put(location, distance);
     }
 
-    public List<LocEdge> getPath(String location) {
+    public List<LocEdge> getDirection(String location) {
         return directions.get(location);
     }
 
@@ -133,5 +134,25 @@ public class RouteInfo implements Serializable {
         }
 
         return result;
+    }
+
+    public void removeLocation(String removalTarget) {
+        if (!distances.containsKey(removalTarget))
+            return;
+        Pair<List<LocEdge>, Double> pair = Utilities.findShortestPathBetween(getCurrentLocation(), getNextTarget());
+
+        List<LocEdge> newDirection = pair.first;
+        Double newDistance = pair.second;
+        Double oldDistance = distances.get(getNextTarget());
+        Double diff = oldDistance - newDistance;
+
+        addDirection(getCurrentTarget(), newDirection);
+        for(Entry<String, Double> entry: distances.entrySet()){
+            if(entry.getValue() > 0){
+                distances.put(entry.getKey(), entry.getValue()- diff);
+            }
+        }
+        distances.remove(removalTarget);
+        directions.remove(removalTarget);
     }
 }

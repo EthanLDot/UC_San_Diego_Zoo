@@ -81,7 +81,7 @@ public class ShowDirectionActivity extends AppCompatActivity {
         mockStep.setOnClickListener(this::onMockStepClicked);
 
         //Initialize the skip button
-        skipBtn = this.findViewById(R.id.skipBtn);
+        skipBtn = this.findViewById(R.id.skip_btn);
         skipBtn.setOnClickListener(this::onSkipBtnClicked);
 
         // Initialize Location Tracker

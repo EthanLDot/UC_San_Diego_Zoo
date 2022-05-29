@@ -41,11 +41,10 @@
         android:id="@+id/previous_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
         android:layout_marginStart="60dp"
         android:text="previous"
         app:layout_constraintTop_toTopOf="@id/next_btn"
-        app:layout_constraintTop_toBottomOf="@id/next_btn"
+        app:layout_constraintBottom_toBottomOf="@id/next_btn"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
@@ -54,9 +53,12 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
         android:layout_marginStart="60dp"
-        android:text="next"
+        android:layout_marginEnd="60dp"
+        android:text="NEXT"
+        app:layout_constraintWidth_max="200dp"
         app:layout_constraintBottom_toTopOf="@id/back_to_plan"
-        app:layout_constraintStart_toEndOf="@id/previous_btn" />
+        app:layout_constraintStart_toEndOf="@id/previous_btn"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <Button
         android:id="@+id/back_to_plan"

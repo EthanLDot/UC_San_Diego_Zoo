@@ -20,16 +20,16 @@ import java.util.concurrent.TimeUnit;
 // Milestone 2 Developer Story 2 Tests
 @RunWith(AndroidJUnit4.class)
 public class MockLocationTest {
-    Intent routeDirectionIntent;
+    Intent showDirectionIntent;
 
     @Before
     public void setUp() {
-        routeDirectionIntent = new Intent(ApplicationProvider.getApplicationContext(), RouteDirectionActivity.class);
+        showDirectionIntent = new Intent(ApplicationProvider.getApplicationContext(), ShowDirectionActivity.class);
     }
 
     @Test
     public void simpleInputTest() {
-        ActivityScenario<RouteDirectionActivity> routeDirectionActivityActivityScenario = ActivityScenario.launch(routeDirectionIntent);
+        ActivityScenario<ShowDirectionActivity> routeDirectionActivityActivityScenario = ActivityScenario.launch(showDirectionIntent);
         routeDirectionActivityActivityScenario.onActivity(activity -> {
             activity.mockRouteInput.setText("89.55, 133.22");
             activity.mockStep.performClick();

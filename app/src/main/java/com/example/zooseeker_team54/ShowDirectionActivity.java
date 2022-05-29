@@ -2,7 +2,6 @@ package com.example.zooseeker_team54;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,13 +22,14 @@ public class ShowDirectionActivity extends AppCompatActivity {
     private ViewModel viewModel;
 
     private Button nextBtn;
+    private Button perviousBtn;
     private Button backBtn;
     private Button settingsBtn;
     private Button skipBtn;
-
-    private RouteInfo routeInfo;
-    private EditText mockRouteInput;
     private Button mockStep;
+
+    private EditText mockRouteInput;
+    private RouteInfo routeInfo;
 
     public LocationTracker locationTracker;
 
@@ -66,6 +66,10 @@ public class ShowDirectionActivity extends AppCompatActivity {
         else updateNextBtn(routeInfo.getCurrentTarget(), routeInfo.getNextTarget());
 
         // Initialize the back button
+        perviousBtn = this.findViewById(R.id.previous_btn);
+        perviousBtn.setOnClickListener(this::onPreviousBtnClicked);
+
+        // Initialize the back button
         backBtn = this.findViewById(R.id.back_to_plan);
         backBtn.setOnClickListener(this::onBackToPlanBtnClicked);
 
@@ -94,10 +98,12 @@ public class ShowDirectionActivity extends AppCompatActivity {
      */
     public void onNextBtnClicked(View view) {
 
-        viewModel.addVisitedLoc(viewModel.getLocItemById(routeInfo.getCurrentTarget()));
+        if (getDirection().equals("forward")) {
+            viewModel.addVisitedLoc(viewModel.getLocItemById(routeInfo.getCurrentTarget()));
 
-        // update database
-        routeInfo.arriveCurrentTarget();
+            // update database
+            routeInfo.arriveCurrentTarget();
+        }
 
         // update nextButton
         String currTarget = routeInfo.getCurrentTarget();
@@ -118,7 +124,7 @@ public class ShowDirectionActivity extends AppCompatActivity {
         String buttonText;
         LocItem nextLocItem = viewModel.getLocItemById(nextTarget);
 
-        if (nextLocItem == null || !nextLocItem.planned) {
+        if (!getDirection().equals("forward") || nextLocItem == null || !nextLocItem.planned) {
             buttonText = "NEXT\n------\n" + "No Exhibits Left!";
             nextBtn.setClickable(false);
             nextBtn.setEnabled(false);
@@ -128,6 +134,14 @@ public class ShowDirectionActivity extends AppCompatActivity {
             nextBtn.setEnabled(true);
         }
         nextBtn.setText(buttonText);
+    }
+
+    /**
+     *
+     * @param view
+     */
+    public void onPreviousBtnClicked(View view) {
+//        viewModel.removeVisitedLoc(viewModel.getLocItemById(routeInfo.getPreviousLocation()));
     }
 
     /**
@@ -152,14 +166,6 @@ public class ShowDirectionActivity extends AppCompatActivity {
     }
 
     /**
-     *
-     * @return
-     */
-    private boolean getIsBrief() {
-        return getPreferences(MODE_PRIVATE).getBoolean("isBrief", true);
-    }
-
-    /**
      * Mocks the next location in the route by calling locationtracker
      * @param view
      */
@@ -176,5 +182,21 @@ public class ShowDirectionActivity extends AppCompatActivity {
         routeInfo.removeLocation(target);
         routeDirectionPresenter.setItems(routeInfo.getDirection(routeInfo.getCurrentTarget()));
         updateNextBtn(routeInfo.getCurrentTarget(), routeInfo.getNextTarget());
+    }
+
+    /**
+     *
+     * @return
+     */
+    private boolean getIsBrief() {
+        return getPreferences(MODE_PRIVATE).getBoolean("isBrief", true);
+    }
+
+    /**
+     *
+     * @return
+     */
+    private String getDirection() {
+        return getPreferences(MODE_PRIVATE).getString("direction", "forward");
     }
 }

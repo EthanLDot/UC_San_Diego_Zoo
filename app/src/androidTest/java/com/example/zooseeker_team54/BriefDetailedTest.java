@@ -12,10 +12,15 @@ import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 
+import androidx.room.Room;
+import androidx.test.core.app.ActivityScenario;
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -24,17 +29,40 @@ import androidx.test.filters.LargeTest;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.List;
+
 @LargeTest
 @RunWith(AndroidJUnit4.class)
 public class BriefDetailedTest {
+    LocItemDao dao;
+    LocDatabase testDb;
+    Intent mainIntent;
 
-    @Rule
-    public ActivityScenarioRule<MainActivity> mActivityScenarioRule =
-            new ActivityScenarioRule<>(MainActivity.class);
+    @Before
+    public void setUp() {
+        mainIntent = new Intent(ApplicationProvider.getApplicationContext(), MainActivity.class);
+        ActivityScenario<MainActivity> mainActivityActivityScenario = ActivityScenario.launch(mainIntent);
+        mainActivityActivityScenario.onActivity(Utilities::loadOldZooJson);
+    }
+
+
+    @Before
+    public void resetDatabase() {
+        Context context = ApplicationProvider.getApplicationContext();
+        testDb = Room.inMemoryDatabaseBuilder(context, LocDatabase.class)
+                .allowMainThreadQueries()
+                .build();
+        LocDatabase.injectTestDatabase(testDb);
+
+        List<LocItem> todos = LocItem.loadJSON(context, "sample_node_info.json");
+        dao = testDb.LocItemDao();
+        dao.insertAll(todos);
+    }
 
     @Test
     public void briefToDetailedTest() {

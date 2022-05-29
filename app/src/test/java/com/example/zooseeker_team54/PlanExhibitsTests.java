@@ -71,6 +71,9 @@ public class PlanExhibitsTests {
     @Test
     public void addToEmptyList() {
         scenario.onActivity(activity -> {
+
+            Utilities.loadOldZooJson(activity);
+
             // Check that there are no exhibits planned yet
             List<LocItem> plannedExhibits = activity.plannedLocsPresenter.getItems();
             assertEquals(0, plannedExhibits.size());
@@ -99,6 +102,9 @@ public class PlanExhibitsTests {
     @Test
     public void addMultipleExhibits() {
         scenario.onActivity(activity -> {
+
+            Utilities.loadOldZooJson(activity);
+
             // Check that there are no exhibits planned yet
             List<LocItem> plannedExhibits = activity.plannedLocsPresenter.getItems();
             assertEquals(0, plannedExhibits.size());

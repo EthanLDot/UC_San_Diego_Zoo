@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Utilities.loadOldZooJson(this); //also change LocDatabase:42
+        Utilities.loadNewZooJson(this);
 
         // prevents UI difficulties resulting from a rotated screen
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);

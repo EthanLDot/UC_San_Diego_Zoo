@@ -55,6 +55,8 @@ public class RouteDirectionTest {
         ActivityScenario<MainActivity> mainActivityActivityScenario = ActivityScenario.launch(mainIntent);
         mainActivityActivityScenario.onActivity(activity -> {
 
+            Utilities.loadOldZooJson(activity);
+
             LocItem lions = dao.get("lions");
 
             List<LocItem> testItems = new ArrayList<>();
@@ -90,6 +92,8 @@ public class RouteDirectionTest {
         // Launch MainActivity class
         ActivityScenario<MainActivity> mainActivityActivityScenario = ActivityScenario.launch(mainIntent);
         mainActivityActivityScenario.onActivity(activity -> {
+
+            Utilities.loadOldZooJson(activity);
 
             LocItem lions = dao.get("lions");
             LocItem gators = dao.get("gators");

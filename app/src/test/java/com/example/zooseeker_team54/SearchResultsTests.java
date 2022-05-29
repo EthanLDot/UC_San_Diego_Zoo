@@ -48,6 +48,9 @@ public class SearchResultsTests {
         scenario.moveToState(Lifecycle.State.RESUMED);
 
         scenario.onActivity(activity -> {
+
+            Utilities.loadOldZooJson(activity);
+
             String query = "lion";
             EditText searchBarText = activity.findViewById(R.id.search_bar);
             searchBarText.setText(query);
@@ -67,6 +70,9 @@ public class SearchResultsTests {
         scenario.moveToState(Lifecycle.State.RESUMED);
 
         scenario.onActivity(activity -> {
+
+            Utilities.loadOldZooJson(activity);
+
             String query = "adsfasdfas";
             EditText searchBarText = activity.findViewById(R.id.search_bar);
             searchBarText.setText(query);
@@ -88,6 +94,9 @@ public class SearchResultsTests {
         scenario.moveToState(Lifecycle.State.RESUMED);
 
         scenario.onActivity(activity -> {
+
+            Utilities.loadOldZooJson(activity);
+
             String query = "entrance";
             EditText searchBarText = activity.findViewById(R.id.search_bar);
             searchBarText.setText(query);
@@ -113,6 +122,9 @@ public class SearchResultsTests {
         scenario.moveToState(Lifecycle.State.RESUMED);
 
         scenario.onActivity(activity -> {
+
+            Utilities.loadOldZooJson(activity);
+
             String query = "reptile";
             EditText searchBarText = activity.findViewById(R.id.search_bar);
             searchBarText.setText(query);

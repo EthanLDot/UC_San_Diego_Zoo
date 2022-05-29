@@ -64,8 +64,8 @@ public class Utilities {
 
         List<LocItem> searchResults = new ArrayList<>();
         for (LocItem locItem : allLocations) {
-            if (locItem.name.toLowerCase().contains(query.toLowerCase())
-                    && !locItem.planned && locItem.kind.equals("exhibit")) {
+            if (((locItem.name.toLowerCase().contains(query.toLowerCase()) || locItem.tags.contains(query))
+                    && !locItem.planned && locItem.kind.equals("exhibit"))) {
                 searchResults.add(locItem);
             }
         }

@@ -135,6 +135,28 @@ public class SearchResultsTests {
         textView.check(doesNotExist());
     }
 
+    @Test
+    public void displayExhibitWithCategoryQuery() {
+        ViewInteraction clearButton = onView(
+                allOf(withId(R.id.clear_btn), withText("clear"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                2),
+                        isDisplayed()));
+        clearButton.perform(click());
+
+        ViewInteraction appCompatEditText = onView(allOf(withId(R.id.search_bar)));
+        appCompatEditText.perform(replaceText("reptile"), closeSoftKeyboard());
+
+        ViewInteraction textView = onView(
+                allOf(withId(R.id.loc_name), withText("Alligator"),
+                        withParent(withParent(withId(R.id.search_results))),
+                        isDisplayed()));
+        textView.check(doesNotExist());
+    }
+
     private static Matcher<View> childAtPosition(
             final Matcher<View> parentMatcher, final int position) {
 

@@ -29,13 +29,12 @@ public class RouteDirectionActivity extends AppCompatActivity {
     private Button backBtn;
     private Button settingsBtn;
 
-    private EditText mockRouteInput;
-    private Button mockStep;
-
-    private HashMap<String, List<LocEdge>> route;
-
+    // Variables for mocking location
+    public EditText mockRouteInput;
+    public Button mockStep;
     public LocationTracker locationTracker;
 
+    private HashMap<String, List<LocEdge>> route;
     /**
      * Create the activity from a given savedInstanceState and initialize everything
      * @param savedInstanceState saved instance from before

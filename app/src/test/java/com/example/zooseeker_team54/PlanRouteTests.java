@@ -37,6 +37,7 @@ public class PlanRouteTests {
         List<LocItem> todos = LocItem.loadJSON(context, "sample_node_info.json");
         dao = testDb.LocItemDao();
         dao.insertAll(todos);
+
     }
 
     @Test
@@ -63,7 +64,9 @@ public class PlanRouteTests {
         scenario.moveToState(Lifecycle.State.RESUMED);
 
         scenario.onActivity(activity -> {
+
             Utilities.loadOldZooJson(activity);
+
             String query = "gorillas";
             EditText searchBarText = activity.findViewById(R.id.search_bar);
             searchBarText.setText(query);
@@ -97,7 +100,9 @@ public class PlanRouteTests {
         scenario.moveToState(Lifecycle.State.RESUMED);
 
         scenario.onActivity(activity -> {
+
             Utilities.loadOldZooJson(activity);
+
             String query = "alligators";
             EditText searchBarText = activity.findViewById(R.id.search_bar);
             searchBarText.setText(query);

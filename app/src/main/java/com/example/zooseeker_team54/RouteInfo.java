@@ -57,7 +57,7 @@ public class RouteInfo implements Serializable {
         return locations;
     }
 
-    public List<String> getSortedLocations(List<String> unsortedLocations) {
+    public List<String> sortLocations(List<String> unsortedLocations) {
 
         Map<String, Double> unsortedDistances = new HashMap<>();
         for (String location : unsortedLocations) {
@@ -100,7 +100,11 @@ public class RouteInfo implements Serializable {
         return getNextLocationOf(currentTarget);
     }
 
-    public String getNextLocationOf(String targetLocation) {
+    public void arriveCurrentTarget() { arrive(getCurrentTarget()); }
+
+    public void arrivePreviousLocation() { arrive(getPreviousLocation()); }
+
+    private String getNextLocationOf(String targetLocation) {
         for (Entry<String, List<LocEdge>> entry: directions.entrySet()) {
             String location = entry.getKey();
             List<LocEdge> path = entry.getValue();
@@ -112,22 +116,11 @@ public class RouteInfo implements Serializable {
         return null;
     }
 
-    public String getPreviousLocationOf(String targetLocation) {
+    private String getPreviousLocationOf(String targetLocation) {
         if (!distances.containsKey(targetLocation))
             return null;
 
         return directions.get(targetLocation).get(0).source_id;
-    }
-
-    public void arriveCurrentTarget() {
-        String nextLocation = getCurrentTarget();
-        Double previousDistance = distances.get(nextLocation);
-
-        for (Entry<String, Double> entry : distances.entrySet()) {
-            String location = entry.getKey();
-            Double originalDistance = entry.getValue();
-            distances.put(location, originalDistance - previousDistance);
-        }
     }
 
     public void removeLocation(String removalTarget) {
@@ -150,7 +143,12 @@ public class RouteInfo implements Serializable {
         directions.remove(removalTarget);
     }
 
-    public static <K, V extends Comparable<? super V>> Map<K, V> sortByValue(Map<K, V> map) {
+    private void arrive(String location) {
+        Double previousDistance = distances.get(location);
+        distances.replaceAll((l, d) -> d - previousDistance);
+    }
+
+    private static <K, V extends Comparable<? super V>> Map<K, V> sortByValue(Map<K, V> map) {
         List<Entry<K, V>> list = new ArrayList<>(map.entrySet());
         list.sort(Entry.comparingByValue());
 
@@ -160,16 +158,5 @@ public class RouteInfo implements Serializable {
         }
 
         return result;
-    }
-
-    public void arrivePreviousLocation() {
-        String previousLocation = getPreviousLocation();
-        Double previousDistance = distances.get(previousLocation);
-
-        for (Entry<String, Double> entry : distances.entrySet()) {
-            String location = entry.getKey();
-            Double originalDistance = entry.getValue();
-            distances.put(location, originalDistance - previousDistance);
-        }
     }
 }

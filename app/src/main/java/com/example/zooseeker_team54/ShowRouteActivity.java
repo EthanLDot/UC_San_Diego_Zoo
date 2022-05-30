@@ -5,12 +5,10 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -93,7 +91,7 @@ public class ShowRouteActivity extends AppCompatActivity {
                 .map((locItem -> locItem.id))
                 .collect(Collectors.toList());
 
-        List<LocItem> sortedLocations = routeInfo.getSortedLocations(locations)
+        List<LocItem> sortedLocations = routeInfo.sortLocations(locations)
                 .stream()
                 .map((location) -> viewModel.getLocItemById(location))
                 .collect(Collectors.toList());

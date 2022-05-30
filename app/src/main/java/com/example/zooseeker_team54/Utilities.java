@@ -14,9 +14,11 @@ import androidx.appcompat.app.AlertDialog;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
@@ -141,8 +143,19 @@ public class Utilities {
      */
     public static RouteInfo findRoute(List<LocItem> unvisitedLocItems, Coord coord, boolean startFromEntrance) {
 
+        if (unvisitedLocItems.size() == 0) {
+            RouteInfo routeInfo = new RouteInfo();
+            routeInfo.addDistance("entrance_exit_gate", 0.0);
+            routeInfo.addDirection("entrance_exit_gate", Collections.emptyList());
+            return routeInfo;
+        }
+
         // the final route to return
         RouteInfo routeInfo = new RouteInfo();
+
+        //
+        Map<String, LocItem> info = new HashMap<>();
+        unvisitedLocItems.forEach((locItem) -> info.put(locItem.id, locItem));
 
         // set up a list unvisited locations
         List<String> unvisited = new ArrayList<>();
@@ -164,7 +177,10 @@ public class Utilities {
             // loop through each other planned locations
             for (int i = 0; i < unvisited.size(); i++) {
                 target = unvisited.get(i);
-                Pair<List<LocEdge>, Double> pair = findShortestPathBetween(current, target);
+
+                String current_id = current.equals("entrance_exit_gate") ? current : getIdForRoute(info.get(current));
+                String target_id = getIdForRoute(info.get(target));
+                Pair<List<LocEdge>, Double> pair = findShortestPathBetween(current_id, target_id);
 
                 // if the distance is shorter than current min distance, update
                 if (pair.second < minDist) {
@@ -189,6 +205,7 @@ public class Utilities {
 
         // find the path from the last added exhibit and add it to the route
         String target = "entrance_exit_gate";
+        current = getIdForRoute(info.get(current));
         Pair<List<LocEdge>, Double> pair = Utilities.findShortestPathBetween(current, target);
         routeInfo.addDirection(target, pair.first);
 
@@ -198,11 +215,20 @@ public class Utilities {
         return routeInfo;
     }
 
+    /**
+     *
+     * @param locItem
+     * @return
+     */
+    public static String getIdForRoute(LocItem locItem) {
+        return locItem.group_id == null ? locItem.id : locItem.group_id;
+    }
+
     // TODO: implement this
     /**
      *
      * @param unvisitedLocItems
-     * @param latLng
+     * @param coord
      * @return
      */
     public static String findClosestExhibitId(List<LocItem> unvisitedLocItems, Coord coord) {
@@ -249,6 +275,8 @@ public class Utilities {
      */
     public static List<LocEdge> getBriefDirections(List<LocEdge> directions) {
         List<LocEdge> briefDirections = new ArrayList<>();
+
+        if (directions.size() == 0) return null;
 
         // initialize the data
         LocEdge firstPath = directions.get(0);
@@ -320,6 +348,4 @@ public class Utilities {
 
         return coords;
     }
-
-
 }

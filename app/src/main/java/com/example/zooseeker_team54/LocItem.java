@@ -39,7 +39,9 @@ public class LocItem implements Serializable {
     public long pk_id;
 
     // member variables of LocItem
-    public String name, kind, id, group_id;
+    @NonNull
+    public String name, kind, id;
+    public String group_id;
     public boolean planned, visited;
     public double  lat, lng;
     public List<String> tags;
@@ -66,7 +68,11 @@ public class LocItem implements Serializable {
      * @param kind  the kind of LocItem it is
      * @param tags  List of tags for the LocItem
      */
-    LocItem(@NonNull String name, String id, String group_id, Double lat, Double lng, String kind, List<String> tags) {
+    LocItem(@NonNull String name,
+            @NonNull String id,
+            String group_id, Double lat, Double lng,
+            @NonNull String kind,
+            @NonNull List<String> tags) {
         this.name = name;
         this.kind = kind;
         this.id = id;

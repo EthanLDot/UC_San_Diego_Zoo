@@ -31,7 +31,6 @@ public class ShowDirectionActivity extends AppCompatActivity {
   
     public LocationTracker locationTracker;
 
-    private HashMap<String, List<LocEdge>> route;
     /**
      * Create the activity from a given savedInstanceState and initialize everything
      * @param savedInstanceState saved instance from before

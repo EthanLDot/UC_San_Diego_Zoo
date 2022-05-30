@@ -7,6 +7,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 
+import android.util.Log;
 import android.util.Pair;
 
 import androidx.appcompat.app.AlertDialog;
@@ -138,7 +139,7 @@ public class Utilities {
      * @param unvisitedLocItems List of LocItems within plan to find a route for
      * @return route from the planned exhibits as a HashMap of edges
      */
-    public static RouteInfo findRoute(List<LocItem> unvisitedLocItems, Coord latLng) {
+    public static RouteInfo findRoute(List<LocItem> unvisitedLocItems, Coord coord, boolean startFromEntrance) {
 
         // the final route to return
         RouteInfo routeInfo = new RouteInfo();
@@ -149,7 +150,7 @@ public class Utilities {
 
         // start at the entrance of the zoo
         double currDist = 0;
-        String current = findClosestExhibit(unvisitedLocItems, latLng);
+        String current = startFromEntrance ? "entrance_exit_gate" : findClosestExhibitId(unvisitedLocItems, coord);
 
         // while there are still unvisited locations, find the closest to the last added one, and add it to the route
         while (unvisited.size() > 0) {
@@ -204,8 +205,13 @@ public class Utilities {
      * @param latLng
      * @return
      */
-    public static String findClosestExhibit(List<LocItem> unvisitedLocItems, Coord latLng) {
-        return "entrance_exit_gate";
+    public static String findClosestExhibitId(List<LocItem> unvisitedLocItems, Coord coord) {
+        return unvisitedLocItems
+                .stream()
+                .reduce((locItem1, locItem2) ->
+                        Coord.distanceBetweenTwoCoords(locItem1.getCoord(), coord) < Coord.distanceBetweenTwoCoords(locItem2.getCoord(), coord) ?
+                        locItem1 : locItem2)
+                .get().id;
     }
 
     /**

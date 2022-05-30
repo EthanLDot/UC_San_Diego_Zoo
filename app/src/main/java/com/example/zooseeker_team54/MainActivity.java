@@ -130,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private RouteInfo findRoute(List<LocItem> unvisitedLocItems, Coord coord) {
-        RouteInfo routeInfo = Utilities.findRoute(unvisitedLocItems, coord);
+        RouteInfo routeInfo = Utilities.findRoute(unvisitedLocItems, coord, viewModel.getAllVisited().size() == 0);
 
         // Skip the ones that are visited
         for (String currTarget = routeInfo.getCurrentTarget(); currTarget != null && viewModel.getLocItemById(currTarget).visited; currTarget = routeInfo.getCurrentTarget())

@@ -1,7 +1,9 @@
 package com.example.zooseeker_team54;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,7 +24,7 @@ public class ShowDirectionActivity extends AppCompatActivity {
     private ViewModel viewModel;
 
     private Button nextBtn;
-    private Button perviousBtn;
+    private Button previousBtn;
     private Button backBtn;
     private Button settingsBtn;
     private Button skipBtn;
@@ -66,8 +68,11 @@ public class ShowDirectionActivity extends AppCompatActivity {
         else updateNextBtn(routeInfo.getCurrentTarget(), routeInfo.getNextTarget());
 
         // Initialize the back button
-        perviousBtn = this.findViewById(R.id.previous_btn);
-        perviousBtn.setOnClickListener(this::onPreviousBtnClicked);
+        previousBtn = this.findViewById(R.id.previous_btn);
+        previousBtn.setOnClickListener(this::onPreviousBtnClicked);
+
+        if (routeInfo == null) updatePreviousBtn(null);
+        else updatePreviousBtn(routeInfo.getCurrentLocation());
 
         // Initialize the back button
         backBtn = this.findViewById(R.id.back_to_plan);
@@ -98,21 +103,24 @@ public class ShowDirectionActivity extends AppCompatActivity {
      */
     public void onNextBtnClicked(View view) {
 
-        if (getDirection().equals("forward")) {
-            viewModel.addVisitedLoc(viewModel.getLocItemById(routeInfo.getCurrentTarget()));
-
-            // update database
+        if (!getDirection().equals("forward")) {
+            setDirection("forward");
+            String currentTarget = routeInfo.getCurrentTarget();
+            List<LocEdge> directions = Utilities.findDirections(routeInfo, viewModel.getLocItemById(currentTarget), getIsBrief());
+            routeDirectionPresenter.setItems(directions);
+        } else {
+            String currentTarget = routeInfo.getCurrentTarget();
+            viewModel.addVisitedLoc(viewModel.getLocItemById(currentTarget));
             routeInfo.arriveCurrentTarget();
+
+            currentTarget = routeInfo.getCurrentTarget();
+            List<LocEdge> directions = Utilities.findDirections(routeInfo, viewModel.getLocItemById(currentTarget), getIsBrief());
+            routeDirectionPresenter.setItems(directions);
         }
 
         // update nextButton
-        String currTarget = routeInfo.getCurrentTarget();
-        String nextTarget = routeInfo.getNextTarget();
-        updateNextBtn(currTarget, nextTarget);
-
-        // Update directions
-        List<LocEdge> newDirections = Utilities.findDirections(routeInfo, viewModel.getLocItemById(currTarget), getIsBrief());
-        routeDirectionPresenter.setItems(newDirections);
+        updateNextBtn(routeInfo.getCurrentTarget(), routeInfo.getNextTarget());
+        updatePreviousBtn(routeInfo.getCurrentLocation());
     }
 
     /**
@@ -124,13 +132,14 @@ public class ShowDirectionActivity extends AppCompatActivity {
         String buttonText;
         LocItem nextLocItem = viewModel.getLocItemById(nextTarget);
 
-        if (!getDirection().equals("forward") || nextLocItem == null || !nextLocItem.planned) {
+        if (nextLocItem == null || !nextLocItem.planned) {
             buttonText = "NEXT\n------\n" + "No Exhibits Left!";
             nextBtn.setClickable(false);
             nextBtn.setEnabled(false);
         }
         else {
             buttonText = "NEXT\n------\n" + nextLocItem.name + ", " + (routeInfo.getDistance(nextTarget).intValue() - routeInfo.getDistance(currTarget).intValue());
+            nextBtn.setClickable(true);
             nextBtn.setEnabled(true);
         }
         nextBtn.setText(buttonText);
@@ -141,7 +150,41 @@ public class ShowDirectionActivity extends AppCompatActivity {
      * @param view
      */
     public void onPreviousBtnClicked(View view) {
-//        viewModel.removeVisitedLoc(viewModel.getLocItemById(routeInfo.getPreviousLocation()));
+        if (!getDirection().equals("backward")) {
+            setDirection("backward");
+            String currentLocation = routeInfo.getCurrentLocation();
+            List<LocEdge> directions = routeInfo.getReversedDirection(currentLocation);
+            routeDirectionPresenter.setItems(directions);
+        }
+        else {
+            String currentLocation = routeInfo.getCurrentLocation();
+            viewModel.removeVisitedLoc(viewModel.getLocItemById(currentLocation));
+            routeInfo.arrivePreviousLocation();
+
+            currentLocation = routeInfo.getCurrentLocation();
+            List<LocEdge> directions = routeInfo.getReversedDirection(currentLocation);
+            routeDirectionPresenter.setItems(directions);
+        }
+        updateNextBtn(routeInfo.getCurrentLocation(), routeInfo.getCurrentTarget());
+        updatePreviousBtn(routeInfo.getCurrentLocation());
+    }
+
+    /**
+     *
+     * @param currentLocation
+     */
+    public void updatePreviousBtn(String currentLocation) {
+        System.out.println(currentLocation);
+        if (currentLocation == null || currentLocation.equals("entrance_exit_gate") ||
+                (currentLocation.equals(routeInfo.getSortedLocations(routeInfo.getLocations()).get(0)) &&
+                getDirection().equals("backward"))) {
+            previousBtn.setClickable(false);
+            previousBtn.setEnabled(false);
+        }
+        else {
+            previousBtn.setClickable(true);
+            previousBtn.setEnabled(true);
+        }
     }
 
     /**
@@ -176,6 +219,10 @@ public class ShowDirectionActivity extends AppCompatActivity {
         locationTracker.mockLocation(locationCoord);
     }
 
+    /**
+     *
+     * @param view
+     */
     private void onSkipBtnClicked(View view){
         String target = routeInfo.getCurrentTarget();
         viewModel.removePlannedLoc(viewModel.getLocItemById(target));
@@ -198,5 +245,16 @@ public class ShowDirectionActivity extends AppCompatActivity {
      */
     private String getDirection() {
         return getPreferences(MODE_PRIVATE).getString("direction", "forward");
+    }
+
+    /**
+     *
+     * @param direction
+     */
+    private void setDirection(String direction) {
+        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("direction", direction);
+        editor.apply();
     }
 }

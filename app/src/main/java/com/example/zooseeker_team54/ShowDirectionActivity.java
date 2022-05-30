@@ -140,7 +140,17 @@ public class ShowDirectionActivity extends AppCompatActivity {
         if (!getDirection().equals("forward")) {
             setDirection("forward");
         } else {
-            viewModel.addVisitedLoc(viewModel.getLocItemById(routeInfo.getCurrentTarget()));
+            String arrivedLocation = routeInfo.getCurrentTarget();
+            viewModel.addVisitedLoc(viewModel.getLocItemById(arrivedLocation));
+
+            String groupId = routeInfo.getGroupId(arrivedLocation);
+            if (groupId != null) {
+                List<String> ids = routeInfo.getIdsWithGroupId(groupId);
+                for (String id : ids) {
+                    viewModel.addVisitedLoc(viewModel.getLocItemById(id));
+                }
+            }
+
             routeInfo.arriveCurrentTarget();
         }
 
@@ -162,7 +172,17 @@ public class ShowDirectionActivity extends AppCompatActivity {
             setDirection("backward");
         }
         else {
-            viewModel.removeVisitedLoc(viewModel.getLocItemById(routeInfo.getCurrentLocation()));
+            String arrivedLocation = routeInfo.getCurrentLocation();
+            viewModel.removeVisitedLoc(viewModel.getLocItemById(arrivedLocation));
+
+            String groupId = routeInfo.getGroupId(arrivedLocation);
+            if (groupId != null) {
+                List<String> ids = routeInfo.getIdsWithGroupId(groupId);
+                for (String id : ids) {
+                    viewModel.removeVisitedLoc(viewModel.getLocItemById(id));
+                }
+            }
+
             routeInfo.arrivePreviousLocation();
         }
 

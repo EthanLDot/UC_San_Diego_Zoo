@@ -201,6 +201,11 @@ public class Utilities {
             // add the next path to paths and add the next distance to distances
             routeInfo.addDirection(closest, minPath);
             routeInfo.addDistance(closest, currDist);
+
+            LocItem closestLocation = info.get(closest);
+            if (closestLocation.group_id != null) {
+                  routeInfo.addGroupId(closest, closestLocation.group_id);
+            }
         }
 
         // find the path from the last added exhibit and add it to the route

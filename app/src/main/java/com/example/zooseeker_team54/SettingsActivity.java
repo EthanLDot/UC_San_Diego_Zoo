@@ -1,5 +1,6 @@
 package com.example.zooseeker_team54;
 
+import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.SharedPreferences;
@@ -82,8 +83,17 @@ public class SettingsActivity extends AppCompatActivity {
         finish();
     }
 
-    private boolean getIsBrief() {
+    public boolean getIsBrief() {
         return getPreferences(MODE_PRIVATE).getBoolean("isBrief", true);
     }
 
+    @VisibleForTesting
+    public Button getDetailed() {
+        return detailed;
+    }
+
+    @VisibleForTesting
+    public Button getBrief() {
+        return brief;
+    }
 }

@@ -14,7 +14,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- *  Class to represent the functionality of RouteDirectionActivity
+ *  Class to represent the functionality of RouteDirectionActivity, which has been deleted.
  */
 public class ShowDirectionActivity extends AppCompatActivity {
 
@@ -30,7 +30,7 @@ public class ShowDirectionActivity extends AppCompatActivity {
     private RouteInfo routeInfo;
     private EditText mockRouteInput;
     private Button mockStep;
-
+  
     public LocationTracker locationTracker;
 
     /**

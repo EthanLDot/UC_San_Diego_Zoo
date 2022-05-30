@@ -39,7 +39,7 @@ public abstract class LocDatabase extends RoomDatabase {
                         super.onCreate(db);
                         Executors.newSingleThreadScheduledExecutor().execute(() -> {
                             List<LocItem> locs = LocItem
-                                    .loadJSON(context, "sample_node_info.json");
+                                    .loadJSON(context, "exhibit_info.json"); //find a way to rewrite so i dont have to call it twice
                             getSingleton(context).LocItemDao().insertAll(locs);
                         });
                     }

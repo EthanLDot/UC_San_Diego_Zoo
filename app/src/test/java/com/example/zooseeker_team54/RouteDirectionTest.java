@@ -65,7 +65,7 @@ public class RouteDirectionTest {
 
             RouteInfo routeInfo = activity.findRoute(activity.plannedLocsPresenter.getItems());
             routeDirectionIntent.putExtra("routeInfo", routeInfo);
-            System.out.println(Utilities.findDirections(routeInfo, lions, true));
+            System.out.println(Utilities.findDirections(routeInfo, lions.id, true));
         });
 
         ActivityScenario<ShowDirectionActivity> routeDirectionActivityActivityScenario = ActivityScenario.launch(routeDirectionIntent);

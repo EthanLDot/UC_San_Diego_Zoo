@@ -56,16 +56,30 @@ public class ShowDirectionActivity extends AppCompatActivity {
                 .getRecyclerViewPresenter();
 
         List<LocEdge> directions;
-        if (routeInfo == null) directions = Collections.emptyList();
-        else directions = Utilities.findDirections(routeInfo, viewModel.getLocItemById(routeInfo.getCurrentTarget()), getIsBrief());
+        if (routeInfo == null) {
+            directions = Collections.emptyList();
+        }
+        else {
+            directions = Utilities.findDirections(routeInfo, routeInfo.getCurrentTarget(), getIsBrief());
+            if (getDirection().equals("backward")) {
+                directions = routeInfo.getReversedDirection(routeInfo.getCurrentLocation());
+            }
+        }
         routeDirectionPresenter.setItems(directions);
 
         // Initialize the next button
         nextBtn = findViewById(R.id.next_btn);
         nextBtn.setOnClickListener(this::onNextBtnClicked);
 
-        if (routeInfo == null) updateNextBtn(null, null);
-        else updateNextBtn(routeInfo.getCurrentTarget(), routeInfo.getNextTarget());
+        if (routeInfo == null) {
+            updateNextBtn(null, null);
+        }
+        else if (getDirection().equals("forward")) {
+            updateNextBtn(routeInfo.getCurrentTarget(), routeInfo.getNextTarget());
+        }
+        else {
+            updateNextBtn(routeInfo.getCurrentLocation(), routeInfo.getCurrentTarget());
+        }
 
         // Initialize the back button
         previousBtn = this.findViewById(R.id.previous_btn);
@@ -102,12 +116,11 @@ public class ShowDirectionActivity extends AppCompatActivity {
      * @param view
      */
     public void onNextBtnClicked(View view) {
-        System.out.println(getDirection());
 
         if (!getDirection().equals("forward")) {
             setDirection("forward");
             String currentTarget = routeInfo.getCurrentTarget();
-            List<LocEdge> directions = Utilities.findDirections(routeInfo, viewModel.getLocItemById(currentTarget), getIsBrief());
+            List<LocEdge> directions = Utilities.findDirections(routeInfo, currentTarget, getIsBrief());
             routeDirectionPresenter.setItems(directions);
         } else {
             String currentTarget = routeInfo.getCurrentTarget();
@@ -115,7 +128,7 @@ public class ShowDirectionActivity extends AppCompatActivity {
             routeInfo.arriveCurrentTarget();
 
             currentTarget = routeInfo.getCurrentTarget();
-            List<LocEdge> directions = Utilities.findDirections(routeInfo, viewModel.getLocItemById(currentTarget), getIsBrief());
+            List<LocEdge> directions = Utilities.findDirections(routeInfo, currentTarget, getIsBrief());
             routeDirectionPresenter.setItems(directions);
         }
 

@@ -202,9 +202,9 @@ public class Utilities {
      * @param isBrief
      * @return
      */
-    public static List<LocEdge> findDirections(RouteInfo routeInfo, LocItem target, boolean isBrief) {
+    public static List<LocEdge> findDirections(RouteInfo routeInfo, String target, boolean isBrief) {
         if (target == null) { return Collections.emptyList(); }
-        List<LocEdge> directions = routeInfo.getDirection(target.id);
+        List<LocEdge> directions = routeInfo.getDirection(target);
         if (!isBrief) { return directions; }
         return getBriefDirections(directions);
     }

@@ -114,20 +114,7 @@ public class ShowRouteActivity extends AppCompatActivity {
 
         //
         intent.putExtra("routeInfo", routeInfo);
-        setDirection("forward");
         directionActivityResultLauncher.launch(intent);
-    }
-
-
-    /**
-     *
-     * @param direction
-     */
-    private void setDirection(String direction) {
-        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString("direction", direction);
-        editor.apply();
     }
 
     ActivityResultLauncher<Intent> directionActivityResultLauncher = registerForActivityResult(
@@ -141,7 +128,6 @@ public class ShowRouteActivity extends AppCompatActivity {
                         if (data.hasExtra("routeInfo")) {
                             routeInfo = (RouteInfo) data.getSerializableExtra("routeInfo");
                             ((ShowRouteAdapter) showRoutePresenter.getAdapter()).setRouteInfo(routeInfo);
-                            setDirection("forward");
                         }
                     }
                 }

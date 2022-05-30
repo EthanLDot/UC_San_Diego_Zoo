@@ -121,7 +121,6 @@ public class MainActivity extends AppCompatActivity {
      */
     public RouteInfo findRoute(List<LocItem> plannedLocItems) {
         RouteInfo routeInfo = Utilities.findRoute(plannedLocItems);
-        setDirection("forward");
 
         // Skip the ones that are visited
         for (String currTarget = routeInfo.getCurrentTarget(); currTarget != null && viewModel.getLocItemById(currTarget).visited; currTarget = routeInfo.getCurrentTarget())
@@ -193,16 +192,5 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, ShowRouteActivity.class);
         intent.putExtra("routeInfo", routeInfo);
         startActivity(intent);
-    }
-
-    /**
-     *
-     * @param direction
-     */
-    public void setDirection(String direction) {
-        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString("direction", direction);
-        editor.apply();
     }
 }

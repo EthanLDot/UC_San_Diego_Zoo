@@ -102,6 +102,7 @@ public class ShowDirectionActivity extends AppCompatActivity {
      * @param view
      */
     public void onNextBtnClicked(View view) {
+        System.out.println(getDirection());
 
         if (!getDirection().equals("forward")) {
             setDirection("forward");
@@ -174,7 +175,6 @@ public class ShowDirectionActivity extends AppCompatActivity {
      * @param currentLocation
      */
     public void updatePreviousBtn(String currentLocation) {
-        System.out.println(currentLocation);
         if (currentLocation == null || currentLocation.equals("entrance_exit_gate") ||
                 (currentLocation.equals(routeInfo.getSortedLocations(routeInfo.getLocations()).get(0)) &&
                 getDirection().equals("backward"))) {

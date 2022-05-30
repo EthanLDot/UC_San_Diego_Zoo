@@ -20,7 +20,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import java.util.List;
 import java.util.Locale;
 
-// User Story 1 Unit Tests
+// User Story 1 Unit Tests for MS 1
+// User Story 1 Unit Tests for MS 2
 @RunWith(AndroidJUnit4.class)
 public class SearchResultsTests {
     LocDatabase testDb;
@@ -47,6 +48,9 @@ public class SearchResultsTests {
         scenario.moveToState(Lifecycle.State.RESUMED);
 
         scenario.onActivity(activity -> {
+
+            Utilities.loadOldZooJson(activity);
+
             String query = "lion";
             EditText searchBarText = activity.findViewById(R.id.search_bar);
             searchBarText.setText(query);
@@ -66,6 +70,9 @@ public class SearchResultsTests {
         scenario.moveToState(Lifecycle.State.RESUMED);
 
         scenario.onActivity(activity -> {
+
+            Utilities.loadOldZooJson(activity);
+
             String query = "adsfasdfas";
             EditText searchBarText = activity.findViewById(R.id.search_bar);
             searchBarText.setText(query);
@@ -87,6 +94,9 @@ public class SearchResultsTests {
         scenario.moveToState(Lifecycle.State.RESUMED);
 
         scenario.onActivity(activity -> {
+
+            Utilities.loadOldZooJson(activity);
+
             String query = "entrance";
             EditText searchBarText = activity.findViewById(R.id.search_bar);
             searchBarText.setText(query);
@@ -95,6 +105,34 @@ public class SearchResultsTests {
             List<LocItem> searchResults = activity.getSearchResultPresenter().getItems();
             for (LocItem locItem : searchResults) {
                 error = error || locItem.name.toLowerCase().contains(query);
+            }
+            assertFalse(error);
+        });
+    }
+
+    /**
+     * Test the searching functionality by looking for an animal's general tag instead
+     * of its specific name.
+     */
+    @Test
+    public void testWithCategory() {
+        ActivityScenario<MainActivity> scenario = ActivityScenario.launch(MainActivity.class);
+        scenario.moveToState(Lifecycle.State.CREATED);
+        scenario.moveToState(Lifecycle.State.STARTED);
+        scenario.moveToState(Lifecycle.State.RESUMED);
+
+        scenario.onActivity(activity -> {
+
+            Utilities.loadOldZooJson(activity);
+
+            String query = "reptile";
+            EditText searchBarText = activity.findViewById(R.id.search_bar);
+            searchBarText.setText(query);
+
+            boolean error = false;
+            List<LocItem> searchResults = activity.getSearchResultPresenter().getItems();
+            for (LocItem locItem : searchResults) {
+                error = error || locItem.name.toLowerCase().contains("Alligators");
             }
             assertFalse(error);
         });

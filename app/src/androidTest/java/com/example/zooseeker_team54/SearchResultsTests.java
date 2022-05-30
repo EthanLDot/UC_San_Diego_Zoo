@@ -13,10 +13,15 @@ import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 
+import androidx.room.Room;
+import androidx.test.core.app.ActivityScenario;
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.filters.LargeTest;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -25,17 +30,41 @@ import androidx.test.rule.ActivityTestRule;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.List;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
 // User Story 1 UI Tests
 public class SearchResultsTests {
+    LocItemDao dao;
+    LocDatabase testDb;
+    Intent mainIntent;
 
-    @Rule
-    public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
+    @Before
+    public void setUp() {
+        mainIntent = new Intent(ApplicationProvider.getApplicationContext(), MainActivity.class);
+        ActivityScenario<MainActivity> mainActivityActivityScenario = ActivityScenario.launch(mainIntent);
+        mainActivityActivityScenario.onActivity(Utilities::loadOldZooJson);
+    }
+
+
+    @Before
+    public void resetDatabase() {
+        Context context = ApplicationProvider.getApplicationContext();
+        testDb = Room.inMemoryDatabaseBuilder(context, LocDatabase.class)
+                .allowMainThreadQueries()
+                .build();
+        LocDatabase.injectTestDatabase(testDb);
+
+        List<LocItem> todos = LocItem.loadJSON(context, "sample_node_info.json");
+        dao = testDb.LocItemDao();
+        dao.insertAll(todos);
+    }
 
     @Test
     public void displayAllExhibitsContainingQuery() {
@@ -130,6 +159,28 @@ public class SearchResultsTests {
 
         ViewInteraction textView = onView(
                 allOf(withId(R.id.loc_name), withText("Entrance Plaza"),
+                        withParent(withParent(withId(R.id.search_results))),
+                        isDisplayed()));
+        textView.check(doesNotExist());
+    }
+
+    @Test
+    public void displayExhibitWithCategoryQuery() {
+        ViewInteraction clearButton = onView(
+                allOf(withId(R.id.clear_btn), withText("clear"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                2),
+                        isDisplayed()));
+        clearButton.perform(click());
+
+        ViewInteraction appCompatEditText = onView(allOf(withId(R.id.search_bar)));
+        appCompatEditText.perform(replaceText("reptile"), closeSoftKeyboard());
+
+        ViewInteraction textView = onView(
+                allOf(withId(R.id.loc_name), withText("Alligator"),
                         withParent(withParent(withId(R.id.search_results))),
                         isDisplayed()));
         textView.check(doesNotExist());

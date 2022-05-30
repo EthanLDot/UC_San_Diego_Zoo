@@ -36,8 +36,8 @@ public class Utilities {
      */
     public static void loadNewZooJson(Context context) {
         g = ZooData.loadZooGraphJSON("zoo_graph.json", context);
-        vInfo = ZooData.loadVertexInfoJSON("zoo_node_info.json", context);
-        eInfo = ZooData.loadEdgeInfoJSON("zoo_edge_info.json", context);
+        vInfo = ZooData.loadVertexInfoJSON("exhibit_info.json", context);
+        eInfo = ZooData.loadEdgeInfoJSON("trail_info.json", context);
     }
 
     /**
@@ -49,6 +49,7 @@ public class Utilities {
         vInfo = ZooData.loadVertexInfoJSON("sample_node_info.json", context);
         eInfo = ZooData.loadEdgeInfoJSON("sample_edge_info.json", context);
     }
+
 
     /**
      * Find search results from a given search bar query
@@ -62,8 +63,8 @@ public class Utilities {
 
         List<LocItem> searchResults = new ArrayList<>();
         for (LocItem locItem : allLocations) {
-            if (locItem.name.toLowerCase().contains(query.toLowerCase())
-                    && !locItem.planned && locItem.kind.equals("exhibit")) {
+            if (((locItem.name.toLowerCase().contains(query.toLowerCase()) || locItem.tags.contains(query))
+                    && !locItem.planned && locItem.kind.equals("exhibit"))) {
                 searchResults.add(locItem);
             }
         }

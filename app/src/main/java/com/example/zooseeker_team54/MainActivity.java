@@ -120,7 +120,11 @@ public class MainActivity extends AppCompatActivity {
      * @return HashMap of the route to be displayed
      */
     public RouteInfo findRoute(List<LocItem> plannedLocItems) {
-        RouteInfo routeInfo = Utilities.findRoute(plannedLocItems);
+        return findRoute(plannedLocItems, getCoord());
+    }
+
+    private RouteInfo findRoute(List<LocItem> unvisitedLocItems, Pair<String, String> latLng) {
+        RouteInfo routeInfo = Utilities.findRoute(unvisitedLocItems, latLng);
 
         // Skip the ones that are visited
         for (String currTarget = routeInfo.getCurrentTarget(); currTarget != null && viewModel.getLocItemById(currTarget).visited; currTarget = routeInfo.getCurrentTarget())

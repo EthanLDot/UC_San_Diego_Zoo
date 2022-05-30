@@ -134,23 +134,23 @@ public class Utilities {
     /**
      * From a given list of LocItems, find the most optimal route through the graph
      * using our findShortestPathBetween function
-     * @param plannedLocItems List of LocItems within plan to find a route for
+     * @param unvisitedLocItems List of LocItems within plan to find a route for
      * @return route from the planned exhibits as a HashMap of edges
      */
-    public static RouteInfo findRoute(List<LocItem> plannedLocItems) {
+    public static RouteInfo findRoute(List<LocItem> unvisitedLocItems,  Pair<String, String> latLng) {
 
         // the final route to return
         RouteInfo routeInfo = new RouteInfo();
 
         // set up a list unvisited locations
         List<String> unvisited = new ArrayList<>();
-        plannedLocItems.forEach((word) -> unvisited.add(word.id));
+        unvisitedLocItems.forEach((word) -> unvisited.add(word.id));
 
         // start at the entrance of the zoo
         double currDist = 0;
-        String current = "entrance_exit_gate";
+        String current = findClosestExhibit(unvisitedLocItems, latLng);
 
-        // while there are still unvisited locations
+        // while there are still unvisited locations, find the closest to the last added one, and add it to the route
         while (unvisited.size() > 0) {
 
             // initialize index, distance, and the path to the shortest planned locations
@@ -185,6 +185,7 @@ public class Utilities {
             routeInfo.addDistance(closest, currDist);
         }
 
+        // find the path from the last added exhibit and add it to the route
         String target = "entrance_exit_gate";
         Pair<List<LocEdge>, Double> pair = Utilities.findShortestPathBetween(current, target);
         routeInfo.addDirection(target, pair.first);

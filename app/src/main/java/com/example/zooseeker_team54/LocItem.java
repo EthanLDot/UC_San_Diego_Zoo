@@ -43,7 +43,7 @@ public class LocItem implements Serializable {
     public String name, kind, id;
     public boolean planned, visited;
     public List<String> tags;
-    public double currDist;
+//    public double currDist;
 
     /**
      * Gets the representation of the LocItem as a string
@@ -57,7 +57,7 @@ public class LocItem implements Serializable {
                 ", name='" + name +
                 "', planned=" + planned +
                 ", visited=" + visited +
-                ", current distance=" + currDist +
+//                ", current distance=" + currDist +
                 '}';
     }
 
@@ -75,16 +75,16 @@ public class LocItem implements Serializable {
         this.tags = tags;
         this.planned = false;
         this.visited = false;
-        this.currDist = 0;
+//        this.currDist = 0;
     }
 
-    /**
-     * Getter method for the current distance as a string
-     * @return  current distance of the LocItem
-     */
-    public String getCurrDist() {
-        return String.format("- %.0f meters", currDist);
-    }
+//    /**
+//     * Getter method for the current distance as a string
+//     * @return  current distance of the LocItem
+//     */
+//    public String getCurrDist() {
+//        return String.format("- %.0f meters", currDist);
+//    }
 
     /**
      * Return a list of LocItems loaded from a JSON file

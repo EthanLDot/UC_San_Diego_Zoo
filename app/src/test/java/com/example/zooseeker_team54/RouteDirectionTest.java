@@ -65,9 +65,9 @@ public class RouteDirectionTest {
 
             activity.addPlannedLoc(lions);
 
-            HashMap<String, List<LocEdge>> route = activity.findRoute(activity.plannedLocsPresenter.getItems());
-            routeDirectionIntent.putExtra("route", route);
-            System.out.println(Utilities.findDirections(route, lions, true));
+            RouteInfo routeInfo = activity.findRoute(activity.plannedLocsPresenter.getItems());
+            routeDirectionIntent.putExtra("routeInfo", routeInfo);
+            System.out.println(Utilities.findDirections(routeInfo, lions, true));
         });
 
         ActivityScenario<ShowDirectionActivity> routeDirectionActivityActivityScenario = ActivityScenario.launch(routeDirectionIntent);
@@ -106,8 +106,8 @@ public class RouteDirectionTest {
             activity.addPlannedLoc(lions);
             activity.addPlannedLoc(gators);
 
-            HashMap<String, List<LocEdge>> route = activity.findRoute(activity.plannedLocsPresenter.getItems());
-            routeDirectionIntent.putExtra("route", route);
+            RouteInfo routeInfo = activity.findRoute(activity.plannedLocsPresenter.getItems());
+            routeDirectionIntent.putExtra("routeInfo", routeInfo);
         });
 
         ActivityScenario<ShowDirectionActivity> routeDirectionActivityActivityScenario = ActivityScenario.launch(routeDirectionIntent);

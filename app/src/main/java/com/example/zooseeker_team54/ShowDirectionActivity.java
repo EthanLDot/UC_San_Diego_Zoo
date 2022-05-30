@@ -2,7 +2,6 @@ package com.example.zooseeker_team54;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -10,7 +9,7 @@ import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -26,12 +25,12 @@ public class ShowDirectionActivity extends AppCompatActivity {
     private Button backBtn;
     private Button settingsBtn;
 
-    // Variables for mocking location
-    public EditText mockRouteInput;
-    public Button mockStep;
+    private RouteInfo routeInfo;
+    private EditText mockRouteInput;
+    private Button mockStep;
+  
     public LocationTracker locationTracker;
 
-    private HashMap<String, List<LocEdge>> route;
     /**
      * Create the activity from a given savedInstanceState and initialize everything
      * @param savedInstanceState saved instance from before
@@ -44,7 +43,7 @@ public class ShowDirectionActivity extends AppCompatActivity {
 
         viewModel = new ViewModelProvider(this).get(ViewModel.class);
 
-        route = (HashMap<String, List<LocEdge>>) intent.getSerializableExtra("route");
+        routeInfo = (RouteInfo) intent.getSerializableExtra("routeInfo");
 
         // Create an adapter for the RecyclerView of route direction
         routeDirectionPresenter = new RecyclerViewPresenterBuilder<LocEdge>()
@@ -52,13 +51,17 @@ public class ShowDirectionActivity extends AppCompatActivity {
                 .setRecyclerView(findViewById(R.id.route_direction))
                 .getRecyclerViewPresenter();
 
-        List<LocEdge> directions = Utilities.findDirections(route, viewModel.getCurrTarget(), getIsBrief());
+        List<LocEdge> directions;
+        if (routeInfo == null) directions = Collections.emptyList();
+        else directions = Utilities.findDirections(routeInfo, viewModel.getLocItemById(routeInfo.getCurrentTarget()), getIsBrief());
         routeDirectionPresenter.setItems(directions);
 
         // Initialize the next button
         nextBtn = findViewById(R.id.next_btn);
         nextBtn.setOnClickListener(this::onNextBtnClicked);
-        updateNextBtn(viewModel.getCurrTarget(), viewModel.getNextTarget());
+
+        if (routeInfo == null) updateNextBtn(null, null);
+        else updateNextBtn(routeInfo.getCurrentTarget(), routeInfo.getNextTarget());
 
         // Initialize the back button
         backBtn = this.findViewById(R.id.back_to_plan);
@@ -85,16 +88,18 @@ public class ShowDirectionActivity extends AppCompatActivity {
      */
     public void onNextBtnClicked(View view) {
 
+        viewModel.addVisitedLoc(viewModel.getLocItemById(routeInfo.getCurrentTarget()));
+
         // update database
-        viewModel.arriveCurrentTarget();
+        routeInfo.arriveCurrentTarget();
 
         // update nextButton
-        LocItem currTarget = viewModel.getCurrTarget();
-        LocItem nextTarget = viewModel.getNextTarget();
+        String currTarget = routeInfo.getCurrentTarget();
+        String nextTarget = routeInfo.getNextTarget();
         updateNextBtn(currTarget, nextTarget);
 
         // Update directions
-        List<LocEdge> newDirections = Utilities.findDirections(route, currTarget, getIsBrief());
+        List<LocEdge> newDirections = Utilities.findDirections(routeInfo, viewModel.getLocItemById(currTarget), getIsBrief());
         routeDirectionPresenter.setItems(newDirections);
     }
 
@@ -103,15 +108,17 @@ public class ShowDirectionActivity extends AppCompatActivity {
      * @param currTarget
      * @param nextTarget
      */
-    public void updateNextBtn(LocItem currTarget, LocItem nextTarget) {
+    public void updateNextBtn(String currTarget, String nextTarget) {
         String buttonText;
-        if (nextTarget == null || !nextTarget.planned) {
+        LocItem nextLocItem = viewModel.getLocItemById(nextTarget);
+
+        if (nextLocItem == null || !nextLocItem.planned) {
             buttonText = "NEXT\n------\n" + "No Exhibits Left!";
             nextBtn.setClickable(false);
             nextBtn.setEnabled(false);
         }
         else {
-            buttonText = "NEXT\n------\n" + nextTarget.name + ", " + (int) (nextTarget.currDist - currTarget.currDist);
+            buttonText = "NEXT\n------\n" + nextLocItem.name + ", " + (routeInfo.getDistance(nextTarget).intValue() - routeInfo.getDistance(currTarget).intValue());
             nextBtn.setEnabled(true);
         }
         nextBtn.setText(buttonText);
@@ -121,7 +128,13 @@ public class ShowDirectionActivity extends AppCompatActivity {
      * Finishes the activity and goes back to the previous activity
      * @param view
      */
-    private void onBackToPlanBtnClicked(View view){ finish(); }
+    private void onBackToPlanBtnClicked(View view){
+        Intent data = new Intent();
+        data.putExtra("routeInfo", routeInfo);
+        // Activity finished ok, return the data
+        setResult(RESULT_OK, data);
+        finish();
+    }
 
     /**
      *

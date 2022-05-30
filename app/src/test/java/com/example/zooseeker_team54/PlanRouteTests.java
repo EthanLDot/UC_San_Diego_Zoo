@@ -50,9 +50,9 @@ public class PlanRouteTests {
         scenario.onActivity(activity -> {
             Utilities.loadOldZooJson(activity);
             List<LocItem> selectedExhibits = activity.plannedLocsPresenter.getItems();
-            HashMap<String, List<LocEdge>> route = activity.findRoute(selectedExhibits);
+            RouteInfo routeInfo = activity.findRoute(selectedExhibits);
             assertEquals(0, selectedExhibits.size());
-            assertEquals(1, route.size());
+            assertEquals(1, routeInfo.getLocations().size());
         });
     }
 
@@ -80,15 +80,15 @@ public class PlanRouteTests {
             assertEquals(1, activity.plannedLocsPresenter.getItemCount());
             List<LocItem> locsAdapterContents = activity.plannedLocsPresenter.getItems();
             assertEquals(1, locsAdapterContents.size());
-            assertEquals("Loc {id=gorillas, name='Gorillas', planned=false, visited=false, current distance=0.0}", locsAdapterContents.get(0).toString());
+            assertEquals("Loc {id=gorillas, name='Gorillas', planned=false, visited=false}", locsAdapterContents.get(0).toString());
 
-            HashMap<String, List<LocEdge>> route = activity.findRoute(locsAdapterContents);
-            assertEquals(2, route.size());
+            RouteInfo routeInfo = activity.findRoute(locsAdapterContents);
+            assertEquals(2, routeInfo.getLocations().size());
             assertEquals("{entrance_exit_gate=[Proceed on 'Africa Rocks Street' 200 meters towards 'Entrance Plaza' from 'Gorillas'.\n" +
                     ", Proceed on 'Entrance Way' 10 meters towards 'Entrance and Exit Gate' from 'Entrance Plaza'.\n" +
                     "], gorillas=[Proceed on 'Entrance Way' 10 meters towards 'Entrance Plaza' from 'Entrance and Exit Gate'.\n" +
                     ", Proceed on 'Africa Rocks Street' 200 meters towards 'Gorillas' from 'Entrance Plaza'.\n" +
-                    "]}", route.toString());
+                    "]}", routeInfo.getDirections().toString());
         });
     }
 
@@ -123,18 +123,18 @@ public class PlanRouteTests {
             List<LocItem> locsAdapterContents = activity.plannedLocsPresenter.getItems();
             assertEquals(2, locsAdapterContents.size());
 
-            assertEquals("Loc {id=gators, name='Alligators', planned=false, visited=false, current distance=0.0}", locsAdapterContents.get(0).toString());
-            assertEquals("Loc {id=lions, name='Lions', planned=false, visited=false, current distance=0.0}", locsAdapterContents.get(1).toString());
+            assertEquals("Loc {id=gators, name='Alligators', planned=false, visited=false}", locsAdapterContents.get(0).toString());
+            assertEquals("Loc {id=lions, name='Lions', planned=false, visited=false}", locsAdapterContents.get(1).toString());
 
-            HashMap<String, List<LocEdge>> route = activity.findRoute(locsAdapterContents);
-            assertEquals(3, route.size());
+            RouteInfo routeInfo = activity.findRoute(locsAdapterContents);
+            assertEquals(3, routeInfo.getLocations().size());
             assertEquals("{lions=[Proceed on 'Sharp Teeth Shortcut' 200 meters towards 'Lions' from 'Alligators'.\n" +
                     "], entrance_exit_gate=[Proceed on 'Sharp Teeth Shortcut' 200 meters towards 'Alligators' from 'Lions'.\n" +
                     ", Proceed on 'Reptile Road' 100 meters towards 'Entrance Plaza' from 'Alligators'.\n" +
                     ", Proceed on 'Entrance Way' 10 meters towards 'Entrance and Exit Gate' from 'Entrance Plaza'.\n" +
                     "], gators=[Proceed on 'Entrance Way' 10 meters towards 'Entrance Plaza' from 'Entrance and Exit Gate'.\n" +
                     ", Proceed on 'Reptile Road' 100 meters towards 'Alligators' from 'Entrance Plaza'.\n" +
-                    "]}", route.toString());
+                    "]}", routeInfo.getDirections().toString());
         });
     }
 }

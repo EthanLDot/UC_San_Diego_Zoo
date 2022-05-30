@@ -44,14 +44,14 @@ public interface LocItemDao {
     @Delete
     int delete(LocItem locItem);
 
-    @Query("SELECT * FROM loc_items WHERE planned = 1 AND visited = 0 ORDER BY currDist")
+    @Query("SELECT * FROM loc_items WHERE planned = 1 AND visited = 0")
     List<LocItem> getAllPlannedUnvisited();
 
-    @Query("SELECT * FROM loc_items WHERE planned = 1 AND visited = 0 ORDER BY currDist")
+    @Query("SELECT * FROM loc_items WHERE planned = 1 AND visited = 0")
     LiveData<List<LocItem>> getAllPlannedUnvisitedLive();
 
-    @Query("SELECT * FROM loc_items WHERE planned = 1 AND visited = 0 AND currDist = (SELECT MIN(currDist) FROM loc_items WHERE planned = 1 AND visited = 0)")
-    LocItem getNextUnvisitedExhibit();
+//    @Query("SELECT * FROM loc_items WHERE planned = 1 AND visited = 0 AND currDist = (SELECT MIN(currDist) FROM loc_items WHERE planned = 1 AND visited = 0)")
+//    LocItem getNextUnvisitedExhibit();
 
     @Query("SELECT COUNT(*) FROM loc_items WHERE planned = 1 AND id != 'entrance_exit_gate' ORDER BY id")
     int countPlannedExhibits();

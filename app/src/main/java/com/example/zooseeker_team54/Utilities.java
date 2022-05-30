@@ -13,9 +13,9 @@ import androidx.appcompat.app.AlertDialog;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
 
 import org.jgrapht.Graph;
 import org.jgrapht.GraphPath;
@@ -79,8 +79,9 @@ public class Utilities {
      */
     public static Pair<List<LocEdge>, Double> findShortestPathBetween(String start, String goal) {
 
-        String current = start, temp;
-        List<LocEdge> shortestPath = new ArrayList<>();
+        String current = start;
+        ZooData.VertexInfo temp;
+        List<LocEdge> shortestPath = new LinkedList<>();
         GraphPath<String, IdentifiedWeightedEdge> path = DijkstraShortestPath.findPathBetween(g, start, goal);
 
         double sumWeight = 0;
@@ -90,8 +91,8 @@ public class Utilities {
             double weight = g.getEdgeWeight(e);
             String id = e.getId();
             String street = eInfo.get(id).street;
-            String source = vInfo.get(g.getEdgeSource(e)).name;
-            String target = vInfo.get(g.getEdgeTarget(e)).name;
+            ZooData.VertexInfo source = vInfo.get(g.getEdgeSource(e));
+            ZooData.VertexInfo target = vInfo.get(g.getEdgeTarget(e));
 
             // we need to swap source or target if the edge we are going is opposite
             if (!current.equals(g.getEdgeSource(e))) {
@@ -104,7 +105,7 @@ public class Utilities {
                 current = g.getEdgeTarget(e);
             }
 
-            shortestPath.add(new LocEdge(id, weight, street, source, target));
+            shortestPath.add(new LocEdge(id, weight, street, source.name, source.id, target.name, target.id));
             sumWeight += weight;
         }
 
@@ -137,12 +138,10 @@ public class Utilities {
      * @param plannedLocItems List of LocItems within plan to find a route for
      * @return route from the planned exhibits as a HashMap of edges
      */
-    public static Pair<HashMap<String, List<LocEdge>>, HashMap<String, Double>>
-    findRoute(List<LocItem> plannedLocItems) {
+    public static RouteInfo findRoute(List<LocItem> plannedLocItems) {
 
         // the final route to return
-        HashMap<String, List<LocEdge>> paths = new HashMap<>();
-        HashMap<String, Double> distances = new HashMap<>();
+        RouteInfo routeInfo = new RouteInfo();
 
         // set up a list unvisited locations
         List<String> unvisited = new ArrayList<>();
@@ -159,7 +158,7 @@ public class Utilities {
             int minIndex = 0;
             String closest = "", target = "";
             double minDist = Double.MAX_VALUE;
-            List<LocEdge> minPath = new ArrayList<>();
+            List<LocEdge> minPath = new LinkedList<>();
 
             // loop through each other planned locations
             for (int i = 0; i < unvisited.size(); i++) {
@@ -183,29 +182,30 @@ public class Utilities {
             unvisited.remove(minIndex);
 
             // add the next path to paths and add the next distance to distances
-            paths.put(closest, minPath);
-            distances.put(closest, currDist);
+            routeInfo.addDirection(closest, minPath);
+            routeInfo.addDistance(closest, currDist);
         }
+
         String target = "entrance_exit_gate";
         Pair<List<LocEdge>, Double> pair = Utilities.findShortestPathBetween(current, target);
-        paths.put(target, pair.first);
+        routeInfo.addDirection(target, pair.first);
 
         currDist += pair.second;
-        distances.put(target, currDist);
+        routeInfo.addDistance(target, currDist);
 
-        return new Pair<>(paths, distances);
+        return routeInfo;
     }
 
     /**
      *
-     * @param route
+     * @param routeInfo
      * @param target
      * @param isBrief
      * @return
      */
-    public static List<LocEdge> findDirections(HashMap<String, List<LocEdge>> route, LocItem target, boolean isBrief) {
+    public static List<LocEdge> findDirections(RouteInfo routeInfo, LocItem target, boolean isBrief) {
         if (target == null) { return Collections.emptyList(); }
-        List<LocEdge> directions = route.get(target.id);
+        List<LocEdge> directions = routeInfo.getPath(target.id);
         if (!isBrief) { return directions; }
         return getBriefDirections(directions);
     }
@@ -222,7 +222,9 @@ public class Utilities {
         LocEdge firstPath = directions.get(0);
         String currStreet = firstPath.street;
         String source = firstPath.source;
+        String source_id = firstPath.source_id;
         String sink = firstPath.target;
+        String sink_id = firstPath.target_id;
         double streetWeight = 0;
 
         // loop through the directions and create brief direction
@@ -231,16 +233,18 @@ public class Utilities {
                 streetWeight += edge.weight;
             } else {
                 // add brief data into the new list
-                briefDirections.add(new LocEdge("", streetWeight, currStreet, source, edge.source));
+                briefDirections.add(new LocEdge("", streetWeight, currStreet, source, source_id, edge.source, edge.source_id));
                 currStreet = edge.street;
                 source = edge.source;
+                source_id = edge.source_id;
                 streetWeight = edge.weight;
                 sink = edge.target;
+                sink_id = edge.target_id;
             }
         }
 
         // for loop will not take care of the last item, thus we are adding it here
-        briefDirections.add(new LocEdge("", streetWeight, currStreet, source, sink));
+        briefDirections.add(new LocEdge("", streetWeight, currStreet, source, source_id, sink, sink_id));
         return briefDirections;
     }
 

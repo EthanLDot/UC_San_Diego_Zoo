@@ -1,15 +1,22 @@
 package com.example.zooseeker_team54;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
+
 
 /**
  * Activity to show the route of exhibits on our plan. Launched when "Plan" is clicked
@@ -20,10 +27,12 @@ public class ShowRouteActivity extends AppCompatActivity {
     private ViewModel viewModel;
     public RecyclerViewPresenter<LocItem> showRoutePresenter;
 
-    private HashMap<String, List<LocEdge>> route;
+    private RouteInfo routeInfo;
 
     private Button directionBtn;
     private Button backBtn;
+
+    private static final int ACTIVITY_CONSTANT = 1;
 
     /**
      * Create the activity from a given savedInstanceState and initialize everything
@@ -35,23 +44,41 @@ public class ShowRouteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route_plan);
         Intent intent = getIntent();
-        route = (HashMap<String, List<LocEdge>>) intent.getSerializableExtra("route");
+        routeInfo = (RouteInfo) intent.getSerializableExtra("routeInfo");
 
         viewModel = new ViewModelProvider(this).get(ViewModel.class);
 
         showRoutePresenter = new RecyclerViewPresenterBuilder<LocItem>()
-                .setAdapter(new ShowRouteAdapter())
+                .setAdapter(new ShowRouteAdapter(routeInfo))
                 .setRecyclerView(this.findViewById(R.id.planned_route))
                 .getRecyclerViewPresenter();
 
         viewModel.getAllPlannedUnvisitedLive()
-                .observe(this, showRoutePresenter::setItems);
+                .observe(this, this::setItems);
 
         directionBtn = findViewById(R.id.direction_btn);
         directionBtn.setOnClickListener(this::onDirectionBtnClicked);
 
         backBtn = findViewById(R.id.go_back_btn);
         backBtn.setOnClickListener(this::onBackButtonClicked);
+    }
+
+    /**
+     *
+     * @param locItems
+     */
+    public void setItems(List<LocItem> locItems) {
+        List<String> locations = locItems
+                .stream()
+                .map((locItem -> locItem.id))
+                .collect(Collectors.toList());
+
+        List<LocItem> sortedLocations = routeInfo.getSortedLocations(locations)
+                .stream()
+                .map((location) -> viewModel.getLocItemById(location))
+                .collect(Collectors.toList());
+
+        showRoutePresenter.setItems(sortedLocations);
     }
 
     /**
@@ -71,7 +98,7 @@ public class ShowRouteActivity extends AppCompatActivity {
     private void onDirectionBtnClicked(View view) {
 
         // user selection of brief display vs detailed display
-        LocItem target = viewModel.getNextUnvisitedExhibit();
+        String target = routeInfo.getCurrentTarget();
         Intent intent = new Intent(this, ShowDirectionActivity.class);
 
         // show an alert if target doesn't exist or is null
@@ -85,8 +112,25 @@ public class ShowRouteActivity extends AppCompatActivity {
         }
 
         //
-        intent.putExtra("route", route);
-        startActivity(intent);
+        intent.putExtra("routeInfo", routeInfo);
+        directionActivityResultLauncher.launch(intent);
     }
+
+    ActivityResultLauncher<Intent> directionActivityResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        // There are no request codes
+                        Intent data = result.getData();
+                        if (data.hasExtra("routeInfo")) {
+                            routeInfo = (RouteInfo) data.getSerializableExtra("routeInfo");
+                            ((ShowRouteAdapter) showRoutePresenter.getAdapter()).setRouteInfo(routeInfo);
+
+                        }
+                    }
+                }
+            });
 }
 

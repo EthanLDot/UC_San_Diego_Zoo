@@ -74,12 +74,12 @@ public class NextDirectionTests {
             List<LocItem> testItems = new ArrayList<>();
             testItems.add(lions);
             testItems.add(gators);
-            activity.plannedLocsPresenter.setItems(testItems);
+            activity.getPlannedLocsPresenter().setItems(testItems);
 
             activity.addPlannedLoc(lions);
             activity.addPlannedLoc(gators);
 
-            RouteInfo routeInfo = activity.findRoute(activity.plannedLocsPresenter.getItems());
+            RouteInfo routeInfo = activity.findRoute(activity.getPlannedLocsPresenter().getItems());
             routeDirectionIntent.putExtra("routeInfo", routeInfo);
         });
 

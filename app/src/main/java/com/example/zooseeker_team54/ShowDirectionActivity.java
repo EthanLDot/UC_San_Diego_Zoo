@@ -19,9 +19,11 @@ import java.util.List;
  */
 public class ShowDirectionActivity extends AppCompatActivity {
 
-    public RecyclerViewPresenter<LocEdge> routeDirectionPresenter;
-
     private ViewModel viewModel;
+    private RouteInfo routeInfo;
+    private LocationTracker locationTracker;
+    private RecyclerViewPresenter<LocEdge> routeDirectionPresenter;
+
 
     private Button nextBtn;
     private Button previousBtn;
@@ -29,11 +31,9 @@ public class ShowDirectionActivity extends AppCompatActivity {
     private Button settingsBtn;
     private Button skipBtn;
     private Button mockStep;
-
     private EditText mockRouteInput;
-    private RouteInfo routeInfo;
 
-    public LocationTracker locationTracker;
+
 
     /**
      * Create the activity from a given savedInstanceState and initialize everything
@@ -45,80 +45,100 @@ public class ShowDirectionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_direction);
         Intent intent = getIntent();
 
-        viewModel = new ViewModelProvider(this).get(ViewModel.class);
-
-        routeInfo = (RouteInfo) intent.getSerializableExtra("routeInfo");
-
-        // Create an adapter for the RecyclerView of route direction
-        routeDirectionPresenter = new RecyclerViewPresenterBuilder<LocEdge>()
-                .setAdapter(new ShowDirectionAdapter())
-                .setRecyclerView(findViewById(R.id.route_direction))
-                .getRecyclerViewPresenter();
-
-        if (getDirection().equals("backward") && routeInfo.getCurrentLocation().equals("entrance_exit_gate"))
-            setDirection("forward");
-
-        List<LocEdge> directions;
-        if (routeInfo == null) {
-            directions = Collections.emptyList();
+        // Initialize major fields
+        {
+            viewModel = new ViewModelProvider(this).get(ViewModel.class);
+            routeInfo = (RouteInfo) intent.getSerializableExtra("routeInfo");
+            locationTracker = new LocationTracker(this, false);
+            routeDirectionPresenter = new RecyclerViewPresenterBuilder<LocEdge>()
+                    .setAdapter(new ShowDirectionAdapter())
+                    .setRecyclerView(findViewById(R.id.route_direction))
+                    .getRecyclerViewPresenter();
         }
-        else if (getDirection().equals("forward")) {
-            directions = Utilities.findDirections(routeInfo, routeInfo.getCurrentTarget(), getIsBrief());
-        }
-        else {
-            directions = routeInfo.getReversedDirection(routeInfo.getCurrentLocation());
-        }
-        routeDirectionPresenter.setItems(directions);
 
-        // Initialize the next button
-        nextBtn = findViewById(R.id.next_btn);
-        nextBtn.setOnClickListener(this::onNextBtnClicked);
+        // set direction to forward if current location is entrance and direction is backward
+        {
+            if (getDirection().equals("backward") && routeInfo.getCurrentLocation().equals("entrance_exit_gate"))
+                setDirection("forward");
+        }
 
-        if (routeInfo == null) {
-            updateNextBtn(null, null);
+        // set recycler view presenter
+        {
+            List<LocEdge> directions;
+            if (routeInfo == null) {
+                directions = Collections.emptyList();
+            }
+            else if (getDirection().equals("forward")) {
+                directions = Utilities.findDirections(routeInfo, routeInfo.getCurrentTarget(), getIsBrief());
+            }
+            else {
+                directions = Utilities.findReversedDirections(routeInfo, routeInfo.getCurrentLocation(), getIsBrief());
+            }
+            routeDirectionPresenter.setItems(directions);
         }
-        else if (getDirection().equals("forward")) {
-            updateNextBtn(routeInfo.getCurrentTarget(), routeInfo.getNextTarget());
-        }
-        else {
-            updateNextBtn(routeInfo.getCurrentLocation(), routeInfo.getCurrentTarget());
+
+        // Initialize nextBtn
+        {
+            nextBtn = findViewById(R.id.next_btn);
+            nextBtn.setOnClickListener(this::onNextBtnClicked);
+
+            if (routeInfo == null) {
+                updateNextBtn(null, null);
+            }
+            else if (getDirection().equals("forward")) {
+                updateNextBtn(routeInfo.getCurrentTarget(), routeInfo.getNextTarget());
+            }
+            else {
+                updateNextBtn(routeInfo.getCurrentLocation(), routeInfo.getCurrentTarget());
+            }
         }
 
         // Initialize the back button
-        previousBtn = this.findViewById(R.id.previous_btn);
-        previousBtn.setOnClickListener(this::onPreviousBtnClicked);
+        {
+            previousBtn = this.findViewById(R.id.previous_btn);
+            previousBtn.setOnClickListener(this::onPreviousBtnClicked);
 
-        if (routeInfo == null) updatePreviousBtn(null);
-        else updatePreviousBtn(routeInfo.getCurrentLocation());
+            if (routeInfo == null) updatePreviousBtn(null);
+            else updatePreviousBtn(routeInfo.getCurrentLocation());
+        }
 
-        // Initialize the back button
-        backBtn = this.findViewById(R.id.back_to_plan);
-        backBtn.setOnClickListener(this::onBackToPlanBtnClicked);
+        // Initialize other components
+        {
+            // Initialize the back button
+            backBtn = this.findViewById(R.id.back_to_plan);
+            backBtn.setOnClickListener(this::onBackToPlanBtnClicked);
 
-        // Initialize the settings button
-        settingsBtn = this.findViewById(R.id.settings_button);
-        settingsBtn.setOnClickListener(this::onSettingsClicked);
+            // Initialize the settings button
+            settingsBtn = this.findViewById(R.id.settings_button);
+            settingsBtn.setOnClickListener(this::onSettingsClicked);
 
-        // Initialize the mock route input
-        mockRouteInput = this.findViewById(R.id.mock_route_input);
+            // Initialize the mock route input
+            mockRouteInput = this.findViewById(R.id.mock_route_input);
 
-        // Initialize the start mock button
-        mockStep = this.findViewById(R.id.start_mock);
-        mockStep.setOnClickListener(this::onMockStepClicked);
+            // Initialize the start mock button
+            mockStep = this.findViewById(R.id.start_mock);
+            mockStep.setOnClickListener(this::onMockStepClicked);
 
-        //Initialize the skip button
-        skipBtn = this.findViewById(R.id.skip_btn);
-        skipBtn.setOnClickListener(this::onSkipBtnClicked);
+            //Initialize the skip button
+            skipBtn = this.findViewById(R.id.skip_btn);
+            skipBtn.setOnClickListener(this::onSkipBtnClicked);
+        }
 
-        // Initialize Location Tracker
-        locationTracker = new LocationTracker(this, false);
+    }
+
+    /**
+     *
+     * @return
+     */
+    public RecyclerViewPresenter<LocEdge> getRouteDirectionPresenter() {
+        return routeDirectionPresenter;
     }
 
     /**
      *
      * @param view
      */
-    public void onNextBtnClicked(View view) {
+    private void onNextBtnClicked(View view) {
 
         if (!getDirection().equals("forward")) {
             setDirection("forward");
@@ -145,7 +165,7 @@ public class ShowDirectionActivity extends AppCompatActivity {
      * @param currTarget
      * @param nextTarget
      */
-    public void updateNextBtn(String currTarget, String nextTarget) {
+    private void updateNextBtn(String currTarget, String nextTarget) {
         String buttonText;
         LocItem nextLocItem = viewModel.getLocItemById(nextTarget);
 
@@ -166,11 +186,11 @@ public class ShowDirectionActivity extends AppCompatActivity {
      *
      * @param view
      */
-    public void onPreviousBtnClicked(View view) {
+    private void onPreviousBtnClicked(View view) {
         if (!getDirection().equals("backward")) {
             setDirection("backward");
             String currentLocation = routeInfo.getCurrentLocation();
-            List<LocEdge> directions = routeInfo.getReversedDirection(currentLocation);
+            List<LocEdge> directions = Utilities.findReversedDirections(routeInfo, currentLocation, getIsBrief());
             routeDirectionPresenter.setItems(directions);
         }
         else {
@@ -179,7 +199,7 @@ public class ShowDirectionActivity extends AppCompatActivity {
             routeInfo.arrivePreviousLocation();
 
             currentLocation = routeInfo.getCurrentLocation();
-            List<LocEdge> directions = routeInfo.getReversedDirection(currentLocation);
+            List<LocEdge> directions = Utilities.findReversedDirections(routeInfo, currentLocation, getIsBrief());
             routeDirectionPresenter.setItems(directions);
         }
         updateNextBtn(routeInfo.getCurrentLocation(), routeInfo.getCurrentTarget());
@@ -190,7 +210,7 @@ public class ShowDirectionActivity extends AppCompatActivity {
      *
      * @param currentLocation
      */
-    public void updatePreviousBtn(String currentLocation) {
+    private void updatePreviousBtn(String currentLocation) {
         if (currentLocation == null || currentLocation.equals("entrance_exit_gate") ||
                 (currentLocation.equals(routeInfo.getSortedLocations(routeInfo.getLocations()).get(0)) &&
                 getDirection().equals("backward"))) {

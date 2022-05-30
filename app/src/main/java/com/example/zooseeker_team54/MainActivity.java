@@ -30,16 +30,16 @@ import java.util.stream.Collectors;
  * Class to represent the functionality of the MainActivity that is displayed on launch of our app
  */
 public class MainActivity extends AppCompatActivity {
-    public RecyclerViewPresenter<LocItem> searchResultPresenter;
-    public RecyclerViewPresenter<LocItem> plannedLocsPresenter;
+
+    private ViewModel viewModel;
+    private RecyclerViewPresenter<LocItem> searchResultPresenter;
+    private RecyclerViewPresenter<LocItem> plannedLocsPresenter;
 
     private TextView planSizeText;
     private AutoCompleteTextView searchBarText;
 
     private Button clearBtn;
     private Button planBtn;
-
-    private ViewModel viewModel;
 
     /**
      * Text Watcher for search bar textview
@@ -193,4 +193,8 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("routeInfo", routeInfo);
         startActivity(intent);
     }
+
+    public RecyclerViewPresenter<LocItem> getSearchResultPresenter() { return searchResultPresenter; }
+
+    public RecyclerViewPresenter<LocItem> getPlannedLocsPresenter() { return plannedLocsPresenter; }
 }

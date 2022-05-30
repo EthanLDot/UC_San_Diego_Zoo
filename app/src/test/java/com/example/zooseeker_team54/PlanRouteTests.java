@@ -48,7 +48,7 @@ public class PlanRouteTests {
 
         scenario.onActivity(activity -> {
             Utilities.loadOldZooJson(activity);
-            List<LocItem> selectedExhibits = activity.plannedLocsPresenter.getItems();
+            List<LocItem> selectedExhibits = activity.getPlannedLocsPresenter().getItems();
             RouteInfo routeInfo = activity.findRoute(selectedExhibits);
             assertEquals(0, selectedExhibits.size());
             assertEquals(1, routeInfo.getLocations().size());
@@ -67,15 +67,15 @@ public class PlanRouteTests {
             String query = "gorillas";
             EditText searchBarText = activity.findViewById(R.id.search_bar);
             searchBarText.setText(query);
-            List<LocItem> searchResults = activity.searchResultPresenter.getItems();
+            List<LocItem> searchResults = activity.getSearchResultPresenter().getItems();
 
             List<LocItem> selectedExhibits = new ArrayList<>();
             selectedExhibits.add(searchResults.get(0));
             assertEquals(1, selectedExhibits.size());
 
-            activity.plannedLocsPresenter.setItems(selectedExhibits);
-            assertEquals(1, activity.plannedLocsPresenter.getItemCount());
-            List<LocItem> locsAdapterContents = activity.plannedLocsPresenter.getItems();
+            activity.getPlannedLocsPresenter().setItems(selectedExhibits);
+            assertEquals(1, activity.getPlannedLocsPresenter().getItemCount());
+            List<LocItem> locsAdapterContents = activity.getPlannedLocsPresenter().getItems();
             assertEquals(1, locsAdapterContents.size());
             assertEquals("Loc {id=gorillas, name='Gorillas', planned=false, visited=false}", locsAdapterContents.get(0).toString());
 
@@ -101,7 +101,7 @@ public class PlanRouteTests {
             String query = "alligators";
             EditText searchBarText = activity.findViewById(R.id.search_bar);
             searchBarText.setText(query);
-            List<LocItem> searchResults = activity.searchResultPresenter.getItems();
+            List<LocItem> searchResults = activity.getSearchResultPresenter().getItems();
 
             List<LocItem> selectedExhibits = new ArrayList<>();
             selectedExhibits.add(searchResults.get(0));
@@ -110,12 +110,12 @@ public class PlanRouteTests {
             query = "lions";
             searchBarText.setText(query);
 
-            selectedExhibits.add(activity.searchResultPresenter.getItems().get(0));
+            selectedExhibits.add(activity.getSearchResultPresenter().getItems().get(0));
             assertEquals(2, selectedExhibits.size());
 
-            activity.plannedLocsPresenter.setItems(selectedExhibits);
-            assertEquals(2, activity.plannedLocsPresenter.getItemCount());
-            List<LocItem> locsAdapterContents = activity.plannedLocsPresenter.getItems();
+            activity.getPlannedLocsPresenter().setItems(selectedExhibits);
+            assertEquals(2, activity.getPlannedLocsPresenter().getItemCount());
+            List<LocItem> locsAdapterContents = activity.getPlannedLocsPresenter().getItems();
             assertEquals(2, locsAdapterContents.size());
 
             assertEquals("Loc {id=gators, name='Alligators', planned=false, visited=false}", locsAdapterContents.get(0).toString());

@@ -211,6 +211,20 @@ public class Utilities {
 
     /**
      *
+     * @param routeInfo
+     * @param target
+     * @param isBrief
+     * @return
+     */
+    public static List<LocEdge> findReversedDirections(RouteInfo routeInfo, String target, boolean isBrief) {
+        if (target == null) { return Collections.emptyList(); }
+        List<LocEdge> directions = routeInfo.getReversedDirection(target);
+        if (!isBrief) { return directions; }
+        return getBriefDirections(directions);
+    }
+
+    /**
+     *
      * @param directions
      * @return
      */

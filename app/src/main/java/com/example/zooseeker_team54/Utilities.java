@@ -138,7 +138,7 @@ public class Utilities {
      * @param unvisitedLocItems List of LocItems within plan to find a route for
      * @return route from the planned exhibits as a HashMap of edges
      */
-    public static RouteInfo findRoute(List<LocItem> unvisitedLocItems,  Pair<String, String> latLng) {
+    public static RouteInfo findRoute(List<LocItem> unvisitedLocItems, Coord latLng) {
 
         // the final route to return
         RouteInfo routeInfo = new RouteInfo();
@@ -195,6 +195,17 @@ public class Utilities {
         routeInfo.addDistance(target, currDist);
 
         return routeInfo;
+    }
+
+    // TODO: implement this
+    /**
+     *
+     * @param unvisitedLocItems
+     * @param latLng
+     * @return
+     */
+    public static String findClosestExhibit(List<LocItem> unvisitedLocItems, Coord latLng) {
+        return "entrance_exit_gate";
     }
 
     /**

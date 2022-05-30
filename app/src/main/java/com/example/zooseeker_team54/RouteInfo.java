@@ -87,13 +87,8 @@ public class RouteInfo implements Serializable {
      * @return List of locations on the route as strings
      */
     public List<String> getLocations() {
-        List<String> locations = new ArrayList<>();
-        Map<String, Double> sortedMap = sortByValue(distances);
         // iterate through our sorted map
-        for (String location : sortedMap.keySet()) {
-            locations.add(location);
-        }
-        return locations;
+        return sortLocations(new ArrayList<>(distances.keySet()));
     }
 
     /**

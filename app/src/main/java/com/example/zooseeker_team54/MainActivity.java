@@ -21,6 +21,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -57,8 +59,8 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    // TODO: figure what should happen if a plan is there but users modify the plan in main
 
+    // TODO: figure what should happen if a plan is there but users modify the plan in main
     /**
      * Create the activity from a given savedInstanceState and initialize everything
      * @param savedInstanceState the saved instance from before
@@ -114,6 +116,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public RecyclerViewPresenter<LocItem> getSearchResultPresenter() { return searchResultPresenter; }
+
+    public RecyclerViewPresenter<LocItem> getPlannedLocsPresenter() { return plannedLocsPresenter; }
+
     /**
      * Finds route from a given list of LocItems
      * @param plannedLocItems List of LocItems to find a route for
@@ -123,8 +129,8 @@ public class MainActivity extends AppCompatActivity {
         return findRoute(plannedLocItems, getCoord());
     }
 
-    private RouteInfo findRoute(List<LocItem> unvisitedLocItems, Pair<String, String> latLng) {
-        RouteInfo routeInfo = Utilities.findRoute(unvisitedLocItems, latLng);
+    private RouteInfo findRoute(List<LocItem> unvisitedLocItems, Coord coord) {
+        RouteInfo routeInfo = Utilities.findRoute(unvisitedLocItems, coord);
 
         // Skip the ones that are visited
         for (String currTarget = routeInfo.getCurrentTarget(); currTarget != null && viewModel.getLocItemById(currTarget).visited; currTarget = routeInfo.getCurrentTarget())
@@ -198,7 +204,29 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public RecyclerViewPresenter<LocItem> getSearchResultPresenter() { return searchResultPresenter; }
+    /**
+     *
+     * @return
+     */
+    private Coord getCoord() {
+        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        Gson gson = new Gson();
+        Coord DEFAULT_COORD = viewModel.getLocItemById("entrance_exit_gate").getCoord();;
+        String json = preferences.getString("coord", gson.toJson(DEFAULT_COORD));
+        Coord coord = gson.fromJson(json, Coord.class);
+        return coord;
+    }
 
-    public RecyclerViewPresenter<LocItem> getPlannedLocsPresenter() { return plannedLocsPresenter; }
+    /**
+     *
+     * @param coord
+     */
+    private void setCoord(Coord coord) {
+        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(coord);
+        editor.putString("coord", json);
+        editor.apply();
+    }
 }

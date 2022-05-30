@@ -39,11 +39,10 @@ public class LocItem implements Serializable {
     public long pk_id;
 
     // member variables of LocItem
-    @NonNull
-    public String name, kind, id;
+    public String name, kind, id, group_id;
     public boolean planned, visited;
+    public double  lat, lng;
     public List<String> tags;
-//    public double currDist;
 
     /**
      * Gets the representation of the LocItem as a string
@@ -57,7 +56,6 @@ public class LocItem implements Serializable {
                 ", name='" + name +
                 "', planned=" + planned +
                 ", visited=" + visited +
-//                ", current distance=" + currDist +
                 '}';
     }
 
@@ -68,23 +66,17 @@ public class LocItem implements Serializable {
      * @param kind  the kind of LocItem it is
      * @param tags  List of tags for the LocItem
      */
-    LocItem(@NonNull String name, String id, String kind, List<String> tags) {
+    LocItem(@NonNull String name, String id, String group_id, Double lat, Double lng, String kind, List<String> tags) {
         this.name = name;
         this.kind = kind;
         this.id = id;
         this.tags = tags;
+        this.group_id = group_id;
+        this.lat = lat;
+        this.lng = lng;
         this.planned = false;
         this.visited = false;
-//        this.currDist = 0;
     }
-
-//    /**
-//     * Getter method for the current distance as a string
-//     * @return  current distance of the LocItem
-//     */
-//    public String getCurrDist() {
-//        return String.format("- %.0f meters", currDist);
-//    }
 
     /**
      * Return a list of LocItems loaded from a JSON file
@@ -103,5 +95,9 @@ public class LocItem implements Serializable {
             e.printStackTrace();
             return Collections.emptyList();
         }
+    }
+
+    public Coord getCoord() {
+        return Coord.of(lat, lng);
     }
 }

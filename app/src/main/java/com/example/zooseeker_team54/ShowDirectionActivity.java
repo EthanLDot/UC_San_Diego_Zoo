@@ -55,15 +55,18 @@ public class ShowDirectionActivity extends AppCompatActivity {
                 .setRecyclerView(findViewById(R.id.route_direction))
                 .getRecyclerViewPresenter();
 
+        if (getDirection().equals("backward") && routeInfo.getCurrentLocation().equals("entrance_exit_gate"))
+            setDirection("forward");
+
         List<LocEdge> directions;
         if (routeInfo == null) {
             directions = Collections.emptyList();
         }
-        else {
+        else if (getDirection().equals("forward")) {
             directions = Utilities.findDirections(routeInfo, routeInfo.getCurrentTarget(), getIsBrief());
-            if (getDirection().equals("backward")) {
-                directions = routeInfo.getReversedDirection(routeInfo.getCurrentLocation());
-            }
+        }
+        else {
+            directions = routeInfo.getReversedDirection(routeInfo.getCurrentLocation());
         }
         routeDirectionPresenter.setItems(directions);
 

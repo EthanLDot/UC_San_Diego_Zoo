@@ -107,13 +107,7 @@ public class BriefDetailedTest {
         materialButton2.perform(click());
 
         ViewInteraction materialButton3 = onView(
-                allOf(withId(R.id.settings_button),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                3),
-                        isDisplayed()));
+                allOf(withId(R.id.settings_button)));
         materialButton3.perform(click());
 
         ViewInteraction button = onView(
@@ -143,13 +137,7 @@ public class BriefDetailedTest {
         materialButton5.perform(click());
 
         ViewInteraction materialButton6 = onView(
-                allOf(withId(R.id.settings_button),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                3),
-                        isDisplayed()));
+                allOf(withId(R.id.settings_button)));
         materialButton6.perform(click());
 
         ViewInteraction button2 = onView(
@@ -202,13 +190,7 @@ public class BriefDetailedTest {
         materialButton2.perform(click());
 
         ViewInteraction materialButton3 = onView(
-                allOf(withId(R.id.settings_button),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                3),
-                        isDisplayed()));
+                allOf(withId(R.id.settings_button)));
         materialButton3.perform(click());
 
         ViewInteraction materialButton4 = onView(
@@ -232,13 +214,7 @@ public class BriefDetailedTest {
         materialButton5.perform(click());
 
         ViewInteraction materialButton6 = onView(
-                allOf(withId(R.id.settings_button),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                3),
-                        isDisplayed()));
+                allOf(withId(R.id.settings_button)));
         materialButton6.perform(click());
 
         ViewInteraction materialButton7 = onView(
@@ -262,13 +238,7 @@ public class BriefDetailedTest {
         materialButton8.perform(click());
 
         ViewInteraction materialButton9 = onView(
-                allOf(withId(R.id.settings_button),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                3),
-                        isDisplayed()));
+                allOf(withId(R.id.settings_button)));
         materialButton9.perform(click());
 
         ViewInteraction button = onView(

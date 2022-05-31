@@ -149,10 +149,10 @@ public class PreviousButtonUITest {
         materialButton5.perform(click());
 
         ViewInteraction textView = onView(
-                allOf(withId(R.id.direction), withText("Proceed on 'Monkey Trail' 3100 meters towards 'Flamingos' from 'Capuchin Monkeys'.\n"),
+                allOf(withId(R.id.direction), withText("Proceed on 'Monkey Trail' 3100 feet towards 'Flamingos' from 'Capuchin Monkeys'.\n"),
                         withParent(withParent(withId(R.id.route_direction))),
                         isDisplayed()));
-        textView.check(matches(withText("Proceed on 'Monkey Trail' 3100 meters towards 'Flamingos' from 'Capuchin Monkeys'.\n")));
+        textView.check(matches(withText("Proceed on 'Monkey Trail' 3100 feet towards 'Flamingos' from 'Capuchin Monkeys'.\n")));
 
         ViewInteraction button = onView(
                 allOf(withId(R.id.next_btn), withText("NEXT\n------\nCROCODILES, 3800"),
@@ -171,16 +171,16 @@ public class PreviousButtonUITest {
         materialButton6.perform(click());
 
         ViewInteraction textView2 = onView(
-                allOf(withId(R.id.direction), withText("Proceed on 'Monkey Trail' 1500 meters towards 'Front Street / Monkey Trail' from 'Flamingos'.\n"),
+                allOf(withId(R.id.direction), withText("Proceed on 'Monkey Trail' 1500 feet towards 'Front Street / Monkey Trail' from 'Flamingos'.\n"),
                         withParent(withParent(withId(R.id.route_direction))),
                         isDisplayed()));
-        textView2.check(matches(withText("Proceed on 'Monkey Trail' 1500 meters towards 'Front Street / Monkey Trail' from 'Flamingos'.\n")));
+        textView2.check(matches(withText("Proceed on 'Monkey Trail' 1500 feet towards 'Front Street / Monkey Trail' from 'Flamingos'.\n")));
 
         ViewInteraction textView3 = onView(
-                allOf(withId(R.id.direction), withText("Proceed on 'Gate Path' 1100 meters towards 'Entrance and Exit Gate' from 'Front Street / Treetops Way'.\n"),
+                allOf(withId(R.id.direction), withText("Proceed on 'Gate Path' 1100 feet towards 'Entrance and Exit Gate' from 'Front Street / Treetops Way'.\n"),
                         withParent(withParent(withId(R.id.route_direction))),
                         isDisplayed()));
-        textView3.check(matches(withText("Proceed on 'Gate Path' 1100 meters towards 'Entrance and Exit Gate' from 'Front Street / Treetops Way'.\n")));
+        textView3.check(matches(withText("Proceed on 'Gate Path' 1100 feet towards 'Entrance and Exit Gate' from 'Front Street / Treetops Way'.\n")));
     }
 
     private static Matcher<View> childAtPosition(

@@ -202,9 +202,20 @@ public class RouteInfo implements Serializable {
     public void removeCurrentTarget() {
         String currentTarget = getCurrentTarget();
         if (currentTarget == null) return;
-        directions.remove(currentTarget);
-        distances.remove(currentTarget);
-        groupIds.remove(currentTarget);
+
+        if (!groupIds.containsKey(currentTarget)) {
+            directions.remove(currentTarget);
+            distances.remove(currentTarget);
+            groupIds.remove(currentTarget);
+            return;
+        }
+
+        List<String> ids = getIdsWithGroupId(groupIds.get(currentTarget));
+        for (String id : ids) {
+            directions.remove(id);
+            distances.remove(id);
+            groupIds.remove(id);
+        }
     }
 
     public void updateTheRest(RouteInfo routeForTheRest) {

@@ -148,11 +148,7 @@ public class MainActivity extends AppCompatActivity {
      * @return HashMap of the route to be displayed
      */
     public RouteInfo findRoute(List<LocItem> plannedLocItems) {
-        return findRoute(plannedLocItems, getCoord());
-    }
-
-    private RouteInfo findRoute(List<LocItem> unvisitedLocItems, Coord coord) {
-        RouteInfo routeInfo = Utilities.findRoute(unvisitedLocItems, coord, viewModel.getAllVisited().size() == 0);
+        RouteInfo routeInfo = Utilities.findRoute(plannedLocItems, viewModel.getLocItemById("entrance_exit_gate"), viewModel.getAllVisited().size() == 0);
 
         // Skip the ones that are visited
         for (String currTarget = routeInfo.getCurrentTarget(); currTarget != null && viewModel.getLocItemById(currTarget).visited; currTarget = routeInfo.getCurrentTarget())
@@ -162,6 +158,18 @@ public class MainActivity extends AppCompatActivity {
         viewModel.addPlannedLoc(targetLocItem);
         return routeInfo;
     }
+
+//    private RouteInfo findRoute(List<LocItem> unvisitedLocItems, Coord coord) {
+//        RouteInfo routeInfo = Utilities.findRoute(unvisitedLocItems, coord, viewModel.getAllVisited().size() == 0);
+//
+//        // Skip the ones that are visited
+//        for (String currTarget = routeInfo.getCurrentTarget(); currTarget != null && viewModel.getLocItemById(currTarget).visited; currTarget = routeInfo.getCurrentTarget())
+//            routeInfo.arriveCurrentTarget();
+//
+//        LocItem targetLocItem = viewModel.getLocItemById("entrance_exit_gate");
+//        viewModel.addPlannedLoc(targetLocItem);
+//        return routeInfo;
+//    }
 
     /**
      * Removes the given LocItem from the viewModel

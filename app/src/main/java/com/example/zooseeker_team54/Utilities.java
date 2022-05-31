@@ -141,7 +141,7 @@ public class Utilities {
      * @param unvisitedLocItems List of LocItems within plan to find a route for
      * @return route from the planned exhibits as a HashMap of edges
      */
-    public static RouteInfo findRoute(List<LocItem> unvisitedLocItems, Coord coord, boolean startFromEntrance) {
+    public static RouteInfo findRoute(List<LocItem> unvisitedLocItems, LocItem locItem, boolean startFromEntrance) {
 
         if (unvisitedLocItems.size() == 0) {
             RouteInfo routeInfo = new RouteInfo();
@@ -155,7 +155,7 @@ public class Utilities {
 
         //
         Map<String, LocItem> info = new HashMap<>();
-        unvisitedLocItems.forEach((locItem) -> info.put(locItem.id, locItem));
+        unvisitedLocItems.forEach((l) -> info.put(l.id, l));
 
         // set up a list unvisited locations
         List<String> unvisited = new ArrayList<>();
@@ -163,7 +163,8 @@ public class Utilities {
 
         // start at the entrance of the zoo
         double currDist = 0;
-        String current = startFromEntrance ? "entrance_exit_gate" : findClosestExhibitId(unvisitedLocItems, coord);
+        String current = startFromEntrance ? "entrance_exit_gate" : locItem.id;
+//        String current = startFromEntrance ? "entrance_exit_gate" : findClosestExhibitId(unvisitedLocItems, locItem.getCoord());
 
         // while there are still unvisited locations, find the closest to the last added one, and add it to the route
         while (unvisited.size() > 0) {

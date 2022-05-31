@@ -10,6 +10,8 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.Collections;
 import java.util.List;
@@ -293,10 +295,17 @@ public class ShowDirectionActivity extends AppCompatActivity {
         viewModel.removePlannedLoc(viewModel.getLocItemById(target));
         routeInfo.removeCurrentTarget();
 
-        RouteInfo newPlanForUnvisitedLocations = Utilities.findRoute(viewModel.getAllPlannedUnvisited(), viewModel.getLocItemById(routeInfo.getCurrentLocation()).getCoord(), viewModel.getAllVisited().size() == 0);
-        routeInfo.updateTheRest(newPlanForUnvisitedLocations);
+        String currentLocation = routeInfo.getCurrentLocation();
+        if (currentLocation.equals("entrance_exit_gate")) {
+            routeInfo = Utilities.findRoute(viewModel.getAllPlannedUnvisited(), viewModel.getLocItemById("entrance_exit_gate"), true);
+        }
+        else {
+            RouteInfo newPlanForUnvisitedLocations = Utilities.findRoute(viewModel.getAllPlannedUnvisited(), viewModel.getLocItemById(currentLocation), false);
+            routeInfo.updateTheRest(newPlanForUnvisitedLocations);
+        }
 
-        routeDirectionPresenter.setItems(routeInfo.getDirection(routeInfo.getCurrentTarget()));
+        List<LocEdge> directions = routeInfo.getDirection(routeInfo.getCurrentTarget());
+        routeDirectionPresenter.setItems(directions);
         updateNextBtn(routeInfo.getCurrentTarget(), routeInfo.getNextTarget());
         updateSkipBtn();
     }

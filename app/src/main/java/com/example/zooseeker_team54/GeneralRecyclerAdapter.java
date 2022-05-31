@@ -32,7 +32,6 @@ public abstract class GeneralRecyclerAdapter<T> extends RecyclerView.Adapter<Gen
     public List<T> getItems() { return items; }
 
     public void setItems(List<T> newItems) {
-        this.items.clear();
         this.items = newItems;
         notifyDataSetChanged();
     }

@@ -141,7 +141,7 @@ public class Utilities {
      * @param unvisitedLocItems List of LocItems within plan to find a route for
      * @return route from the planned exhibits as a HashMap of edges
      */
-    public static RouteInfo findRoute(List<LocItem> unvisitedLocItems, LocItem locItem, boolean startFromEntrance) {
+    public static RouteInfo findRoute(List<LocItem> unvisitedLocItems, Coord coord, boolean startFromEntrance) {
 
         if (unvisitedLocItems.size() == 0) {
             RouteInfo routeInfo = new RouteInfo();
@@ -163,7 +163,7 @@ public class Utilities {
 
         // start at the entrance of the zoo
         double currDist = 0;
-        String current = startFromEntrance ? "entrance_exit_gate" : locItem.id;
+        String current = startFromEntrance ? "entrance_exit_gate" : findClosestExhibitId(unvisitedLocItems, coord);
 //        String current = startFromEntrance ? "entrance_exit_gate" : findClosestExhibitId(unvisitedLocItems, locItem.getCoord());
 
         // while there are still unvisited locations, find the closest to the last added one, and add it to the route
@@ -237,12 +237,8 @@ public class Utilities {
      * @return
      */
     public static String findClosestExhibitId(List<LocItem> unvisitedLocItems, Coord coord) {
-        return unvisitedLocItems
-                .stream()
-                .reduce((locItem1, locItem2) ->
-                        Coord.distanceBetweenTwoCoords(locItem1.getCoord(), coord) < Coord.distanceBetweenTwoCoords(locItem2.getCoord(), coord) ?
-                        locItem1 : locItem2)
-                .get().id;
+        // TODO: implement this
+        return unvisitedLocItems.get(0).id;
     }
 
     /**

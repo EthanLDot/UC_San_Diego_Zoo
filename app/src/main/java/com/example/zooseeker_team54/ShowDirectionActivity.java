@@ -14,6 +14,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -50,6 +52,8 @@ public class ShowDirectionActivity extends AppCompatActivity {
             viewModel = new ViewModelProvider(this).get(ViewModel.class);
             routeInfo = (RouteInfo) intent.getSerializableExtra("routeInfo");
             locationTracker = new LocationTracker(this, false);
+            locationTracker.mockLocation(getCoord());
+            locationTracker.getUserCoordLive().observe(this, this::detectOffRoute);
             routeDirectionPresenter = new RecyclerViewPresenterBuilder<LocEdge>()
                     .setAdapter(new ShowDirectionAdapter())
                     .setRecyclerView(findViewById(R.id.route_direction))
@@ -129,6 +133,33 @@ public class ShowDirectionActivity extends AppCompatActivity {
 
     /**
      *
+     * @param coord
+     */
+    private void detectOffRoute(Coord coord) {
+        String currentTarget = routeInfo.getCurrentTarget();
+        LocItem targetLocItem = viewModel.getLocItemById(currentTarget);
+        Double threshold = Coord.distanceBetweenTwoCoords(coord, targetLocItem.getCoord());
+
+        List<LocItem> unvisitedLocItems = viewModel.getAllPlannedUnvisited();
+        for (LocItem locItem : unvisitedLocItems) {
+            if (Coord.distanceBetweenTwoCoords(coord, locItem.getCoord()) < threshold) {
+                if (askForReroute()) {
+                    routeInfo = Utilities.findRoute(unvisitedLocItems, coord, false);
+                }
+            }
+        }
+    }
+
+    /**
+     *
+     */
+    public boolean askForReroute() {
+        return true;
+    }
+
+
+    /**
+     *
      * @return
      */
     public RecyclerViewPresenter<LocEdge> getRouteDirectionPresenter() {
@@ -145,7 +176,13 @@ public class ShowDirectionActivity extends AppCompatActivity {
             setDirection("forward");
         } else {
             String arrivedLocation = routeInfo.getCurrentTarget();
-            viewModel.addVisitedLoc(viewModel.getLocItemById(arrivedLocation));
+            LocItem arrivedLocItem = viewModel.getLocItemById(arrivedLocation);
+            viewModel.addVisitedLoc(arrivedLocItem);
+
+            if (arrivedLocItem.group_id != null)
+                locationTracker.mockLocation(viewModel.getLocItemById(arrivedLocItem.group_id).getCoord());
+            else
+                locationTracker.mockLocation(viewModel.getLocItemById(arrivedLocation).getCoord());
 
             String groupId = routeInfo.getGroupId(arrivedLocation);
             if (groupId != null) {
@@ -178,7 +215,13 @@ public class ShowDirectionActivity extends AppCompatActivity {
         }
         else {
             String arrivedLocation = routeInfo.getCurrentLocation();
-            viewModel.removeVisitedLoc(viewModel.getLocItemById(arrivedLocation));
+            LocItem arrivedLocItem = viewModel.getLocItemById(arrivedLocation);
+            viewModel.removeVisitedLoc(arrivedLocItem);
+
+            if (arrivedLocItem.group_id != null)
+                locationTracker.mockLocation(viewModel.getLocItemById(arrivedLocItem.group_id).getCoord());
+            else
+                locationTracker.mockLocation(viewModel.getLocItemById(arrivedLocation).getCoord());
 
             String groupId = routeInfo.getGroupId(arrivedLocation);
             if (groupId != null) {
@@ -240,8 +283,7 @@ public class ShowDirectionActivity extends AppCompatActivity {
         }
     }
 
-    private void updateSkipBtn()
-    {
+    private void updateSkipBtn() {
         if(routeInfo != null) {
             String currTarget = routeInfo.getCurrentTarget();
             String nextTarget = routeInfo.getNextTarget();
@@ -264,6 +306,7 @@ public class ShowDirectionActivity extends AppCompatActivity {
         data.putExtra("routeInfo", routeInfo);
         // Activity finished ok, return the data
         setResult(RESULT_OK, data);
+        setCoord(getCoord());
         finish();
     }
 
@@ -307,7 +350,7 @@ public class ShowDirectionActivity extends AppCompatActivity {
             routeInfo.addDistance("entrance_exit_gate", pair.second);
         }
         else {
-            RouteInfo newPlanForUnvisitedLocations = Utilities.findRoute(viewModel.getAllPlannedUnvisited(), viewModel.getLocItemById(currentLocation), false);
+            RouteInfo newPlanForUnvisitedLocations = Utilities.findRoute(viewModel.getAllPlannedUnvisited(), viewModel.getLocItemById(currentLocation).getCoord(), false);
             routeInfo.updateTheRest(newPlanForUnvisitedLocations);
         }
 
@@ -343,4 +386,32 @@ public class ShowDirectionActivity extends AppCompatActivity {
         editor.putString("direction", direction);
         editor.apply();
     }
+
+
+    /**
+     *
+     * @return
+     */
+    private Coord getCoord() {
+        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        Gson gson = new Gson();
+        Coord DEFAULT_COORD = viewModel.getLocItemById("entrance_exit_gate").getCoord();
+        String json = preferences.getString("coord", gson.toJson(DEFAULT_COORD));
+        Coord coord = gson.fromJson(json, Coord.class);
+        return coord;
+    }
+
+    /**
+     *
+     * @param coord
+     */
+    private void setCoord(Coord coord) {
+        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(coord);
+        editor.putString("coord", json);
+        editor.apply();
+    }
+
 }

@@ -36,7 +36,7 @@ public class LocEdge implements Serializable {
      */
     @Override
     public String toString() {
-        return String.format("Proceed on '%s' %.0f meters towards '%s' from '%s'.\n",
+        return String.format("Proceed on '%s' %.0f feet towards '%s' from '%s'.\n",
                 street, weight, target, source);
     }
 

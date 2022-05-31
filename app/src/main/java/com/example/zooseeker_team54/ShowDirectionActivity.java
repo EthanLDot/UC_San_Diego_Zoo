@@ -130,6 +130,8 @@ public class ShowDirectionActivity extends AppCompatActivity {
 
     }
 
+    public LocationTracker getLocationTracker() { return locationTracker; }
+
     /**
      *
      * @param coord
@@ -141,9 +143,17 @@ public class ShowDirectionActivity extends AppCompatActivity {
 
         List<LocItem> unvisitedLocItems = viewModel.getAllPlannedUnvisited();
         for (LocItem locItem : unvisitedLocItems) {
+
+            // if the location is in a group, we want to find the route to its group instead.
+            if (locItem.group_id != null) {
+                locItem = viewModel.getLocItemById(locItem.group_id);
+            }
+
             if (Coord.distanceBetweenTwoCoords(coord, locItem.getCoord()) < threshold) {
                 if (askForReroute()) {
-                    routeInfo = Utilities.findRoute(unvisitedLocItems, coord, false);
+                    String startLocation = Utilities.findClosestExhibitId(viewModel.getAllNonGroup(), coord);
+                    RouteInfo newPlanForUnvisitedLocations = Utilities.findRoute(unvisitedLocItems, coord, startLocation);
+                    routeInfo.updateTheRest(newPlanForUnvisitedLocations);
                 }
             }
         }
@@ -155,7 +165,6 @@ public class ShowDirectionActivity extends AppCompatActivity {
     public boolean askForReroute() {
         return true;
     }
-
 
     /**
      *
@@ -340,10 +349,10 @@ public class ShowDirectionActivity extends AppCompatActivity {
 
         String currentLocation = routeInfo.getCurrentLocation();
         if (currentLocation.equals("entrance_exit_gate")) {
-            routeInfo = Utilities.findRoute(viewModel.getAllPlannedUnvisited(), viewModel.getLocItemById("entrance_exit_gate").getCoord(), true);
+            routeInfo = Utilities.findRoute(viewModel.getAllPlannedUnvisited(), viewModel.getLocItemById("entrance_exit_gate").getCoord(), "entrance_exit_gate");
         }
         else {
-            RouteInfo newPlanForUnvisitedLocations = Utilities.findRoute(viewModel.getAllPlannedUnvisited(), viewModel.getLocItemById(currentLocation).getCoord(), false);
+            RouteInfo newPlanForUnvisitedLocations = Utilities.findRoute(viewModel.getAllPlannedUnvisited(), viewModel.getLocItemById(currentLocation).getCoord(), currentLocation);
             routeInfo.updateTheRest(newPlanForUnvisitedLocations);
         }
 
@@ -379,7 +388,6 @@ public class ShowDirectionActivity extends AppCompatActivity {
         editor.putString("direction", direction);
         editor.apply();
     }
-
 
     /**
      *

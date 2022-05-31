@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Finds route from a given list of LocItems
-     * @param plannedLocItems List of LocItems to find a route for
+     * @param unvisitedLocItems List of LocItems to find a route for
      * @return HashMap of the route to be displayed
      */
     public RouteInfo findRoute(List<LocItem> unvisitedLocItems) {
@@ -152,7 +152,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private RouteInfo findRoute(List<LocItem> unvisitedLocItems, Coord coord) {
-        RouteInfo routeInfo = Utilities.findRoute(unvisitedLocItems, coord, viewModel.getAllVisited().size() == 0);
+
+        String startLocation;
+        if (viewModel.getAllVisited().size() == 0) {
+            startLocation = "entrance_exit_gate";
+        }
+        else {
+            startLocation = Utilities.findClosestExhibitId(viewModel.getAllNonGroup(), coord);
+        }
+
+        RouteInfo routeInfo = Utilities.findRoute(unvisitedLocItems, coord, startLocation);
 
         // Skip the ones that are visited
         for (String currTarget = routeInfo.getCurrentTarget(); currTarget != null && viewModel.getLocItemById(currTarget).visited; currTarget = routeInfo.getCurrentTarget())

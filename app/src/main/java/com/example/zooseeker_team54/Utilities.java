@@ -229,7 +229,6 @@ public class Utilities {
         return locItem.group_id == null ? locItem.id : locItem.group_id;
     }
 
-    // TODO: implement this
     /**
      *
      * @param unvisitedLocItems

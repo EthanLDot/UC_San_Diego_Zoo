@@ -156,16 +156,10 @@ public class ShowDirectionActivity extends AppCompatActivity {
         }
 
         String currentTarget = routeInfo.getCurrentTarget();
-        String a = routeInfo.getCurrentTarget();
-        String b = routeInfo.getCurrentLocation();
         List<LocEdge> directions = Utilities.findDirections(routeInfo, currentTarget, getIsBrief());
-        String c = routeInfo.getCurrentTarget();
-        String d = routeInfo.getCurrentLocation();
         routeDirectionPresenter.setItems(directions);
 
         // update buttons
-        String target2 = routeInfo.getCurrentTarget();
-        String target2b = routeInfo.getCurrentLocation();
         updateNextBtn(routeInfo.getCurrentTarget(), routeInfo.getNextTarget());
         updatePreviousBtn(routeInfo.getCurrentLocation());
         updateSkipBtn();
@@ -297,8 +291,7 @@ public class ShowDirectionActivity extends AppCompatActivity {
     private void onSkipBtnClicked(View view){
         String target = routeInfo.getCurrentTarget();
         viewModel.removePlannedLoc(viewModel.getLocItemById(target));
-        routeInfo.removeLocation(target);
-        String s = routeInfo.getCurrentLocation();
+        routeInfo.removeCurrentTarget();
 
         RouteInfo newPlanForUnvisitedLocations = Utilities.findRoute(viewModel.getAllPlannedUnvisited(), viewModel.getLocItemById(routeInfo.getCurrentLocation()).getCoord(), viewModel.getAllVisited().size() == 0);
         routeInfo.updateTheRest(newPlanForUnvisitedLocations);

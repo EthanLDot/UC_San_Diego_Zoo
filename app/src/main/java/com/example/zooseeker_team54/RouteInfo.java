@@ -18,6 +18,7 @@ public class RouteInfo implements Serializable {
     private Map<String, Double> distances;
     private Map<String, List<LocEdge>> directions;
     private Map<String, String> groupIds;
+    private int index;
 
     /**
      * Constructor for RouteInfo that instantiates new member variables
@@ -26,6 +27,7 @@ public class RouteInfo implements Serializable {
         directions = new HashMap<>();
         distances = new HashMap<>();
         groupIds = new HashMap<>();
+        index = 0;
     }
 
     /**
@@ -118,14 +120,11 @@ public class RouteInfo implements Serializable {
      * @return String of the current location
      */
     public String getCurrentLocation() {
-        for (Entry<String, Double> entry : distances.entrySet()) {
-            if (entry.getValue() == 0.0 && (!groupIds.containsKey(entry.getKey()) || directions.get(entry.getKey()).size() > 0))
-                return entry.getKey();
-        }
-
-        // If we reach here, there isn't a next unvisited exhibit, so we return the entrance/exit
-        Log.d("FOOBAR", "No next unvisited exhibit");
-        return "entrance_exit_gate";
+        if (index >= getLocations().size() + 1 || index < 0)
+            return null;
+        else if (index == 0)
+            return "entrance_exit_gate";
+        return getLocations().get(index - 1);
     }
 
     /**
@@ -133,8 +132,9 @@ public class RouteInfo implements Serializable {
      * @return String of the current target
      */
     public String getCurrentTarget() {
-        String currentLocation = getCurrentLocation();
-        return getNextExhibitOf(currentLocation);
+        if (index >= getLocations().size() || index < 0)
+            return null;
+        return getNextExhibitOf(getCurrentLocation());
     }
 
     /**
@@ -142,8 +142,18 @@ public class RouteInfo implements Serializable {
      * @return String of the next target
      */
     public String getNextTarget() {
-        String currentTarget = getCurrentTarget();
-        return getNextExhibitOf(currentTarget);
+        if (index >= getLocations().size() - 1 || index < 0)
+            return null;
+        return getNextExhibitOf(getCurrentTarget());
+    }
+
+    public String getPreviousLocation() {
+        if (index == 0)
+            return null;
+        else if (index == 1)
+            return "entrance_exit_gate";
+        else
+            return getPreviousLocationOf(getCurrentLocation());
     }
 
     /**
@@ -169,36 +179,32 @@ public class RouteInfo implements Serializable {
         return sortedLocations;
     }
 
-    public String getPreviousLocation() {
-        String currentLocation = getCurrentLocation();
-        return getPreviousLocationOf(currentLocation);
-    }
-
     /**
      * Method to carry out functionality whenever the user arrives at the current target
      */
-    public void arriveCurrentTarget() { arrive(getCurrentTarget()); }
+    public void arriveCurrentTarget() {
+        if (index >= getLocations().size() + 1 || index < 0) return;
+        String currentTarget = getCurrentTarget();
+        index = getLocations().indexOf(currentTarget) + 1;
+        arrive(currentTarget);
+    }
 
-    public void arrivePreviousLocation() { arrive(getPreviousLocation()); }
+    /**
+     *
+     */
+    public void arrivePreviousLocation() {
+        if (index >= getLocations().size() + 1 || index < 0) return;
+        String previousLocation = getPreviousLocation();
+        index = getLocations().indexOf(previousLocation) + 1;
+        arrive(previousLocation);
+    }
 
-    public void removeLocation(String removalTarget) {
-        if (!distances.containsKey(removalTarget))
-            return;
-        Pair<List<LocEdge>, Double> pair = Utilities.findShortestPathBetween(getCurrentLocation(), getNextTarget());
-
-        List<LocEdge> newDirection = pair.first;
-        Double newDistance = pair.second;
-        Double oldDistance = distances.get(getNextTarget());
-        Double diff = oldDistance - newDistance;
-
-        addDirection(getNextTarget(), newDirection);
-        for(Entry<String, Double> entry: distances.entrySet()){
-            if(entry.getValue() > 0){
-                distances.put(entry.getKey(), entry.getValue()- diff);
-            }
-        }
-        distances.remove(removalTarget);
-        directions.remove(removalTarget);
+    public void removeCurrentTarget() {
+        String currentTarget = getCurrentTarget();
+        if (currentTarget == null) return;
+        directions.remove(currentTarget);
+        distances.remove(currentTarget);
+        groupIds.remove(currentTarget);
     }
 
     public void updateTheRest(RouteInfo routeForTheRest) {
@@ -230,33 +236,40 @@ public class RouteInfo implements Serializable {
      */
     private String getNextExhibitOf(String targetLocation) {
 
-        for (Entry<String, List<LocEdge>> entry: directions.entrySet()) {
-            String location = entry.getKey();
-            List<LocEdge> path = entry.getValue();
+        List<String> locations = getLocations();
+        if (index == 0 && targetLocation.equals("entrance_exit_gate"))
+            return locations.size() > 0 ? locations.get(0) : null;
 
-            if (path.size() > 0
-                    && (path.get(0).source_id.equals(targetLocation) || path.get(0).source_id.equals(groupIds.get(targetLocation)))
-                    && distances.get(location) > 0
-            ) return location;
+        int position = locations.indexOf(targetLocation);
+        for (int i = position + 1; i < locations.size(); i++) {
+            String next = locations.get(i);
+            List<LocEdge> direction = directions.get(next);
+            if (direction.size() > 0) return next;
         }
 
         // Nothing found, return null
         return null;
     }
 
+    /**
+     *
+     * @param targetLocation
+     * @return
+     */
     private String getPreviousLocationOf(String targetLocation) {
-        if (!distances.containsKey(targetLocation))
-            return null;
 
-        String source = directions.get(targetLocation).get(0).source_id;
-        for (Entry<String, String> groupIds : groupIds.entrySet()) {
-            String location = groupIds.getKey();
-            String groupId = groupIds.getValue();
+        List<String> locations = getLocations();
+        if (index == 0) return null;
+        if (index == 1) return "entrance_exit_gate";
 
-            if (source.equals(groupId) && directions.get(location).size() > 0)
-                return location;
+        int position = locations.indexOf(targetLocation);
+        for (int i = position - 1; i >= 0; i--) {
+            String previous = locations.get(i);
+            List<LocEdge> direction = directions.get(previous);
+            if (direction.size() > 0) return previous;
         }
-        return source;
+
+        return "entrance_exit_gate";
     }
 
     private void arrive(String location) {

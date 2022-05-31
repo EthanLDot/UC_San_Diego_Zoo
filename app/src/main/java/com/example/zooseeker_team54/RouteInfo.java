@@ -119,7 +119,7 @@ public class RouteInfo implements Serializable {
      */
     public String getCurrentLocation() {
         for (Entry<String, Double> entry : distances.entrySet()) {
-            if (entry.getValue() == 0.0 && directions.get(entry.getKey()).size() > 0)
+            if (entry.getValue() == 0.0 && (!groupIds.containsKey(entry.getKey()) || directions.get(entry.getKey()).size() > 0))
                 return entry.getKey();
         }
 
@@ -199,6 +199,28 @@ public class RouteInfo implements Serializable {
         }
         distances.remove(removalTarget);
         directions.remove(removalTarget);
+    }
+
+    public void updateTheRest(RouteInfo routeForTheRest) {
+        String currentLocation = getCurrentLocation();
+
+        // update directions
+        for (Entry<String, List<LocEdge>> entry : routeForTheRest.directions.entrySet()) {
+            if (!entry.getKey().equals(currentLocation))
+                directions.put(entry.getKey(), entry.getValue());
+        }
+
+        // update distances
+        for (Entry<String, Double> entry : routeForTheRest.distances.entrySet()) {
+            if (!entry.getKey().equals(currentLocation))
+                distances.put(entry.getKey(), entry.getValue());
+        }
+
+        // update groupIds
+        for (Entry<String, String> entry : routeForTheRest.groupIds.entrySet()) {
+            if (!entry.getKey().equals(currentLocation))
+                groupIds.put(entry.getKey(), entry.getValue());
+        }
     }
 
     /**

@@ -299,7 +299,10 @@ public class ShowDirectionActivity extends AppCompatActivity {
         viewModel.removePlannedLoc(viewModel.getLocItemById(target));
         routeInfo.removeLocation(target);
         String s = routeInfo.getCurrentLocation();
-        routeInfo = Utilities.findRoute(viewModel.getAllPlannedUnvisited(), viewModel.getLocItemById(routeInfo.getCurrentLocation()).getCoord(), viewModel.getAllVisited().size() == 0);
+
+        RouteInfo newPlanForUnvisitedLocations = Utilities.findRoute(viewModel.getAllPlannedUnvisited(), viewModel.getLocItemById(routeInfo.getCurrentLocation()).getCoord(), viewModel.getAllVisited().size() == 0);
+        routeInfo.updateTheRest(newPlanForUnvisitedLocations);
+
         routeDirectionPresenter.setItems(routeInfo.getDirection(routeInfo.getCurrentTarget()));
         updateNextBtn(routeInfo.getCurrentTarget(), routeInfo.getNextTarget());
         updateSkipBtn();

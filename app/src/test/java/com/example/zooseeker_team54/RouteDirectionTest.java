@@ -61,13 +61,13 @@ public class RouteDirectionTest {
 
             List<LocItem> testItems = new ArrayList<>();
             testItems.add(lions);
-            activity.plannedLocsPresenter.setItems(testItems);
+            activity.getPlannedLocsPresenter().setItems(testItems);
 
             activity.addPlannedLoc(lions);
 
-            RouteInfo routeInfo = activity.findRoute(activity.plannedLocsPresenter.getItems());
+            RouteInfo routeInfo = activity.findRoute(activity.getPlannedLocsPresenter().getItems());
             routeDirectionIntent.putExtra("routeInfo", routeInfo);
-            System.out.println(Utilities.findDirections(routeInfo, lions, true));
+            System.out.println(Utilities.findDirections(routeInfo, lions.id, true));
         });
 
         ActivityScenario<ShowDirectionActivity> routeDirectionActivityActivityScenario = ActivityScenario.launch(routeDirectionIntent);
@@ -76,7 +76,7 @@ public class RouteDirectionTest {
                     ", Proceed on 'Reptile Road' 100 feet towards 'Alligators' from 'Entrance Plaza'.\n" +
                     ", Proceed on 'Sharp Teeth Shortcut' 200 feet towards 'Lions' from 'Alligators'.\n" +
                     "]";
-            List<LocEdge> directions = activity.routeDirectionPresenter.getItems();
+            List<LocEdge> directions = activity.getRouteDirectionPresenter().getItems();
             assertEquals(expectedDirections, directions.toString());
         });
 
@@ -101,12 +101,12 @@ public class RouteDirectionTest {
             List<LocItem> testItems = new ArrayList<>();
             testItems.add(lions);
             testItems.add(gators);
-            activity.plannedLocsPresenter.setItems(testItems);
+            activity.getPlannedLocsPresenter().setItems(testItems);
 
             activity.addPlannedLoc(lions);
             activity.addPlannedLoc(gators);
 
-            RouteInfo routeInfo = activity.findRoute(activity.plannedLocsPresenter.getItems());
+            RouteInfo routeInfo = activity.findRoute(activity.getPlannedLocsPresenter().getItems());
             routeDirectionIntent.putExtra("routeInfo", routeInfo);
         });
 
@@ -115,7 +115,7 @@ public class RouteDirectionTest {
             String expectedDirections = "[Proceed on 'Entrance Way' 10 feet towards 'Entrance Plaza' from 'Entrance and Exit Gate'.\n" +
                     ", Proceed on 'Reptile Road' 100 feet towards 'Alligators' from 'Entrance Plaza'.\n" +
                     "]";
-            List<LocEdge> directions = activity.routeDirectionPresenter.getItems();
+            List<LocEdge> directions = activity.getRouteDirectionPresenter().getItems();
             assertEquals(expectedDirections, directions.toString());
         });
     }

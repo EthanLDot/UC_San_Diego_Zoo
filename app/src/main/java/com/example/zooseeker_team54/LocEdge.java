@@ -40,4 +40,12 @@ public class LocEdge implements Serializable {
                 street, weight, target, source);
     }
 
+    /**
+     *
+     * @param edge
+     * @return
+     */
+    public static LocEdge getReversedLocEdge(LocEdge edge) {
+        return new LocEdge(edge.id, edge.weight, edge.street, edge.target, edge.target_id, edge.source, edge.source_id);
+    }
 }

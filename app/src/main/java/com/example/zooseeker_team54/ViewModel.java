@@ -57,34 +57,7 @@ public class ViewModel extends AndroidViewModel {
         return locItemDao.getAllPlannedLive();
     }
 
-
-//    /**
-//     * Getter method for the next unvisited exhibit
-//     * @return LocItem of the next unvisited exhibit
-//     */
-//    public LocItem getNextUnvisitedExhibit() { return locItemDao.getNextUnvisitedExhibit(); }
-
-//    /**
-//     * Getter method for the next target LocItem
-//     * @return LocItem that is the next target
-//     */
-//    public LocItem getNextTarget() {
-//        List<LocItem> allPlannedUnvisited = locItemDao.getAllPlannedUnvisited();
-//        // If there or less than 2 unvisited LocItems left in the plan, return null
-//        if (allPlannedUnvisited == null || allPlannedUnvisited.size() < 2) return null;
-//        return allPlannedUnvisited.get(1);
-//    }
-
-//    /**
-//     * Getter method for the current target LocItem
-//     * @return LocItem that is the current target LocItem
-//     */
-//    public LocItem getCurrTarget() {
-//        List<LocItem> allPlannedUnvisited = locItemDao.getAllPlannedUnvisited();
-//        // If there is less than 1 unvisited LocItems left in the plan, return null
-//        if (allPlannedUnvisited == null || allPlannedUnvisited.size() < 1) return null;
-//        return allPlannedUnvisited.get(0);
-//    }
+    public List<LocItem> getAllVisited() { return locItemDao.getAllVisited(); }
 
     /**
      * Getter method to retrieve all of the unvisited LocItems in the plan
@@ -141,16 +114,6 @@ public class ViewModel extends AndroidViewModel {
         locItemDao.update(locItem);
     }
 
-//    /**
-//     * Updates a given LocItem's distance
-//     * @param locItem LocItem to be updated with a new distance
-//     * @param dist new distance of the LocItem as a double
-//     */
-//    public void updateLocCurrentDist(LocItem locItem, double dist) {
-//        locItem.currDist = dist;
-//        locItemDao.update(locItem);
-//    }
-
     /**
      * Clears all of the planned LocItems from the plan
      */
@@ -170,21 +133,6 @@ public class ViewModel extends AndroidViewModel {
      * @return int of the number of planned exhibits
      */
     public int countPlannedExhibits() { return locItemDao.countPlannedExhibits(); }
-
-//    /**
-//     *
-//     */
-//    public void arriveCurrentTarget() {
-//        LocItem currTarget = getCurrTarget();
-//        List<LocItem> unvisited = getAllPlannedUnvisited();
-//
-//        for (LocItem locItem : unvisited) {
-//            double newDist = locItem.currDist - currTarget.currDist;
-//            updateLocCurrentDist(locItem, newDist);
-//        }
-//
-//        addVisitedLoc(currTarget);
-//    }
 
     /**
      *

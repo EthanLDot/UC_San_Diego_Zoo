@@ -60,7 +60,7 @@ public class PlanExhibitsTests {
     @Test
     public void emptyPlannedList() {
         scenario.onActivity(activity -> {
-            List<LocItem> plannedExhibits = activity.plannedLocsPresenter.getItems();
+            List<LocItem> plannedExhibits = activity.getPlannedLocsPresenter().getItems();
             assertEquals(0, plannedExhibits.size());
         });
     }
@@ -75,14 +75,14 @@ public class PlanExhibitsTests {
             Utilities.loadOldZooJson(activity);
 
             // Check that there are no exhibits planned yet
-            List<LocItem> plannedExhibits = activity.plannedLocsPresenter.getItems();
+            List<LocItem> plannedExhibits = activity.getPlannedLocsPresenter().getItems();
             assertEquals(0, plannedExhibits.size());
 
             // Search for a specific exhibit.
             String query = "arctic fox";
             EditText searchBar = activity.findViewById(R.id.search_bar);
             searchBar.setText(query);
-            List<LocItem> searchResults = activity.searchResultPresenter.getItems();
+            List<LocItem> searchResults = activity.getSearchResultPresenter().getItems();
 
             // Get the search result
             List<LocItem> selectedExhibits = new ArrayList<>();
@@ -90,9 +90,9 @@ public class PlanExhibitsTests {
             assertEquals(1, selectedExhibits.size());
 
             // Add the result to the list of planned exhibits and check for correctness.
-            activity.plannedLocsPresenter.setItems(selectedExhibits);
-            assertEquals(1, activity.plannedLocsPresenter.getItemCount());
-            assertEquals("Arctic Foxes", activity.plannedLocsPresenter.getItems().get(0).name);
+            activity.getPlannedLocsPresenter().setItems(selectedExhibits);
+            assertEquals(1, activity.getPlannedLocsPresenter().getItemCount());
+            assertEquals("Arctic Foxes", activity.getPlannedLocsPresenter().getItems().get(0).name);
         });
     }
 
@@ -106,14 +106,14 @@ public class PlanExhibitsTests {
             Utilities.loadOldZooJson(activity);
 
             // Check that there are no exhibits planned yet
-            List<LocItem> plannedExhibits = activity.plannedLocsPresenter.getItems();
+            List<LocItem> plannedExhibits = activity.getPlannedLocsPresenter().getItems();
             assertEquals(0, plannedExhibits.size());
 
             // Search for a specific exhibit
             String query = "arctic fox";
             EditText searchBar = activity.findViewById(R.id.search_bar);
             searchBar.setText(query);
-            List<LocItem> searchResults = activity.searchResultPresenter.getItems();
+            List<LocItem> searchResults = activity.getSearchResultPresenter().getItems();
 
             // Get the search result
             List<LocItem> selectedExhibits = new ArrayList<>();
@@ -123,16 +123,16 @@ public class PlanExhibitsTests {
             // Search for an exhibit with many variations
             query = "bear";
             searchBar.setText(query);
-            searchResults = activity.searchResultPresenter.getItems();
+            searchResults = activity.getSearchResultPresenter().getItems();
 
             // Set the selected exhibit to "Brown Bears" and add to plan
             selectedExhibits.add(searchResults.get(1));
-            activity.plannedLocsPresenter.setItems(selectedExhibits);
+            activity.getPlannedLocsPresenter().setItems(selectedExhibits);
 
             // Check for correctness
-            assertEquals(2, activity.plannedLocsPresenter.getItemCount());
-            assertEquals("Arctic Foxes", activity.plannedLocsPresenter.getItems().get(0).name);
-            assertEquals("Brown Bears", activity.plannedLocsPresenter.getItems().get(1).name);
+            assertEquals(2, activity.getPlannedLocsPresenter().getItemCount());
+            assertEquals("Arctic Foxes", activity.getPlannedLocsPresenter().getItems().get(0).name);
+            assertEquals("Brown Bears", activity.getPlannedLocsPresenter().getItems().get(1).name);
         });
     }
 }

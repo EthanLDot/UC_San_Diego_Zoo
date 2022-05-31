@@ -1,11 +1,17 @@
 package com.example.zooseeker_team54;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.location.Location;
 import android.os.Bundle;
@@ -20,6 +26,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,8 +37,9 @@ import java.util.stream.Collectors;
  * Class to represent the functionality of the MainActivity that is displayed on launch of our app
  */
 public class MainActivity extends AppCompatActivity {
-    public RecyclerViewPresenter<LocItem> searchResultPresenter;
-    public RecyclerViewPresenter<LocItem> plannedLocsPresenter;
+
+    private RecyclerViewPresenter<LocItem> searchResultPresenter;
+    private RecyclerViewPresenter<LocItem> plannedLocsPresenter;
 
     private TextView planSizeText;
     private AutoCompleteTextView searchBarText;
@@ -39,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private Button planBtn;
 
     private ViewModel viewModel;
+    private RouteInfo routeInfo;
 
     /**
      * Text Watcher for search bar textview
@@ -56,8 +66,23 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    // TODO: figure what should happen if a plan is there but users modify the plan in main
+    private final ActivityResultLauncher<Intent> routeActivityResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        // There are no request codes
+                        Intent data = result.getData();
+                        if (data.hasExtra("routeInfo")) {
+                            routeInfo = (RouteInfo) data.getSerializableExtra("routeInfo");
+                            updatePlanSizeText();
+                        }
+                    }
+                }
+            });
 
+    // TODO: figure what should happen if a plan is there but users modify the plan in main
     /**
      * Create the activity from a given savedInstanceState and initialize everything
      * @param savedInstanceState the saved instance from before
@@ -113,15 +138,21 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public RecyclerViewPresenter<LocItem> getSearchResultPresenter() { return searchResultPresenter; }
+
+    public RecyclerViewPresenter<LocItem> getPlannedLocsPresenter() { return plannedLocsPresenter; }
+
     /**
      * Finds route from a given list of LocItems
      * @param plannedLocItems List of LocItems to find a route for
      * @return HashMap of the route to be displayed
      */
     public RouteInfo findRoute(List<LocItem> plannedLocItems) {
-        RouteInfo routeInfo = Utilities.findRoute(plannedLocItems);
+        return findRoute(plannedLocItems, getCoord());
+    }
 
-        System.out.println(routeInfo);
+    private RouteInfo findRoute(List<LocItem> unvisitedLocItems, Coord coord) {
+        RouteInfo routeInfo = Utilities.findRoute(unvisitedLocItems, coord, viewModel.getAllVisited().size() == 0);
 
         // Skip the ones that are visited
         for (String currTarget = routeInfo.getCurrentTarget(); currTarget != null && viewModel.getLocItemById(currTarget).visited; currTarget = routeInfo.getCurrentTarget())
@@ -173,6 +204,7 @@ public class MainActivity extends AppCompatActivity {
     private void onClearBtnClicked(View view) {
         viewModel.clearPlannedLocs();
         planSizeText.setText("Planned (0)");
+        routeInfo = null;
     }
 
     /**
@@ -182,16 +214,44 @@ public class MainActivity extends AppCompatActivity {
     private void onPlanButtonClicked(View view) {
 
         // show an alert if plan size is 0
-        if (plannedLocsPresenter.getAdapter().getItemCount() == 0) {
+        if (plannedLocsPresenter.getItemCount() == 0) {
             Utilities.showAlert(this, "Plan list is empty, can't create plan!");
             return;
         }
 
-        RouteInfo routeInfo = findRoute(plannedLocsPresenter.getAdapter().getItems());
+        if (routeInfo == null) {
+            routeInfo = findRoute(plannedLocsPresenter.getItems());
+        }
 
         // launch ShowRouteActivity to display directions
         Intent intent = new Intent(this, ShowRouteActivity.class);
         intent.putExtra("routeInfo", routeInfo);
-        startActivity(intent);
+        routeActivityResultLauncher.launch(intent);
+    }
+
+    /**
+     *
+     * @return
+     */
+    private Coord getCoord() {
+        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        Gson gson = new Gson();
+        Coord DEFAULT_COORD = viewModel.getLocItemById("entrance_exit_gate").getCoord();;
+        String json = preferences.getString("coord", gson.toJson(DEFAULT_COORD));
+        Coord coord = gson.fromJson(json, Coord.class);
+        return coord;
+    }
+
+    /**
+     *
+     * @param coord
+     */
+    private void setCoord(Coord coord) {
+        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(coord);
+        editor.putString("coord", json);
+        editor.apply();
     }
 }

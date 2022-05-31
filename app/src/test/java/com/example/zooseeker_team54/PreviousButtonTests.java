@@ -18,22 +18,20 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
-// User Story 5, 6 Unit Tests
+// User Story 4 Tests for MS 2
 @RunWith(AndroidJUnit4.class)
-public class NextDirectionTests {
+public class PreviousButtonTests {
     LocItemDao dao;
     LocDatabase testDb;
-    Intent mainIntent, routeDirectionIntent;
+    Intent mainIntent, showDirectionIntent;
 
     @Before
     public void setUp() {
         mainIntent = new Intent(ApplicationProvider.getApplicationContext(), MainActivity.class);
-        routeDirectionIntent = new Intent(ApplicationProvider.getApplicationContext(), ShowDirectionActivity.class);
+        showDirectionIntent = new Intent(ApplicationProvider.getApplicationContext(), ShowDirectionActivity.class);
     }
-
 
     @Before
     public void resetDatabase() {
@@ -48,25 +46,15 @@ public class NextDirectionTests {
         dao.insertAll(todos);
     }
 
+    /**
+     * Adds two exhibits to the route. Clicks the next button, then the previous button
+     * Checks to see if the next button still displays the correct information.
+     */
     @Test
-    public void noMoreExhibitsTest() {
-
-        ActivityScenario<ShowDirectionActivity> routeDirectionActivityActivityScenario = ActivityScenario.launch(routeDirectionIntent);
-        routeDirectionActivityActivityScenario.onActivity(activity -> {
-            String nextBtnText = "NEXT\n------\n" + "No Exhibits Left!";
-            Button nextBtn = activity.findViewById(R.id.next_btn);
-            assertEquals(nextBtnText, nextBtn.getText());
-            assertFalse(nextBtn.isEnabled());
-        });
-
-    }
-
-    @Test
-    public void MoreExhibitsTest() {
+    public void previousExhibitTest() {
         // Launch MainActivity class
-        ActivityScenario<MainActivity> mainActivityActivityScenario = ActivityScenario.launch(mainIntent);
-        mainActivityActivityScenario.onActivity(activity -> {
-
+        ActivityScenario<MainActivity> mainScenario = ActivityScenario.launch(mainIntent);
+        mainScenario.onActivity(activity -> {
             Utilities.loadOldZooJson(activity);
 
             LocItem lions = dao.get("lions");
@@ -81,16 +69,19 @@ public class NextDirectionTests {
             activity.addPlannedLoc(gators);
 
             RouteInfo routeInfo = activity.findRoute(activity.getPlannedLocsPresenter().getItems());
-            routeDirectionIntent.putExtra("routeInfo", routeInfo);
+            showDirectionIntent.putExtra("routeInfo", routeInfo);
         });
 
-        ActivityScenario<ShowDirectionActivity> routeDirectionActivityActivityScenario = ActivityScenario.launch(routeDirectionIntent);
-        routeDirectionActivityActivityScenario.onActivity(activity -> {
+        ActivityScenario<ShowDirectionActivity> showDirectionScenario = ActivityScenario.launch(showDirectionIntent);
+        showDirectionScenario.onActivity(activity -> {
             Button nextBtn = activity.findViewById(R.id.next_btn);
+            nextBtn.performClick();
+            Button previousBtn = activity.findViewById(R.id.previous_btn);
+            previousBtn.performClick();
             String expectedBtnText = "NEXT\n------\nLions, 200";
             assertEquals(expectedBtnText, nextBtn.getText());
+            assertFalse(previousBtn.isEnabled());
             assertTrue(nextBtn.isEnabled());
         });
-
     }
 }

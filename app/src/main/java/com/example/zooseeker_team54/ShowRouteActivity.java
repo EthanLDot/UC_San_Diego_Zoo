@@ -5,7 +5,6 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.app.Activity;
@@ -25,14 +24,27 @@ import java.util.stream.Collectors;
 public class ShowRouteActivity extends AppCompatActivity {
 
     private ViewModel viewModel;
-    public RecyclerViewPresenter<LocItem> showRoutePresenter;
-
     private RouteInfo routeInfo;
+    private RecyclerViewPresenter<LocItem> showRoutePresenter;
 
     private Button directionBtn;
     private Button backBtn;
 
-    private static final int ACTIVITY_CONSTANT = 1;
+    private final ActivityResultLauncher<Intent> directionActivityResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        // There are no request codes
+                        Intent data = result.getData();
+                        if (data.hasExtra("routeInfo")) {
+                            routeInfo = (RouteInfo) data.getSerializableExtra("routeInfo");
+                            ((ShowRouteAdapter) showRoutePresenter.getAdapter()).setRouteInfo(routeInfo);
+                        }
+                    }
+                }
+            });
 
     /**
      * Create the activity from a given savedInstanceState and initialize everything
@@ -44,23 +56,29 @@ public class ShowRouteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route_plan);
         Intent intent = getIntent();
-        routeInfo = (RouteInfo) intent.getSerializableExtra("routeInfo");
 
-        viewModel = new ViewModelProvider(this).get(ViewModel.class);
+        // initialize major fields of this activity
+        {
+            viewModel = new ViewModelProvider(this).get(ViewModel.class);
+            routeInfo = (RouteInfo) intent.getSerializableExtra("routeInfo");
+            showRoutePresenter = new RecyclerViewPresenterBuilder<LocItem>()
+                    .setAdapter(new ShowRouteAdapter(routeInfo))
+                    .setRecyclerView(this.findViewById(R.id.planned_route))
+                    .getRecyclerViewPresenter();
+        }
 
-        showRoutePresenter = new RecyclerViewPresenterBuilder<LocItem>()
-                .setAdapter(new ShowRouteAdapter(routeInfo))
-                .setRecyclerView(this.findViewById(R.id.planned_route))
-                .getRecyclerViewPresenter();
-
+        // add observer to this livedata
         viewModel.getAllPlannedUnvisitedLive()
                 .observe(this, this::setItems);
 
-        directionBtn = findViewById(R.id.direction_btn);
-        directionBtn.setOnClickListener(this::onDirectionBtnClicked);
+        // initialize other components
+        {
+            directionBtn = findViewById(R.id.direction_btn);
+            directionBtn.setOnClickListener(this::onDirectionBtnClicked);
 
-        backBtn = findViewById(R.id.go_back_btn);
-        backBtn.setOnClickListener(this::onBackButtonClicked);
+            backBtn = findViewById(R.id.go_back_btn);
+            backBtn.setOnClickListener(this::onBackButtonClicked);
+        }
     }
 
     /**
@@ -73,7 +91,7 @@ public class ShowRouteActivity extends AppCompatActivity {
                 .map((locItem -> locItem.id))
                 .collect(Collectors.toList());
 
-        List<LocItem> sortedLocations = routeInfo.getSortedLocations(locations)
+        List<LocItem> sortedLocations = routeInfo.sortLocations(locations)
                 .stream()
                 .map((location) -> viewModel.getLocItemById(location))
                 .collect(Collectors.toList());
@@ -87,6 +105,10 @@ public class ShowRouteActivity extends AppCompatActivity {
      * @param view View that's passed in
      */
     private void onBackButtonClicked(View view) {
+        Intent data = new Intent();
+        data.putExtra("routeInfo", routeInfo);
+        // Activity finished ok, return the data
+        setResult(RESULT_OK, data);
         finish();
     }
 
@@ -115,22 +137,5 @@ public class ShowRouteActivity extends AppCompatActivity {
         intent.putExtra("routeInfo", routeInfo);
         directionActivityResultLauncher.launch(intent);
     }
-
-    ActivityResultLauncher<Intent> directionActivityResultLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
-                    if (result.getResultCode() == Activity.RESULT_OK) {
-                        // There are no request codes
-                        Intent data = result.getData();
-                        if (data.hasExtra("routeInfo")) {
-                            routeInfo = (RouteInfo) data.getSerializableExtra("routeInfo");
-                            ((ShowRouteAdapter) showRoutePresenter.getAdapter()).setRouteInfo(routeInfo);
-
-                        }
-                    }
-                }
-            });
 }
 

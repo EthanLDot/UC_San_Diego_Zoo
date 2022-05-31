@@ -239,17 +239,16 @@ public class ShowDirectionActivity extends AppCompatActivity {
 
     private void updateSkipBtn()
     {
-        String currTarget = routeInfo.getCurrentTarget();
-        String nextTarget = routeInfo.getNextTarget();
-        if((nextTarget == null || nextTarget.equals("entrance_exit_gate")) &&  (currTarget == null || currTarget.equals("entrance_exit_gate")))
-        {
-            skipBtn.setClickable(false);
-            skipBtn.setEnabled(false);
-        }
-        else
-        {
-            skipBtn.setClickable(true);
-            skipBtn.setEnabled(true);
+        if(routeInfo != null) {
+            String currTarget = routeInfo.getCurrentTarget();
+            String nextTarget = routeInfo.getNextTarget();
+            if ((nextTarget == null || nextTarget.equals("entrance_exit_gate")) && (currTarget == null || currTarget.equals("entrance_exit_gate"))) {
+                skipBtn.setClickable(false);
+                skipBtn.setEnabled(false);
+            } else {
+                skipBtn.setClickable(true);
+                skipBtn.setEnabled(true);
+            }
         }
     }
 

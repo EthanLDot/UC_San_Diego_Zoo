@@ -292,6 +292,8 @@ public class Utilities {
         for (LocEdge edge : directions) {
             if (currStreet.equals(edge.street)) {
                 streetWeight += edge.weight;
+                sink = edge.target;
+                sink_id = edge.target_id;
             } else {
                 // add brief data into the new list
                 briefDirections.add(new LocEdge("", streetWeight, currStreet, source, source_id, edge.source, edge.source_id));

@@ -66,6 +66,16 @@ public class BriefDetailedTest {
 
     @Test
     public void briefToDetailedTest() {
+        ViewInteraction clearButton = onView(
+                allOf(withId(R.id.clear_btn), withText("clear"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                2),
+                        isDisplayed()));
+        clearButton.perform(click());
+
         ViewInteraction materialAutoCompleteTextView = onView(
                 allOf(withId(R.id.search_bar),
                         childAtPosition(
@@ -149,6 +159,16 @@ public class BriefDetailedTest {
 
     @Test
     public void detailedToBrief() {
+        ViewInteraction clearButton = onView(
+                allOf(withId(R.id.clear_btn), withText("clear"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                2),
+                        isDisplayed()));
+        clearButton.perform(click());
+        
         ViewInteraction materialAutoCompleteTextView = onView(
                 allOf(withId(R.id.search_bar),
                         childAtPosition(

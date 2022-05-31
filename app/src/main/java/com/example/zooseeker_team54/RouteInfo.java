@@ -206,19 +206,19 @@ public class RouteInfo implements Serializable {
 
         // update directions
         for (Entry<String, List<LocEdge>> entry : routeForTheRest.directions.entrySet()) {
-            if (!entry.getKey().equals(currentLocation))
+            if (!entry.getKey().equals(currentLocation) || currentLocation.equals("entrance_exit_gate"))
                 directions.put(entry.getKey(), entry.getValue());
         }
 
         // update distances
         for (Entry<String, Double> entry : routeForTheRest.distances.entrySet()) {
-            if (!entry.getKey().equals(currentLocation))
+            if (!entry.getKey().equals(currentLocation) || currentLocation.equals("entrance_exit_gate"))
                 distances.put(entry.getKey(), entry.getValue());
         }
 
         // update groupIds
         for (Entry<String, String> entry : routeForTheRest.groupIds.entrySet()) {
-            if (!entry.getKey().equals(currentLocation))
+            if (!entry.getKey().equals(currentLocation) || currentLocation.equals("entrance_exit_gate"))
                 groupIds.put(entry.getKey(), entry.getValue());
         }
     }

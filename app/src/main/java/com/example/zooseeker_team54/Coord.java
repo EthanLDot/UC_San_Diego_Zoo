@@ -39,9 +39,14 @@ public class Coord {
      * @return
      */
     public static Double distanceBetweenTwoCoords(Coord coordOne, Coord coordTwo) {
+        // The Latitude would be the y value
+        // The Longitude would be the x value.
+        // Basic Formula = sqrt((x2 - x1)^2 + (y2 - y1)^2)
 
-        // TODO: implement this functions
-        return 100.0;
+        double latDiff = Math.pow(coordOne.lat - coordTwo.lat, 2);
+        double longDiff = Math.pow(coordOne.lng - coordTwo.lng, 2);
+
+        return Math.pow(latDiff + longDiff, 0.5);
     }
 
     @Override

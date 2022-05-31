@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -260,7 +261,26 @@ public class ShowDirectionActivity extends AppCompatActivity {
      * @param view
      */
     private void onMockStepClicked(View view) {
-        String [] nextLocation = mockRouteInput.getText().toString().split(",");
+      String [] nextLocation = mockRouteInput.getText().toString().split(",");
+        if(nextLocation.length == 2) {
+            try {
+                Coord locationCoord = new Coord(Double.parseDouble(nextLocation[0]), Double.parseDouble(nextLocation[1]));
+                // Log.d("NEXT Coord: ", String.valueOf(locationCoord));
+                locationTracker.mockLocation(locationCoord);
+                Toast.makeText(this, "Coordinates mocked!",
+                        Toast.LENGTH_LONG).show();
+            } catch (NumberFormatException nfe) {
+                Toast.makeText(this, "Invalid Coords!",
+                        Toast.LENGTH_LONG).show();
+                return;
+            }
+
+        }
+        else
+        {
+            Toast.makeText(this, "Invalid Coords!",
+                    Toast.LENGTH_LONG).show();
+        }
         Coord locationCoord = new Coord (Double.parseDouble(nextLocation[0]), Double.parseDouble(nextLocation[1]));
         // Log.d("NEXT Coord: ", String.valueOf(locationCoord));
         locationTracker.mockLocation(locationCoord);
@@ -290,6 +310,7 @@ public class ShowDirectionActivity extends AppCompatActivity {
      *
      * @return
      */
+
     private String getDirection() {
         return getPreferences(MODE_PRIVATE).getString("direction", "forward");
     }

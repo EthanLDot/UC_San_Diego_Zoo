@@ -204,6 +204,7 @@ public class MainActivity extends AppCompatActivity {
     private void onClearBtnClicked(View view) {
         viewModel.clearPlannedLocs();
         planSizeText.setText("Planned (0)");
+        routeInfo = null;
     }
 
     /**

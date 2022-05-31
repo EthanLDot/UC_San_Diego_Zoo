@@ -1,10 +1,15 @@
 package com.example.zooseeker_team54;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -33,7 +38,6 @@ import java.util.stream.Collectors;
  */
 public class MainActivity extends AppCompatActivity {
 
-    private ViewModel viewModel;
     private RecyclerViewPresenter<LocItem> searchResultPresenter;
     private RecyclerViewPresenter<LocItem> plannedLocsPresenter;
 
@@ -42,6 +46,9 @@ public class MainActivity extends AppCompatActivity {
 
     private Button clearBtn;
     private Button planBtn;
+
+    private ViewModel viewModel;
+    private RouteInfo routeInfo;
 
     /**
      * Text Watcher for search bar textview
@@ -59,6 +66,21 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    private final ActivityResultLauncher<Intent> routeActivityResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        // There are no request codes
+                        Intent data = result.getData();
+                        if (data.hasExtra("routeInfo")) {
+                            routeInfo = (RouteInfo) data.getSerializableExtra("routeInfo");
+                            updatePlanSizeText();
+                        }
+                    }
+                }
+            });
 
     // TODO: figure what should happen if a plan is there but users modify the plan in main
     /**
@@ -196,12 +218,14 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        RouteInfo routeInfo = findRoute(plannedLocsPresenter.getItems());
+        if (routeInfo == null) {
+            routeInfo = findRoute(plannedLocsPresenter.getItems());
+        }
 
         // launch ShowRouteActivity to display directions
         Intent intent = new Intent(this, ShowRouteActivity.class);
         intent.putExtra("routeInfo", routeInfo);
-        startActivity(intent);
+        routeActivityResultLauncher.launch(intent);
     }
 
     /**

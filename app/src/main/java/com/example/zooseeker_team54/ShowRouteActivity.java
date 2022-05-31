@@ -105,6 +105,10 @@ public class ShowRouteActivity extends AppCompatActivity {
      * @param view View that's passed in
      */
     private void onBackButtonClicked(View view) {
+        Intent data = new Intent();
+        data.putExtra("routeInfo", routeInfo);
+        // Activity finished ok, return the data
+        setResult(RESULT_OK, data);
         finish();
     }
 

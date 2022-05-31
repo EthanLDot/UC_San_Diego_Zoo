@@ -1,5 +1,6 @@
 package com.example.zooseeker_team54;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -9,6 +10,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -36,6 +41,19 @@ public class ShowDirectionActivity extends AppCompatActivity {
     private Button skipBtn;
     private Button mockStep;
     private EditText mockRouteInput;
+
+    private final ActivityResultLauncher<Intent> settingActivityLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        // There are no request codes
+                        List<LocEdge> directions = Utilities.findDirections(routeInfo, routeInfo.getCurrentTarget(), getIsBrief());
+                        routeDirectionPresenter.setItems(directions);
+                    }
+                }
+            });
 
     /**
      * Create the activity from a given savedInstanceState and initialize everything
@@ -319,7 +337,7 @@ public class ShowDirectionActivity extends AppCompatActivity {
      */
     private void onSettingsClicked(View view) {
         Intent intent = new Intent(this, SettingsActivity.class);
-        startActivity(intent);
+        settingActivityLauncher.launch(intent);
     }
 
     /**
@@ -367,8 +385,8 @@ public class ShowDirectionActivity extends AppCompatActivity {
      *
      * @return
      */
-    private boolean getIsBrief() {
-        return getPreferences(MODE_PRIVATE).getBoolean("isBrief", true);
+    public boolean getIsBrief() {
+        return getSharedPreferences("isBrief", MODE_PRIVATE).getBoolean("isBrief", true);
     }
 
     /**

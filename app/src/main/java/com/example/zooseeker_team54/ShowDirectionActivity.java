@@ -136,6 +136,9 @@ public class ShowDirectionActivity extends AppCompatActivity {
      * @param coord
      */
     private void detectOffRoute(Coord coord) {
+
+        if (routeInfo == null) return;
+
         String currentTarget = routeInfo.getCurrentTarget();
         LocItem targetLocItem = viewModel.getLocItemById(currentTarget);
         Double threshold = Coord.distanceBetweenTwoCoords(coord, targetLocItem.getCoord());

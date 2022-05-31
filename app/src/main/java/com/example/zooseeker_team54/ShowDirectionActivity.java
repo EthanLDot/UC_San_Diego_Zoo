@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -296,8 +297,14 @@ public class ShowDirectionActivity extends AppCompatActivity {
         routeInfo.removeCurrentTarget();
 
         String currentLocation = routeInfo.getCurrentLocation();
-        if (currentLocation.equals("entrance_exit_gate")) {
-            routeInfo = Utilities.findRoute(viewModel.getAllPlannedUnvisited(), viewModel.getLocItemById("entrance_exit_gate"), true);
+        String currentTarget = routeInfo.getCurrentTarget();
+        if (currentLocation != null && currentLocation.equals("entrance_exit_gate")) {
+            routeInfo = Utilities.findRoute(viewModel.getAllPlannedUnvisited(), viewModel.getLocItemById("entrance_exit_gate").getCoord(), true);
+        }
+        else if (currentLocation != null && currentTarget != null && currentTarget.equals("entrance_exit_gate")) {
+            Pair<List<LocEdge>, Double> pair = Utilities.findShortestPathBetween(currentLocation, currentTarget);
+            routeInfo.addDirection("entrance_exit_gate", pair.first);
+            routeInfo.addDistance("entrance_exit_gate", pair.second);
         }
         else {
             RouteInfo newPlanForUnvisitedLocations = Utilities.findRoute(viewModel.getAllPlannedUnvisited(), viewModel.getLocItemById(currentLocation), false);

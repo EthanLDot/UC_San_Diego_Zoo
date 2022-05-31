@@ -147,8 +147,12 @@ public class MainActivity extends AppCompatActivity {
      * @param plannedLocItems List of LocItems to find a route for
      * @return HashMap of the route to be displayed
      */
-    public RouteInfo findRoute(List<LocItem> plannedLocItems) {
-        RouteInfo routeInfo = Utilities.findRoute(plannedLocItems, viewModel.getLocItemById("entrance_exit_gate"), viewModel.getAllVisited().size() == 0);
+    public RouteInfo findRoute(List<LocItem> unvisitedLocItems) {
+        return findRoute(unvisitedLocItems, getCoord());
+    }
+
+    private RouteInfo findRoute(List<LocItem> unvisitedLocItems, Coord coord) {
+        RouteInfo routeInfo = Utilities.findRoute(unvisitedLocItems, coord, viewModel.getAllVisited().size() == 0);
 
         // Skip the ones that are visited
         for (String currTarget = routeInfo.getCurrentTarget(); currTarget != null && viewModel.getLocItemById(currTarget).visited; currTarget = routeInfo.getCurrentTarget())
@@ -158,18 +162,6 @@ public class MainActivity extends AppCompatActivity {
         viewModel.addPlannedLoc(targetLocItem);
         return routeInfo;
     }
-
-//    private RouteInfo findRoute(List<LocItem> unvisitedLocItems, Coord coord) {
-//        RouteInfo routeInfo = Utilities.findRoute(unvisitedLocItems, coord, viewModel.getAllVisited().size() == 0);
-//
-//        // Skip the ones that are visited
-//        for (String currTarget = routeInfo.getCurrentTarget(); currTarget != null && viewModel.getLocItemById(currTarget).visited; currTarget = routeInfo.getCurrentTarget())
-//            routeInfo.arriveCurrentTarget();
-//
-//        LocItem targetLocItem = viewModel.getLocItemById("entrance_exit_gate");
-//        viewModel.addPlannedLoc(targetLocItem);
-//        return routeInfo;
-//    }
 
     /**
      * Removes the given LocItem from the viewModel
@@ -228,7 +220,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (routeInfo == null) {
-            routeInfo = findRoute(plannedLocsPresenter.getItems());
+            routeInfo = findRoute(viewModel.getAllPlannedUnvisited());
         }
 
         // launch ShowRouteActivity to display directions
@@ -248,18 +240,5 @@ public class MainActivity extends AppCompatActivity {
         String json = preferences.getString("coord", gson.toJson(DEFAULT_COORD));
         Coord coord = gson.fromJson(json, Coord.class);
         return coord;
-    }
-
-    /**
-     *
-     * @param coord
-     */
-    private void setCoord(Coord coord) {
-        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        Gson gson = new Gson();
-        String json = gson.toJson(coord);
-        editor.putString("coord", json);
-        editor.apply();
     }
 }

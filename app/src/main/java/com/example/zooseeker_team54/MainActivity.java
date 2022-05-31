@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Utilities.loadNewZooJson(this);
+        Utilities.loadOldZooJson(this);
 
         // prevents UI difficulties resulting from a rotated screen
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -236,7 +236,7 @@ public class MainActivity extends AppCompatActivity {
     private Coord getCoord() {
         SharedPreferences preferences = getPreferences(MODE_PRIVATE);
         Gson gson = new Gson();
-        Coord DEFAULT_COORD = viewModel.getLocItemById("entrance_exit_gate").getCoord();;
+        Coord DEFAULT_COORD = viewModel.getLocItemById("entrance_exit_gate").getCoord();
         String json = preferences.getString("coord", gson.toJson(DEFAULT_COORD));
         Coord coord = gson.fromJson(json, Coord.class);
         return coord;

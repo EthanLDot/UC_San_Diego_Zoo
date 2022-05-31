@@ -10,6 +10,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
+/**
+ * Activity to represent the Settings page
+ */
 public class SettingsActivity extends AppCompatActivity {
 
     private Button brief;
@@ -17,8 +20,9 @@ public class SettingsActivity extends AppCompatActivity {
     private Button exitBtn;
 
     /**
+     * Method for initial creation of the activity
      *
-     * @param savedInstanceState
+     * @param savedInstanceState the saved instance from before
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +43,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     /**
      * Setter method for isBrief
+     *
      * @param bool boolean for isBrief to be set to
      */
     public void setIsBrief(boolean bool) {
@@ -49,9 +54,10 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     /**
+     * Gets the OnClickListener for a given button for use in the OnClickListener setter method
      *
-     * @param otherBtn
-     * @return
+     * @param otherBtn button to retrieve onClickListener for
+     * @return OnClickListener for the given button
      */
     private OnClickListener getOnClickedListener(Button otherBtn) {
         return (button) -> {
@@ -65,9 +71,10 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     /**
+     * Setter method for a given button
      *
-     * @param button
-     * @param isChecked
+     * @param button Button to be set
+     * @param isChecked Boolean representing if it has been checked or not
      */
     private void setButton(View button, boolean isChecked)
     {
@@ -76,22 +83,38 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     /**
+     * Method for when the exit button is clicked
      *
-     * @param view
+     * @param view View to be passed in
      */
     private void onExitBtnClicked(View view) {
         finish();
     }
 
+    /**
+     * Getter method for the boolean isBrief
+     *
+     * @return Boolean of isBrief
+     */
     public boolean getIsBrief() {
         return getPreferences(MODE_PRIVATE).getBoolean("isBrief", true);
     }
 
+    /**
+     * Getter method for the detailed button
+     *
+     * @return detailed button
+     */
     @VisibleForTesting
     public Button getDetailed() {
         return detailed;
     }
 
+    /**
+     * Getter method for the brief button
+     *
+     * @return brief button
+     */
     @VisibleForTesting
     public Button getBrief() {
         return brief;

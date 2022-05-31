@@ -32,6 +32,7 @@ public class RouteInfo implements Serializable {
 
     /**
      * Getter method for the member variable directions
+     *
      * @return member variable directions as a Map<String, List<LocEdge>>
      */
     public Map<String, List<LocEdge>> getDirections() {
@@ -40,6 +41,7 @@ public class RouteInfo implements Serializable {
 
     /**
      * Getter method for the member variable distances
+     *
      * @return member variable distances as a Map<String, Double>
      */
     public Map<String, Double> getDistances() {
@@ -48,6 +50,7 @@ public class RouteInfo implements Serializable {
 
     /**
      * Adds a direction into the directions Map
+     *
      * @param location Name of location
      * @param direction List of LocEdges representing the directions
      */
@@ -57,6 +60,7 @@ public class RouteInfo implements Serializable {
 
     /**
      * Adds a distance to the distances Map
+     *
      * @param location Name of the location
      * @param distance The current distance to be added
      */
@@ -65,14 +69,18 @@ public class RouteInfo implements Serializable {
     }
 
     /**
+     * Adds a given group ID to a given location
      *
-     * @param location
-     * @param groupId
+     * @param location String location to be ID'd
+     * @param groupId String ID for the given location
      */
-    public void addGroupId(String location, String groupId) { groupIds.put(location, groupId); }
+    public void addGroupId(String location, String groupId) {
+        groupIds.put(location, groupId);
+    }
 
     /**
      * Getter method for the path from a given location
+     *
      * @param location String name of the desired location
      * @return List of LocEdges for the directions to the passed in location
      */
@@ -80,13 +88,33 @@ public class RouteInfo implements Serializable {
         return directions.get(location);
     }
 
+    /**
+     * Get reversed directions based on location
+     *
+     * @param location String location to start from
+     * @return List of LocEdges representing the reversed directions
+     */
     public List<LocEdge> getReversedDirection(String location) {
         if (!directions.containsKey(location)) return null;
         return Utilities.getReversedDirections(directions.get(location));
     }
 
-    public String getGroupId(String location) { return groupIds.get(location); }
+    /**
+     * Retrieves the group ID of a given location
+     *
+     * @param location String of the location to retrieve its group ID
+     * @return Group ID of the given location
+     */
+    public String getGroupId(String location) {
+        return groupIds.get(location);
+    }
 
+    /**
+     * Get IDs of locations that have the same group ID
+     *
+     * @param groupId Group ID of locations wanted
+     * @return List of IDs as Strings
+     */
     public List<String> getIdsWithGroupId(String groupId) {
         List<String> ids = new ArrayList<>();
 
@@ -99,6 +127,7 @@ public class RouteInfo implements Serializable {
 
     /**
      * Getter method for the current distance to a given location
+     *
      * @param location String name of the desired location
      * @return Double representation of the current distance
      */
@@ -108,6 +137,7 @@ public class RouteInfo implements Serializable {
 
     /**
      * Gets all of the locations within the route
+     *
      * @return List of locations on the route as strings
      */
     public List<String> getLocations() {
@@ -117,6 +147,7 @@ public class RouteInfo implements Serializable {
 
     /**
      * Gets the current location
+     *
      * @return String of the current location
      */
     public String getCurrentLocation() {
@@ -129,6 +160,7 @@ public class RouteInfo implements Serializable {
 
     /**
      * Gets the current target
+     *
      * @return String of the current target
      */
     public String getCurrentTarget() {
@@ -139,6 +171,7 @@ public class RouteInfo implements Serializable {
 
     /**
      * Gets the next target
+     *
      * @return String of the next target
      */
     public String getNextTarget() {
@@ -147,6 +180,11 @@ public class RouteInfo implements Serializable {
         return getNextExhibitOf(getCurrentTarget());
     }
 
+    /**
+     * Gets previous location
+     *
+     * @return Previous location as a String
+     */
     public String getPreviousLocation() {
         if (index == 0)
             return null;
@@ -158,6 +196,7 @@ public class RouteInfo implements Serializable {
 
     /**
      * Gets the locations and sorts them into a list by distance
+     *
      * @param unsortedLocations List of unsorted locations in plan
      * @return List of sorted locations based on distance
      */
@@ -190,7 +229,7 @@ public class RouteInfo implements Serializable {
     }
 
     /**
-     *
+     * Used to indicate when the user has arrived at the previous location
      */
     public void arrivePreviousLocation() {
         if (index >= getLocations().size() + 1 || index < 0) return;
@@ -199,6 +238,9 @@ public class RouteInfo implements Serializable {
         arrive(previousLocation);
     }
 
+    /**
+     * Method to remove the current target
+     */
     public void removeCurrentTarget() {
         String currentTarget = getCurrentTarget();
         if (currentTarget == null) return;
@@ -218,6 +260,11 @@ public class RouteInfo implements Serializable {
         }
     }
 
+    /**
+     * Method used to update the rest of the route after
+     *
+     * @param routeForTheRest RouteInfo with the rest of the un-updated locations
+     */
     public void updateTheRest(RouteInfo routeForTheRest) {
         String currentLocation = getCurrentLocation();
 
@@ -242,6 +289,7 @@ public class RouteInfo implements Serializable {
 
     /**
      * Get the next exhibit in our plan
+     *
      * @param targetLocation String of the current location
      * @return String of the next exhibit on the route
      */
@@ -263,9 +311,10 @@ public class RouteInfo implements Serializable {
     }
 
     /**
+     * Gets the previous location of a given location
      *
-     * @param targetLocation
-     * @return
+     * @param targetLocation Location to get the previous of
+     * @return Previous location of a given location
      */
     private String getPreviousLocationOf(String targetLocation) {
 
@@ -283,6 +332,11 @@ public class RouteInfo implements Serializable {
         return "entrance_exit_gate";
     }
 
+    /**
+     * Used to indicate when the user has arrived at a location
+     *
+     * @param location Location arrived at
+     */
     private void arrive(String location) {
         Double previousDistance = distances.get(location);
         distances.replaceAll((l, d) -> d - previousDistance);
@@ -290,6 +344,7 @@ public class RouteInfo implements Serializable {
 
     /**
      * Sorts a given Map of locations by their distances
+     *
      * @param map Map of the distances
      * @param <K> String name of the location
      * @param <V> total distance as a Double

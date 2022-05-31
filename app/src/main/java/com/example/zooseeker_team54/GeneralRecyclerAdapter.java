@@ -59,7 +59,8 @@ public abstract class GeneralRecyclerAdapter<T> extends RecyclerView.Adapter<Gen
     public abstract void onBindViewHolder(@NonNull GeneralRecyclerAdapter.ViewHolder holder, int position);
 
     @Override
-    public int getItemCount() { return items.size(); }
+    public int getItemCount() {
+        return items == null ? 0 : items.size(); }
 
     public abstract class ViewHolder extends RecyclerView.ViewHolder {
         private T item;

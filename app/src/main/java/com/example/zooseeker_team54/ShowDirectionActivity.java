@@ -119,6 +119,7 @@ public class ShowDirectionActivity extends AppCompatActivity {
             //Initialize the skip button
             skipBtn = this.findViewById(R.id.skip_btn);
             skipBtn.setOnClickListener(this::onSkipBtnClicked);
+            updateSkipBtn();
         }
 
     }
@@ -161,6 +162,7 @@ public class ShowDirectionActivity extends AppCompatActivity {
         // update buttons
         updateNextBtn(routeInfo.getCurrentTarget(), routeInfo.getNextTarget());
         updatePreviousBtn(routeInfo.getCurrentLocation());
+        updateSkipBtn();
     }
 
     /**
@@ -193,6 +195,7 @@ public class ShowDirectionActivity extends AppCompatActivity {
         // update buttons
         updateNextBtn(routeInfo.getCurrentLocation(), routeInfo.getCurrentTarget());
         updatePreviousBtn(routeInfo.getCurrentLocation());
+        updateSkipBtn();
     }
 
     /**
@@ -231,6 +234,22 @@ public class ShowDirectionActivity extends AppCompatActivity {
         else {
             previousBtn.setClickable(true);
             previousBtn.setEnabled(true);
+        }
+    }
+
+    private void updateSkipBtn()
+    {
+        String currTarget = routeInfo.getCurrentTarget();
+        String nextTarget = routeInfo.getNextTarget();
+        if((nextTarget == null || nextTarget.equals("entrance_exit_gate")) &&  (currTarget == null || currTarget.equals("entrance_exit_gate")))
+        {
+            skipBtn.setClickable(false);
+            skipBtn.setEnabled(false);
+        }
+        else
+        {
+            skipBtn.setClickable(true);
+            skipBtn.setEnabled(true);
         }
     }
 
@@ -276,6 +295,7 @@ public class ShowDirectionActivity extends AppCompatActivity {
         routeInfo.removeLocation(target);
         routeDirectionPresenter.setItems(routeInfo.getDirection(routeInfo.getCurrentTarget()));
         updateNextBtn(routeInfo.getCurrentTarget(), routeInfo.getNextTarget());
+        updateSkipBtn();
     }
 
     /**

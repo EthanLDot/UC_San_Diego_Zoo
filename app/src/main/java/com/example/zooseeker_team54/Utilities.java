@@ -35,6 +35,7 @@ public class Utilities {
 
     /**
      * Used to load new Zoo JSON information for use
+     *
      * @param context activity to be called from
      */
     public static void loadNewZooJson(Context context) {
@@ -45,6 +46,7 @@ public class Utilities {
 
     /**
      * Used to get the old Zoo JSON info for use on initial creation of MainActivity
+     *
      * @param context activity to be called from
      */
     public static void loadOldZooJson(Context context) {
@@ -56,6 +58,7 @@ public class Utilities {
 
     /**
      * Find search results from a given search bar query
+     *
      * @param query String obtained from user input
      * @param allLocations List of all LocItems within zoo
      * @return List of LocItems to be displayed in the search results RecyclerView
@@ -76,6 +79,7 @@ public class Utilities {
 
     /**
      * Finds shortest path between two edges
+     *
      * @param start vertex we're starting from
      * @param goal  vertex we're trying to reach
      * @return      a pair that consists of the path and the total weight of that path
@@ -117,6 +121,7 @@ public class Utilities {
 
     /**
      * Method to make showing alerts easier
+     *
      * @param activity Activity to display the alert in
      * @param message message to be displayed in the alert
      */
@@ -138,6 +143,7 @@ public class Utilities {
     /**
      * From a given list of LocItems, find the most optimal route through the graph
      * using our findShortestPathBetween function
+     *
      * @param unvisitedLocItems List of LocItems within plan to find a route for
      * @return route from the planned exhibits as a HashMap of edges
      */
@@ -221,19 +227,21 @@ public class Utilities {
     }
 
     /**
+     * Gets ID for route from a LocItem
      *
-     * @param locItem
-     * @return
+     * @param locItem LocItem's ID to be obtained
+     * @return Group ID of the given LocItem
      */
     public static String getIdForRoute(LocItem locItem) {
         return locItem.group_id == null ? locItem.id : locItem.group_id;
     }
 
     /**
+     * Finds the closest exhibit by ID
      *
-     * @param allNonGroupLocItems
-     * @param coord
-     * @return
+     * @param allNonGroupLocItems All of the LocItems without a Group ID
+     * @param coord current coordinates of user
+     * @return ID of the closest exhibit ID
      */
     public static String findClosestExhibitId(List<LocItem> allNonGroupLocItems, Coord coord) {
         // TODO: implement this
@@ -247,11 +255,12 @@ public class Utilities {
     }
 
     /**
+     * Finds the directions for display use
      *
-     * @param routeInfo
-     * @param target
-     * @param isBrief
-     * @return
+     * @param routeInfo the current RouteInfo
+     * @param target    current target location
+     * @param isBrief   boolean if Brief directions are desired
+     * @return          List of LocEdges representing the directions of the route
      */
     public static List<LocEdge> findDirections(RouteInfo routeInfo, String target, boolean isBrief) {
         if (target == null) { return Collections.emptyList(); }
@@ -261,11 +270,12 @@ public class Utilities {
     }
 
     /**
+     * Method to find the reversed directions
      *
-     * @param routeInfo
-     * @param target
-     * @param isBrief
-     * @return
+     * @param routeInfo the current RouteInfo
+     * @param target    current target location
+     * @param isBrief   boolean if Brief directions are desired
+     * @return          List of LocEdges representing the reversed directions of the route
      */
     public static List<LocEdge> findReversedDirections(RouteInfo routeInfo, String target, boolean isBrief) {
         if (target == null) { return Collections.emptyList(); }
@@ -275,9 +285,10 @@ public class Utilities {
     }
 
     /**
+     * Method to retrieve the brief directions of the route
      *
-     * @param directions
-     * @return
+     * @param directions default detailed directions to be made brief
+     * @return List of LocEdges representing the brief directions
      */
     public static List<LocEdge> getBriefDirections(List<LocEdge> directions) {
         List<LocEdge> briefDirections = new ArrayList<>();
@@ -315,9 +326,10 @@ public class Utilities {
     }
 
     /**
+     * Method to get the reversed directions
      *
-     * @param direction
-     * @return
+     * @param direction List of LocEdges to be made reversed
+     * @return List of LocEdges representing the reversed directions
      */
     public static List<LocEdge> getReversedDirections(List<LocEdge> direction) {
         LinkedList<LocEdge> reversedDirections = new LinkedList<>();
@@ -326,9 +338,10 @@ public class Utilities {
     }
 
     /**
+     * Getter method for text from the user's clipboard
      *
-     * @param context
-     * @return
+     * @param context Passed in context
+     * @return String of the user's clipboard
      */
     public static String getTextFromBoard(Context context){
         ClipboardManager clipboard = (ClipboardManager) context.getSystemService(CLIPBOARD_SERVICE);
@@ -337,8 +350,10 @@ public class Utilities {
     }
 
     /**
+     * Method to get a mock route from a given locations array
      *
-     * @return
+     * @param locations String array of locations
+     * @return List of coordinates representing the mock route
      */
     public static List<Coord> getMockRoute(String [] locations) {
         // TODO: find a way to prompt the user and paste the JSON text or an URL

@@ -57,37 +57,4 @@ public class MockLocationTrack {
         });
 
     }
-
-    @Test
-    public void goOffRouteWithTheSameTarget() {
-
-        ActivityScenario<MainActivity> mActivityActivityScenario = ActivityScenario.launch(mainIntent);
-        mActivityActivityScenario.onActivity(activity -> {
-
-            LocItem fern_canyon = dao.get("fern_canyon");
-            LocItem gorilla = dao.get("gorilla");
-
-            List<LocItem> testItems = new ArrayList<>();
-            testItems.add(fern_canyon);
-            testItems.add(gorilla);
-            activity.getPlannedLocsPresenter().setItems(testItems);
-
-            RouteInfo routeInfo = activity.findRoute(activity.getPlannedLocsPresenter().getItems());
-            routeDirectionIntent.putExtra("routeInfo", routeInfo);
-        });
-
-        ActivityScenario<ShowDirectionActivity> routeDirectionActivityActivityScenario = ActivityScenario.launch(routeDirectionIntent);
-        routeDirectionActivityActivityScenario.onActivity(activity -> {
-            RouteInfo routeInfo = activity.getRouteInfo();
-            System.out.println(routeInfo.getDirections());
-            List<LocEdge> oldRouteForCanyon = routeInfo.getDirection("fern_canyon");
-            LocationTracker locationTracker = activity.getLocationTracker();
-            LocItem siamang = dao.get("siamang");
-            locationTracker.mockLocation(siamang.getCoord());
-            List<LocEdge> newRouteForCanyon = routeInfo.getDirection("fern_canyon");
-            assertNotEquals(oldRouteForCanyon, newRouteForCanyon);
-        });
-
-
-    }
 }

@@ -245,12 +245,17 @@ public class Utilities {
      * @return
      */
     public static String findClosestExhibitId(List<LocItem> allNonGroupLocItems, Coord coord) {
-        // TODO: implement this
-        String id = "";
+        String id = null;
+        double minDistance = Double.MAX_VALUE;
+
         for (LocItem l: allNonGroupLocItems) {
-            if (l.getCoord().equals(coord)) {
+            double distance = Coord.distanceBetweenTwoCoords(coord, l.getCoord());
+
+            if (distance < minDistance) {
                 id = l.id;
+                minDistance = distance;
             }
+
         }
         return id;
     }

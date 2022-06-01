@@ -55,7 +55,6 @@ public class Utilities {
         eInfo = ZooData.loadEdgeInfoJSON("sample_edge_info.json", context);
     }
 
-
     /**
      * Find search results from a given search bar query
      *

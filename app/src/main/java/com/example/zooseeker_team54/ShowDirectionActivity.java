@@ -156,6 +156,9 @@ public class ShowDirectionActivity extends AppCompatActivity {
             }
         }
 
+        if (getDirection().equals("backward"))
+            setDirection("forward");
+
         String currentTarget = routeInfo.getCurrentTarget();
         LocItem targetLocItem = viewModel.getLocItemById(currentTarget);
 
@@ -201,6 +204,13 @@ public class ShowDirectionActivity extends AppCompatActivity {
                 directions = Utilities.findReversedDirections(routeInfo, routeInfo.getCurrentLocation(), getIsBrief());
             }
             routeDirectionPresenter.setItems(directions);
+        }
+
+        // update Buttons
+        {
+            updateNextBtn(routeInfo.getCurrentTarget(), routeInfo.getNextTarget());
+            updatePreviousBtn(routeInfo.getCurrentLocation());
+            updateSkipBtn();
         }
     }
 

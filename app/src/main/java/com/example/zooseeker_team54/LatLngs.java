@@ -10,14 +10,30 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+/**
+ * Class representing the functionality of the LatLng object. Used to represent coordinates
+ */
 public class LatLngs {
+    // LatLngs of UCSD and ZOO
     public static final LatLng UCSD_LATLNG = new LatLng(32.8801, -117.2340);
     public static final LatLng ZOO_LATLNG = new LatLng(32.7353, -117.1490);
 
+    /**
+     * Method to create a LatLng based on a given location
+     *
+     * @param location location to get coordinates of
+     * @return coordinates of the given location as a LatLng
+     */
     public static LatLng fromLocation(Location location) {
         return new LatLng(location.getLatitude(), location.getLongitude());
     }
 
+    /**
+     * Method to get the Location from a given LatLng
+     *
+     * @param latLng LatLng to be converted to a Location
+     * @return Location of the given LatLng
+     */
     public static Location toGPSLocation(LatLng latLng) {
         Location location = new Location(LocationManager.GPS_PROVIDER);
         location.setLatitude(latLng.latitude);
@@ -28,6 +44,13 @@ public class LatLngs {
         return location;
     }
 
+    /**
+     * Method to calculate the midpoint between two LatLngs
+     *
+     * @param l1    Start LatLng
+     * @param l2    End Latlng
+     * @return      LatLng of the midpoint between the two given LatLngs
+     */
     public static LatLng midpoint(LatLng l1, LatLng l2) {
         return new LatLng(
                 (l1.latitude + l2.latitude) / 2,
@@ -35,6 +58,14 @@ public class LatLngs {
         );
     }
 
+    /**
+     * Method to interpolate points between two LatLngs
+     *
+     * @param l1    Start LatLng
+     * @param l2    End LatLng
+     * @param n     Number of points to interpolate in between
+     * @return      List of LatLngs that are evenly spaced in between l1 and l2
+     */
     public static List<LatLng> pointsBetween(LatLng l1, LatLng l2, int n) {
         var dLat = Math.abs(l1.latitude - l2.latitude);
         var dLng = Math.abs(l1.longitude - l2.longitude);

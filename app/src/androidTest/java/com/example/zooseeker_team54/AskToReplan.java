@@ -30,6 +30,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 // UI Test for User Story 5, 6 in MS 2
+// IMPORTANT: Make sure that the app is set to "Brief" for the directions mode!!!!!
 @LargeTest
 @RunWith(AndroidJUnit4.class)
 public class AskToReplan {
@@ -213,10 +214,10 @@ public class AskToReplan {
         appCompatEditText2.perform(replaceText("32.74529,-117.16976"), closeSoftKeyboard());
 
         ViewInteraction textView = onView(
-                allOf(withId(R.id.direction), withText("Proceed on 'Gate Path' 1100 meters towards 'Front Street / Treetops Way' from 'Entrance and Exit Gate'.\n"),
+                allOf(withId(R.id.direction), withText("Proceed on 'Gate Path' 1100 feet towards 'Front Street / Treetops Way' from 'Entrance and Exit Gate'.\n"),
                         withParent(withParent(withId(R.id.route_direction))),
                         isDisplayed()));
-        textView.check(matches(withText("Proceed on 'Gate Path' 1100 meters towards 'Front Street / Treetops Way' from 'Entrance and Exit Gate'.\n")));
+        textView.check(matches(withText("Proceed on 'Gate Path' 1100 feet towards 'Front Street / Treetops Way' from 'Entrance and Exit Gate'.\n")));
 
         ViewInteraction materialButton5 = onView(
                 allOf(withId(R.id.start_mock), withText("Mock"),
@@ -245,10 +246,10 @@ public class AskToReplan {
         materialButton6.perform(click());
 
         ViewInteraction textView3 = onView(
-                allOf(withId(R.id.direction), withText("Proceed on 'Hippo Trail' 1500 meters towards 'Monkey Trail' from 'Crocodiles'.\n"),
+                allOf(withId(R.id.direction), withText("Proceed on 'Monkey Trail' 2300 feet towards 'Capuchin Monkeys' from 'Monkey Trail / Hippo Trail'.\n"),
                         withParent(withParent(withId(R.id.route_direction))),
                         isDisplayed()));
-        textView3.check(matches(withText("Proceed on 'Hippo Trail' 1500 meters towards 'Monkey Trail' from 'Crocodiles'.\n")));
+        textView3.check(matches(withText("Proceed on 'Monkey Trail' 2300 feet towards 'Capuchin Monkeys' from 'Monkey Trail / Hippo Trail'.\n")));
     }
 
     private static Matcher<View> childAtPosition(

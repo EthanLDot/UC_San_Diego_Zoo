@@ -78,8 +78,7 @@ public class SettingsActivity extends AppCompatActivity {
      * @param button    Given button to be set
      * @param isChecked boolean for if the button should be checked or not
      */
-    private void setButton(View button, boolean isChecked)
-    {
+    private void setButton(View button, boolean isChecked) {
         String color = isChecked ? "#8BC34A" : "#40737373";
         button.setBackgroundColor(Color.parseColor(color));
     }

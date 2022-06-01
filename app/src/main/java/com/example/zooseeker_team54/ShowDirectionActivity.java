@@ -51,7 +51,6 @@ public class ShowDirectionActivity extends AppCompatActivity {
             viewModel = new ViewModelProvider(this).get(ViewModel.class);
             routeInfo = (RouteInfo) intent.getSerializableExtra("routeInfo");
             locationTracker = new LocationTracker(this, false);
-            locationTracker.mockLocation(getCoord());
             locationTracker.getUserCoordLive().observe(this, this::detectOffRoute);
             routeDirectionPresenter = new RecyclerViewPresenterBuilder<LocEdge>()
                     .setAdapter(new ShowDirectionAdapter())
@@ -137,6 +136,9 @@ public class ShowDirectionActivity extends AppCompatActivity {
      * @param coord
      */
     private void detectOffRoute(Coord coord) {
+        if (coord.equals(viewModel.getLocItemById(routeInfo.getCurrentLocation()))) {
+            return;
+        }
         String currentTarget = routeInfo.getCurrentTarget();
         LocItem targetLocItem = viewModel.getLocItemById(currentTarget);
         Double threshold = Coord.distanceBetweenTwoCoords(coord, targetLocItem.getCoord());
@@ -154,6 +156,19 @@ public class ShowDirectionActivity extends AppCompatActivity {
                     String startLocation = Utilities.findClosestExhibitId(viewModel.getAllNonGroup(), coord);
                     RouteInfo newPlanForUnvisitedLocations = Utilities.findRoute(unvisitedLocItems, coord, startLocation);
                     routeInfo.updateTheRest(newPlanForUnvisitedLocations);
+                    {
+                        List<LocEdge> directions;
+                        if (routeInfo == null) {
+                            directions = Collections.emptyList();
+                        }
+                        else if (getDirection().equals("forward")) {
+                            directions = Utilities.findDirections(routeInfo, routeInfo.getCurrentTarget(), getIsBrief());
+                        }
+                        else {
+                            directions = Utilities.findReversedDirections(routeInfo, routeInfo.getCurrentLocation(), getIsBrief());
+                        }
+                        routeDirectionPresenter.setItems(directions);
+                    }
                 }
             }
         }
@@ -186,11 +201,6 @@ public class ShowDirectionActivity extends AppCompatActivity {
             String arrivedLocation = routeInfo.getCurrentTarget();
             LocItem arrivedLocItem = viewModel.getLocItemById(arrivedLocation);
             viewModel.addVisitedLoc(arrivedLocItem);
-
-            if (arrivedLocItem.group_id != null)
-                locationTracker.mockLocation(viewModel.getLocItemById(arrivedLocItem.group_id).getCoord());
-            else
-                locationTracker.mockLocation(viewModel.getLocItemById(arrivedLocation).getCoord());
 
             String groupId = routeInfo.getGroupId(arrivedLocation);
             if (groupId != null) {

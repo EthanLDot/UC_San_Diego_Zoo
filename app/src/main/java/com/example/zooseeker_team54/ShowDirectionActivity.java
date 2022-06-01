@@ -129,11 +129,17 @@ public class ShowDirectionActivity extends AppCompatActivity {
 
     }
 
-    public LocationTracker getLocationTracker() { return locationTracker; }
+    /**
+     * Getter method for the location tracker
+     * @return the current location tracker
+     */
+    public LocationTracker getLocationTracker() {
+        return locationTracker;
+    }
 
     /**
-     *
-     * @param coord
+     * Method to detect when the user is off the given route
+     * @param coord Current coordinates of the user
      */
     private void detectOffRoute(Coord coord) {
 

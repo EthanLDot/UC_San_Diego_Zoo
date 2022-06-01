@@ -237,7 +237,13 @@ public class Utilities {
      */
     public static String findClosestExhibitId(List<LocItem> allNonGroupLocItems, Coord coord) {
         // TODO: implement this
-        return allNonGroupLocItems.get(0).id;
+        String id = "";
+        for (LocItem l: allNonGroupLocItems) {
+            if (l.getCoord().equals(coord)) {
+                id = l.id;
+            }
+        }
+        return id;
     }
 
     /**

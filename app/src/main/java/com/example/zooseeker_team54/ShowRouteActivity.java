@@ -87,6 +87,9 @@ public class ShowRouteActivity extends AppCompatActivity {
      * @param locItems Given locations of the route
      */
     public void setItems(List<LocItem> locItems) {
+
+        if (locItems.size() == 0) return;
+
         List<String> locations = locItems
                 .stream()
                 .map((locItem -> locItem.id))

@@ -78,15 +78,15 @@ public class SkipExhibitTests {
         routeDirectionActivityActivityScenario.onActivity(activity -> {
             Button skipBtn = activity.findViewById(R.id.skip_btn);
             skipBtn.performClick();
-            String expectedDirections = "[Proceed on 'Gate Path' 1100 meters towards 'Front Street / Treetops Way' from 'Entrance and Exit Gate'.\n" +
-                    ", Proceed on 'Treetops Way' 1100 meters towards 'Treetops Way / Fern Canyon Trail' from 'Front Street / Treetops Way'.\n" +
-                    ", Proceed on 'Treetops Way' 1400 meters towards 'Treetops Way / Orangutan Trail' from 'Treetops Way / Fern Canyon Trail'.\n" +
-                    ", Proceed on 'Treetops Way' 1900 meters towards 'Treetops Way / Hippo Trail' from 'Treetops Way / Orangutan Trail'.\n" +
-                    ", Proceed on 'Hippo Trail' 1900 meters towards 'Hippos' from 'Treetops Way / Hippo Trail'.\n" +
-                    ", Proceed on 'Hippo Trail' 1100 meters towards 'Crocodiles' from 'Hippos'.\n" +
-                    ", Proceed on 'Hippo Trail' 1500 meters towards 'Monkey Trail / Hippo Trail' from 'Crocodiles'.\n" +
-                    ", Proceed on 'Monkey Trail' 1200 meters towards 'Scripps Aviary' from 'Monkey Trail / Hippo Trail'.\n" +
-                    ", Proceed on 'Monkey Trail' 1200 meters towards 'Gorillas' from 'Scripps Aviary'.\n]";
+            String expectedDirections = "[Proceed on 'Gate Path' 1100 feet towards 'Front Street / Treetops Way' from 'Entrance and Exit Gate'.\n" +
+                    ", Proceed on 'Treetops Way' 1100 feet towards 'Treetops Way / Fern Canyon Trail' from 'Front Street / Treetops Way'.\n" +
+                    ", Proceed on 'Treetops Way' 1400 feet towards 'Treetops Way / Orangutan Trail' from 'Treetops Way / Fern Canyon Trail'.\n" +
+                    ", Proceed on 'Treetops Way' 1900 feet towards 'Treetops Way / Hippo Trail' from 'Treetops Way / Orangutan Trail'.\n" +
+                    ", Proceed on 'Hippo Trail' 1900 feet towards 'Hippos' from 'Treetops Way / Hippo Trail'.\n" +
+                    ", Proceed on 'Hippo Trail' 1100 feet towards 'Crocodiles' from 'Hippos'.\n" +
+                    ", Proceed on 'Hippo Trail' 1500 feet towards 'Monkey Trail / Hippo Trail' from 'Crocodiles'.\n" +
+                    ", Proceed on 'Monkey Trail' 1200 feet towards 'Scripps Aviary' from 'Monkey Trail / Hippo Trail'.\n" +
+                    ", Proceed on 'Monkey Trail' 1200 feet towards 'Gorillas' from 'Scripps Aviary'.\n]";
             List<LocEdge> directions = activity.getRouteDirectionPresenter().getItems();
             assertEquals(expectedDirections, directions.toString());
         });
@@ -128,11 +128,11 @@ public class SkipExhibitTests {
             Button skipBtn = activity.findViewById(R.id.skip_btn);
             nextBtn.performClick();
             skipBtn.performClick();
-            String expectedDirections = "[Proceed on 'Orangutan Trail' 1100 meters towards 'Siamangs' from 'Orangutans'.\n" +
-                    ", Proceed on 'Orangutan Trail' 1200 meters towards 'Treetops Way / Orangutan Trail' from 'Siamangs'.\n" +
-                    ", Proceed on 'Treetops Way' 1400 meters towards 'Treetops Way / Fern Canyon Trail' from 'Treetops Way / Orangutan Trail'.\n" +
-                    ", Proceed on 'Treetops Way' 1100 meters towards 'Front Street / Treetops Way' from 'Treetops Way / Fern Canyon Trail'.\n" +
-                    ", Proceed on 'Gate Path' 1100 meters towards 'Entrance and Exit Gate' from 'Front Street / Treetops Way'.\n]";
+            String expectedDirections = "[Proceed on 'Orangutan Trail' 1100 feet towards 'Siamangs' from 'Orangutans'.\n" +
+                    ", Proceed on 'Orangutan Trail' 1200 feet towards 'Treetops Way / Orangutan Trail' from 'Siamangs'.\n" +
+                    ", Proceed on 'Treetops Way' 1400 feet towards 'Treetops Way / Fern Canyon Trail' from 'Treetops Way / Orangutan Trail'.\n" +
+                    ", Proceed on 'Treetops Way' 1100 feet towards 'Front Street / Treetops Way' from 'Treetops Way / Fern Canyon Trail'.\n" +
+                    ", Proceed on 'Gate Path' 1100 feet towards 'Entrance and Exit Gate' from 'Front Street / Treetops Way'.\n]";
             List<LocEdge> directions = activity.getRouteDirectionPresenter().getItems();
             assertEquals(expectedDirections, directions.toString());
         });

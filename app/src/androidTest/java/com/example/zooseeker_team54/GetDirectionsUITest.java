@@ -184,16 +184,16 @@ public class GetDirectionsUITest {
         materialButton2.perform(click());
 
         ViewInteraction textView = onView(
-                allOf(withId(R.id.direction), withText("Proceed on 'Entrance Way' 10 meters towards 'Entrance Plaza' from 'Entrance and Exit Gate'.\n"),
+                allOf(withId(R.id.direction), withText("Proceed on 'Entrance Way' 10 feet towards 'Entrance Plaza' from 'Entrance and Exit Gate'.\n"),
                         withParent(withParent(withId(R.id.route_direction))),
                         isDisplayed()));
-        textView.check(matches(withText("Proceed on 'Entrance Way' 10 meters towards 'Entrance Plaza' from 'Entrance and Exit Gate'.\n")));
+        textView.check(matches(withText("Proceed on 'Entrance Way' 10 feet towards 'Entrance Plaza' from 'Entrance and Exit Gate'.\n")));
 
         ViewInteraction textView2 = onView(
-                allOf(withId(R.id.direction), withText("Proceed on 'Reptile Road' 100 meters towards 'Alligators' from 'Entrance Plaza'.\n"),
+                allOf(withId(R.id.direction), withText("Proceed on 'Reptile Road' 100 feet towards 'Alligators' from 'Entrance Plaza'.\n"),
                         withParent(withParent(withId(R.id.route_direction))),
                         isDisplayed()));
-        textView2.check(matches(withText("Proceed on 'Reptile Road' 100 meters towards 'Alligators' from 'Entrance Plaza'.\n")));
+        textView2.check(matches(withText("Proceed on 'Reptile Road' 100 feet towards 'Alligators' from 'Entrance Plaza'.\n")));
 
         ViewInteraction button = onView(
                 allOf(withId(R.id.next_btn), withText("NEXT\n------\nLIONS, 200"),
@@ -216,10 +216,10 @@ public class GetDirectionsUITest {
         materialButton4.perform(click());
 
         ViewInteraction textView3 = onView(
-                allOf(withId(R.id.direction), withText("Proceed on 'Arctic Avenue' 300 meters towards 'Arctic Foxes' from 'Entrance Plaza'.\n"),
+                allOf(withId(R.id.direction), withText("Proceed on 'Arctic Avenue' 300 feet towards 'Arctic Foxes' from 'Entrance Plaza'.\n"),
                         withParent(withParent(withId(R.id.route_direction))),
                         isDisplayed()));
-        textView3.check(matches(withText("Proceed on 'Arctic Avenue' 300 meters towards 'Arctic Foxes' from 'Entrance Plaza'.\n")));
+        textView3.check(matches(withText("Proceed on 'Arctic Avenue' 300 feet towards 'Arctic Foxes' from 'Entrance Plaza'.\n")));
 
         ViewInteraction button3 = onView(
                 allOf(withId(R.id.next_btn), withText("NEXT\n------\nENTRANCE AND EXIT GATE, 310"),
@@ -232,16 +232,16 @@ public class GetDirectionsUITest {
         materialButton5.perform(click());
 
         ViewInteraction textView4 = onView(
-                allOf(withId(R.id.direction), withText("Proceed on 'Arctic Avenue' 300 meters towards 'Entrance Plaza' from 'Arctic Foxes'.\n"),
+                allOf(withId(R.id.direction), withText("Proceed on 'Arctic Avenue' 300 feet towards 'Entrance Plaza' from 'Arctic Foxes'.\n"),
                         withParent(withParent(withId(R.id.route_direction))),
                         isDisplayed()));
-        textView4.check(matches(withText("Proceed on 'Arctic Avenue' 300 meters towards 'Entrance Plaza' from 'Arctic Foxes'.\n")));
+        textView4.check(matches(withText("Proceed on 'Arctic Avenue' 300 feet towards 'Entrance Plaza' from 'Arctic Foxes'.\n")));
 
         ViewInteraction textView5 = onView(
-                allOf(withId(R.id.direction), withText("Proceed on 'Entrance Way' 10 meters towards 'Entrance and Exit Gate' from 'Entrance Plaza'.\n"),
+                allOf(withId(R.id.direction), withText("Proceed on 'Entrance Way' 10 feet towards 'Entrance and Exit Gate' from 'Entrance Plaza'.\n"),
                         withParent(withParent(withId(R.id.route_direction))),
                         isDisplayed()));
-        textView5.check(matches(withText("Proceed on 'Entrance Way' 10 meters towards 'Entrance and Exit Gate' from 'Entrance Plaza'.\n")));
+        textView5.check(matches(withText("Proceed on 'Entrance Way' 10 feet towards 'Entrance and Exit Gate' from 'Entrance Plaza'.\n")));
 
         ViewInteraction button4 = onView(
                 allOf(withId(R.id.next_btn), withText("NEXT\n------\nNO EXHIBITS LEFT!"),

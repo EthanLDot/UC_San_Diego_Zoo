@@ -56,7 +56,7 @@ public class ShowRouteAdapter extends GeneralRecyclerAdapter<LocItem> {
         public void setItem(LocItem locItem) {
             super.setItem(locItem);
             this.locNameText.setText(locItem.name);
-            this.distanceText.setText(String.format("- %d meters", routeInfo.getDistance(locItem.id).intValue()));
+            this.distanceText.setText(String.format("- %d feet", routeInfo.getDistance(locItem.id).intValue()));
         }
     }
 }

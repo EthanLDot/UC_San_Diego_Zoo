@@ -313,7 +313,7 @@ public class ShowDirectionActivity extends AppCompatActivity {
             setDirection("backward");
         }
         else {
-            String arrivedLocation = routeInfo.getCurrentLocation();
+            String arrivedLocation = routeInfo.getPreviousLocation();
             LocItem arrivedLocItem = viewModel.getLocItemById(arrivedLocation);
             viewModel.removeVisitedLoc(arrivedLocItem);
 
@@ -449,6 +449,12 @@ public class ShowDirectionActivity extends AppCompatActivity {
             routeInfo = Utilities.findRoute(viewModel.getAllPlannedUnvisited(), viewModel.getLocItemById("entrance_exit_gate"));
         }
         else if (currentLocation != null && currentTarget != null && currentTarget.equals("entrance_exit_gate")) {
+
+            // safeguard protection
+            currentLocation = Utilities.getIdForRoute(viewModel.getLocItemById(currentLocation));
+            currentTarget = Utilities.getIdForRoute(viewModel.getLocItemById(currentTarget));
+
+            // get the actual pair
             Pair<List<LocEdge>, Double> pair = Utilities.findShortestPathBetween(currentLocation, currentTarget);
             routeInfo.addDirection("entrance_exit_gate", pair.first);
             routeInfo.addDistance("entrance_exit_gate", pair.second);

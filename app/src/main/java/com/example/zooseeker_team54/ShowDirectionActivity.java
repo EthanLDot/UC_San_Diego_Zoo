@@ -3,6 +3,7 @@ package com.example.zooseeker_team54;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Pair;
@@ -64,6 +65,8 @@ public class ShowDirectionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_direction);
         Intent intent = getIntent();
+
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         // Initialize major fields
         {

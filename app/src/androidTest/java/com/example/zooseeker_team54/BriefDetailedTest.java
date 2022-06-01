@@ -36,6 +36,7 @@ import org.junit.runner.RunWith;
 
 import java.util.List;
 
+// MS 2 User Story 2 UI Test
 @LargeTest
 @RunWith(AndroidJUnit4.class)
 public class BriefDetailedTest {

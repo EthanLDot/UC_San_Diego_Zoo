@@ -27,6 +27,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+// MS 2 US 7 UI Test
 @LargeTest
 @RunWith(AndroidJUnit4.class)
 public class SkipBtnUITest {

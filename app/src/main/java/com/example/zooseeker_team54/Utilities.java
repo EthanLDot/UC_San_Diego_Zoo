@@ -156,44 +156,32 @@ public class Utilities {
             return routeInfo;
         }
 
-        //Boolean a = unvisitedLocItems.size() == 1;
-        //Boolean b = unvisitedLocItems.get(0).id.equals("entrance_exit_gate");
-
         if(!(unvisitedLocItems.size() == 1 && unvisitedLocItems.get(0).id.equals("entrance_exit_gate"))) {
-        removeEntranceGate(unvisitedLocItems);
+            removeEntranceGate(unvisitedLocItems);
         }
 
         // the final route to return
         RouteInfo routeInfo = new RouteInfo();
 
-        //
-        Map<String, LocItem> locItemMap = new HashMap<>();
-        unvisitedLocItems.forEach((l) -> locItemMap.put(l.id, l));
-
-        // set up a list unvisited locations
-        List<String> unvisited = new ArrayList<>();
-        unvisitedLocItems.forEach((word) -> unvisited.add(word.id));
-
         // start at the entrance of the zoo
         double currDist = 0;
-        String current = startLocation.id;
-        LocItem currentLocItem = startLocation;
+        LocItem current = startLocation;
 
         // while there are still unvisited locations, find the closest to the last added one, and add it to the route
-        while (unvisited.size() > 0) {
+        while (unvisitedLocItems.size() > 0) {
 
             // initialize index, distance, and the path to the shortest planned locations
             int minIndex = 0;
-            String closest = "", target = "";
+            LocItem closest = null, target;
             double minDist = Double.MAX_VALUE;
             List<LocEdge> minPath = new LinkedList<>();
 
             // loop through each other planned locations
-            for (int i = 0; i < unvisited.size(); i++) {
-                target = unvisited.get(i);
+            for (int i = 0; i < unvisitedLocItems.size(); i++) {
+                target = unvisitedLocItems.get(i);
 
-                String current_id = current.equals("entrance_exit_gate") ? current : getIdForRoute(currentLocItem);
-                String target_id = getIdForRoute(locItemMap.get(target));
+                String current_id = current.equals("entrance_exit_gate") ? "entrance_exit_gate" : getIdForRoute(current);
+                String target_id = getIdForRoute(target);
                 Pair<List<LocEdge>, Double> pair = findShortestPathBetween(current_id, target_id);
 
                 // if the distance is shorter than current min distance, update
@@ -210,23 +198,20 @@ public class Utilities {
 
             // set closest to be current and remove the top element from unvisited
             current = closest;
-            currentLocItem = locItemMap.get(closest);
-            unvisited.remove(minIndex);
+            unvisitedLocItems.remove(minIndex);
 
             // add the next path to paths and add the next distance to distances
-            routeInfo.addDirection(closest, minPath);
-            routeInfo.addDistance(closest, currDist);
+            routeInfo.addDirection(closest.id, minPath);
+            routeInfo.addDistance(closest.id, currDist);
 
-            LocItem closestLocation = locItemMap.get(closest);
-            if (closestLocation.group_id != null) {
-                  routeInfo.addGroupId(closest, closestLocation.group_id);
+            if (closest.group_id != null) {
+                  routeInfo.addGroupId(closest.id, closest.group_id);
             }
         }
 
         // find the path from the last added exhibit and add it to the route
         String target = "entrance_exit_gate";
-        current = getIdForRoute(locItemMap.get(current));
-        Pair<List<LocEdge>, Double> pair = Utilities.findShortestPathBetween(current, target);
+        Pair<List<LocEdge>, Double> pair = Utilities.findShortestPathBetween(current.id, target);
         routeInfo.addDirection(target, pair.first);
 
         currDist += pair.second;

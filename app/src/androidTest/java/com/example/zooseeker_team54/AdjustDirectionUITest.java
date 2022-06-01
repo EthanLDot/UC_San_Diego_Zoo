@@ -29,6 +29,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 // UI Test for MS 2 User Story 3
+// IMPORTANT: Make sure that the app is set to "Brief" for the directions mode!!!!!
 @LargeTest
 @RunWith(AndroidJUnit4.class)
 public class AdjustDirectionUITest {

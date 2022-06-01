@@ -218,16 +218,18 @@ public class ShowDirectionActivity extends AppCompatActivity {
     }
 
     /**
+     * Getter method for the RouteDirectionPresenter
      *
-     * @return
+     * @return member variable RouteDirectionPresenter
      */
     public RecyclerViewPresenter<LocEdge> getRouteDirectionPresenter() {
         return routeDirectionPresenter;
     }
 
     /**
+     * Method for when the next button is clicked
      *
-     * @param view
+     * @param view View to be launched from
      */
     private void onNextBtnClicked(View view) {
 
@@ -265,8 +267,9 @@ public class ShowDirectionActivity extends AppCompatActivity {
     }
 
     /**
+     * Method for when previous button is clicked
      *
-     * @param view
+     * @param view View to be launched from
      */
     private void onPreviousBtnClicked(View view) {
         if (!getDirection().equals("backward")) {
@@ -304,9 +307,10 @@ public class ShowDirectionActivity extends AppCompatActivity {
     }
 
     /**
+     * Method for when the next button is clicked
      *
-     * @param currTarget
-     * @param nextTarget
+     * @param currTarget the current target location
+     * @param nextTarget the next target location
      */
     private void updateNextBtn(String currTarget, String nextTarget) {
         String buttonText;
@@ -326,8 +330,9 @@ public class ShowDirectionActivity extends AppCompatActivity {
     }
 
     /**
+     * Method to update the previous button with new information
      *
-     * @param currentLocation
+     * @param currentLocation the current location
      */
     private void updatePreviousBtn(String currentLocation) {
         if (currentLocation == null || currentLocation.equals("entrance_exit_gate") ||
@@ -342,6 +347,9 @@ public class ShowDirectionActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Method to update the skip button with new information
+     */
     private void updateSkipBtn() {
         if(routeInfo != null) {
             String currTarget = routeInfo.getCurrentTarget();
@@ -370,8 +378,8 @@ public class ShowDirectionActivity extends AppCompatActivity {
     }
 
     /**
-     *
-     * @param view
+     * Method for when the Settings button is clicked
+     * @param view View to be launched from
      */
     private void onSettingsClicked(View view) {
         Intent intent = new Intent(this, SettingsActivity.class);
@@ -390,8 +398,8 @@ public class ShowDirectionActivity extends AppCompatActivity {
     }
 
     /**
-     *
-     * @param view
+     * Method for when the skip button is clicked
+     * @param view View to be launched from
      */
     private void onSkipBtnClicked(View view){
         String target = routeInfo.getCurrentTarget();
@@ -414,24 +422,24 @@ public class ShowDirectionActivity extends AppCompatActivity {
     }
 
     /**
-     *
-     * @return
+     * Getter method for the isBrief boolean in SharedPreferences
+     * @return the isBrief boolean from SharedPreferences
      */
     private boolean getIsBrief() {
         return getPreferences(MODE_PRIVATE).getBoolean("isBrief", true);
     }
 
     /**
-     *
-     * @return
+     * Getter method for the direction from SharedPreferences
+     * @return the direction from SharedPreferences
      */
     private String getDirection() {
         return getPreferences(MODE_PRIVATE).getString("direction", "forward");
     }
 
     /**
-     *
-     * @param direction
+     * Setter method for the direction
+     * @param direction direction to be set
      */
     private void setDirection(String direction) {
         SharedPreferences preferences = getPreferences(MODE_PRIVATE);
@@ -441,8 +449,8 @@ public class ShowDirectionActivity extends AppCompatActivity {
     }
 
     /**
-     *
-     * @return
+     * Getter method the current coordinates
+     * @return the current coordinates
      */
     private Coord getCoord() {
         SharedPreferences preferences = getPreferences(MODE_PRIVATE);
@@ -454,8 +462,8 @@ public class ShowDirectionActivity extends AppCompatActivity {
     }
 
     /**
-     *
-     * @param coord
+     * Setter method for coordinates
+     * @param coord Coordinates to be set to
      */
     private void setCoord(Coord coord) {
         SharedPreferences preferences = getPreferences(MODE_PRIVATE);

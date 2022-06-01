@@ -35,6 +35,7 @@ public class Utilities {
 
     /**
      * Used to load new Zoo JSON information for use
+     *
      * @param context activity to be called from
      */
     public static void loadNewZooJson(Context context) {
@@ -45,6 +46,7 @@ public class Utilities {
 
     /**
      * Used to get the old Zoo JSON info for use on initial creation of MainActivity
+     *
      * @param context activity to be called from
      */
     public static void loadOldZooJson(Context context) {
@@ -53,9 +55,9 @@ public class Utilities {
         eInfo = ZooData.loadEdgeInfoJSON("sample_edge_info.json", context);
     }
 
-
     /**
      * Find search results from a given search bar query
+     *
      * @param query String obtained from user input
      * @param allLocations List of all LocItems within zoo
      * @return List of LocItems to be displayed in the search results RecyclerView
@@ -76,6 +78,7 @@ public class Utilities {
 
     /**
      * Finds shortest path between two edges
+     *
      * @param start vertex we're starting from
      * @param goal  vertex we're trying to reach
      * @return      a pair that consists of the path and the total weight of that path
@@ -117,6 +120,7 @@ public class Utilities {
 
     /**
      * Method to make showing alerts easier
+     *
      * @param activity Activity to display the alert in
      * @param message message to be displayed in the alert
      */
@@ -138,10 +142,11 @@ public class Utilities {
     /**
      * From a given list of LocItems, find the most optimal route through the graph
      * using our findShortestPathBetween function
+     *
      * @param unvisitedLocItems List of LocItems within plan to find a route for
      * @return route from the planned exhibits as a HashMap of edges
      */
-    public static RouteInfo findRoute(List<LocItem> unvisitedLocItems, Coord coord, boolean startFromEntrance) {
+    public static RouteInfo findRoute(List<LocItem> unvisitedLocItems, LocItem startLocation) {
 
         if (unvisitedLocItems.size() == 0) {
             RouteInfo routeInfo = new RouteInfo();
@@ -150,36 +155,32 @@ public class Utilities {
             return routeInfo;
         }
 
+        if(!(unvisitedLocItems.size() == 1 && unvisitedLocItems.get(0).id.equals("entrance_exit_gate"))) {
+            removeEntranceGate(unvisitedLocItems);
+        }
+
         // the final route to return
         RouteInfo routeInfo = new RouteInfo();
 
-        //
-        Map<String, LocItem> info = new HashMap<>();
-        unvisitedLocItems.forEach((locItem) -> info.put(locItem.id, locItem));
-
-        // set up a list unvisited locations
-        List<String> unvisited = new ArrayList<>();
-        unvisitedLocItems.forEach((word) -> unvisited.add(word.id));
-
         // start at the entrance of the zoo
         double currDist = 0;
-        String current = startFromEntrance ? "entrance_exit_gate" : findClosestExhibitId(unvisitedLocItems, coord);
+        LocItem current = startLocation;
 
         // while there are still unvisited locations, find the closest to the last added one, and add it to the route
-        while (unvisited.size() > 0) {
+        while (unvisitedLocItems.size() > 0) {
 
             // initialize index, distance, and the path to the shortest planned locations
             int minIndex = 0;
-            String closest = "", target = "";
+            LocItem closest = null, target;
             double minDist = Double.MAX_VALUE;
             List<LocEdge> minPath = new LinkedList<>();
 
             // loop through each other planned locations
-            for (int i = 0; i < unvisited.size(); i++) {
-                target = unvisited.get(i);
+            for (int i = 0; i < unvisitedLocItems.size(); i++) {
+                target = unvisitedLocItems.get(i);
 
-                String current_id = current.equals("entrance_exit_gate") ? current : getIdForRoute(info.get(current));
-                String target_id = getIdForRoute(info.get(target));
+                String current_id = current.equals("entrance_exit_gate") ? "entrance_exit_gate" : getIdForRoute(current);
+                String target_id = getIdForRoute(target);
                 Pair<List<LocEdge>, Double> pair = findShortestPathBetween(current_id, target_id);
 
                 // if the distance is shorter than current min distance, update
@@ -196,22 +197,21 @@ public class Utilities {
 
             // set closest to be current and remove the top element from unvisited
             current = closest;
-            unvisited.remove(minIndex);
+            unvisitedLocItems.remove(minIndex);
 
             // add the next path to paths and add the next distance to distances
-            routeInfo.addDirection(closest, minPath);
-            routeInfo.addDistance(closest, currDist);
+            routeInfo.addDirection(closest.id, minPath);
+            routeInfo.addDistance(closest.id, currDist);
 
-            LocItem closestLocation = info.get(closest);
-            if (closestLocation.group_id != null) {
-                  routeInfo.addGroupId(closest, closestLocation.group_id);
+            if (closest.group_id != null) {
+                  routeInfo.addGroupId(closest.id, closest.group_id);
             }
         }
 
         // find the path from the last added exhibit and add it to the route
         String target = "entrance_exit_gate";
-        current = getIdForRoute(info.get(current));
-        Pair<List<LocEdge>, Double> pair = Utilities.findShortestPathBetween(current, target);
+        String current_id = current.equals("entrance_exit_gate") ? "entrance_exit_gate" : getIdForRoute(current);
+        Pair<List<LocEdge>, Double> pair = Utilities.findShortestPathBetween(current_id, target);
         routeInfo.addDirection(target, pair.first);
 
         currDist += pair.second;
@@ -220,37 +220,51 @@ public class Utilities {
         return routeInfo;
     }
 
+    public static List<LocItem> removeEntranceGate(List<LocItem> unvisitedLocItems) {
+        unvisitedLocItems.removeIf(locItem -> locItem.id.equals("entrance_exit_gate"));
+        return unvisitedLocItems;
+    }
+
     /**
+     * Gets ID for route from a LocItem
      *
-     * @param locItem
-     * @return
+     * @param locItem LocItem's ID to be obtained
+     * @return Group ID of the given LocItem
      */
     public static String getIdForRoute(LocItem locItem) {
         return locItem.group_id == null ? locItem.id : locItem.group_id;
     }
 
-    // TODO: implement this
     /**
+     * Finds the closest exhibit by ID
      *
-     * @param unvisitedLocItems
-     * @param coord
-     * @return
+     * @param allNonGroupLocItems All of the LocItems without a Group ID
+     * @param coord current coordinates of user
+     * @return ID of the closest exhibit ID
      */
-    public static String findClosestExhibitId(List<LocItem> unvisitedLocItems, Coord coord) {
-        return unvisitedLocItems
-                .stream()
-                .reduce((locItem1, locItem2) ->
-                        Coord.distanceBetweenTwoCoords(locItem1.getCoord(), coord) < Coord.distanceBetweenTwoCoords(locItem2.getCoord(), coord) ?
-                        locItem1 : locItem2)
-                .get().id;
+    public static String findClosestExhibitId(List<LocItem> allNonGroupLocItems, Coord coord) {
+        String id = null;
+        double minDistance = Double.MAX_VALUE;
+
+        for (LocItem l: allNonGroupLocItems) {
+            double distance = Coord.distanceBetweenTwoCoords(coord, l.getCoord());
+
+            if (distance < minDistance) {
+                id = l.id;
+                minDistance = distance;
+            }
+
+        }
+        return id;
     }
 
     /**
+     * Finds the directions for display use
      *
-     * @param routeInfo
-     * @param target
-     * @param isBrief
-     * @return
+     * @param routeInfo the current RouteInfo
+     * @param target    current target location
+     * @param isBrief   boolean if Brief directions are desired
+     * @return          List of LocEdges representing the directions of the route
      */
     public static List<LocEdge> findDirections(RouteInfo routeInfo, String target, boolean isBrief) {
         if (target == null) { return Collections.emptyList(); }
@@ -260,11 +274,12 @@ public class Utilities {
     }
 
     /**
+     * Method to find the reversed directions
      *
-     * @param routeInfo
-     * @param target
-     * @param isBrief
-     * @return
+     * @param routeInfo the current RouteInfo
+     * @param target    current target location
+     * @param isBrief   boolean if Brief directions are desired
+     * @return          List of LocEdges representing the reversed directions of the route
      */
     public static List<LocEdge> findReversedDirections(RouteInfo routeInfo, String target, boolean isBrief) {
         if (target == null) { return Collections.emptyList(); }
@@ -274,9 +289,10 @@ public class Utilities {
     }
 
     /**
+     * Method to retrieve the brief directions of the route
      *
-     * @param directions
-     * @return
+     * @param directions default detailed directions to be made brief
+     * @return List of LocEdges representing the brief directions
      */
     public static List<LocEdge> getBriefDirections(List<LocEdge> directions) {
         List<LocEdge> briefDirections = new ArrayList<>();
@@ -296,6 +312,8 @@ public class Utilities {
         for (LocEdge edge : directions) {
             if (currStreet.equals(edge.street)) {
                 streetWeight += edge.weight;
+                sink = edge.target;
+                sink_id = edge.target_id;
             } else {
                 // add brief data into the new list
                 briefDirections.add(new LocEdge("", streetWeight, currStreet, source, source_id, edge.source, edge.source_id));
@@ -314,9 +332,10 @@ public class Utilities {
     }
 
     /**
+     * Method to get the reversed directions
      *
-     * @param direction
-     * @return
+     * @param direction List of LocEdges to be made reversed
+     * @return List of LocEdges representing the reversed directions
      */
     public static List<LocEdge> getReversedDirections(List<LocEdge> direction) {
         LinkedList<LocEdge> reversedDirections = new LinkedList<>();
@@ -325,9 +344,10 @@ public class Utilities {
     }
 
     /**
+     * Getter method for text from the user's clipboard
      *
-     * @param context
-     * @return
+     * @param context Passed in context
+     * @return String of the user's clipboard
      */
     public static String getTextFromBoard(Context context){
         ClipboardManager clipboard = (ClipboardManager) context.getSystemService(CLIPBOARD_SERVICE);
@@ -336,8 +356,10 @@ public class Utilities {
     }
 
     /**
+     * Method to get a mock route from a given locations array
      *
-     * @return
+     * @param locations String array of locations
+     * @return List of coordinates representing the mock route
      */
     public static List<Coord> getMockRoute(String [] locations) {
         // TODO: find a way to prompt the user and paste the JSON text or an URL

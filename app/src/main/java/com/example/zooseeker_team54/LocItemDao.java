@@ -35,6 +35,9 @@ public interface LocItemDao {
     @Query("SELECT name FROM loc_items WHERE kind = 'exhibit' ORDER BY id")
     List<String> getAllExhibitNames();
 
+    @Query("SELECT * FROM loc_items WHERE kind = 'exhibit' AND group_id is null ORDER BY id")
+    List<LocItem> getAllNonGroup();
+
     @Query("SELECT * FROM loc_items ORDER BY id")
     LiveData<List<LocItem>> getAllLive();
 

@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -57,6 +58,8 @@ public class ShowRouteActivity extends AppCompatActivity {
         setContentView(R.layout.activity_route_plan);
         Intent intent = getIntent();
 
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
         // initialize major fields of this activity
         {
             viewModel = new ViewModelProvider(this).get(ViewModel.class);
@@ -82,10 +85,14 @@ public class ShowRouteActivity extends AppCompatActivity {
     }
 
     /**
+     * Setter method to set a given list of LocItems for display
      *
-     * @param locItems
+     * @param locItems Given locations of the route
      */
     public void setItems(List<LocItem> locItems) {
+
+        if (locItems.size() == 0) return;
+
         List<String> locations = locItems
                 .stream()
                 .map((locItem -> locItem.id))

@@ -2,6 +2,7 @@ package com.example.zooseeker_team54;
 
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
@@ -12,15 +13,10 @@ import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 
-import android.content.Context;
-import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 
-import androidx.room.Room;
-import androidx.test.core.app.ActivityScenario;
-import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -29,45 +25,23 @@ import androidx.test.filters.LargeTest;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.List;
-
-// MS 2 User Story 2 UI Test
+// UI Test for User Story 5, 6 in MS 2
+// IMPORTANT: Make sure that the app is set to "Brief" for the directions mode!!!!!
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class BriefDetailedTest {
-    LocItemDao dao;
-    LocDatabase testDb;
-    Intent mainIntent;
+public class AskToReplan {
 
-    @Before
-    public void setUp() {
-        mainIntent = new Intent(ApplicationProvider.getApplicationContext(), MainActivity.class);
-        ActivityScenario<MainActivity> mainActivityActivityScenario = ActivityScenario.launch(mainIntent);
-        mainActivityActivityScenario.onActivity(Utilities::loadOldZooJson);
-    }
-
-
-    @Before
-    public void resetDatabase() {
-        Context context = ApplicationProvider.getApplicationContext();
-        testDb = Room.inMemoryDatabaseBuilder(context, LocDatabase.class)
-                .allowMainThreadQueries()
-                .build();
-        LocDatabase.injectTestDatabase(testDb);
-
-        List<LocItem> todos = LocItem.loadJSON(context, "sample_node_info.json");
-        dao = testDb.LocItemDao();
-        dao.insertAll(todos);
-    }
+    @Rule
+    public ActivityScenarioRule<MainActivity> mActivityScenarioRule =
+            new ActivityScenarioRule<>(MainActivity.class);
 
     @Test
-    public void briefToDetailedTest() {
-        ViewInteraction clearButton = onView(
+    public void askToReplan() {
+        ViewInteraction materialButton = onView(
                 allOf(withId(R.id.clear_btn), withText("clear"),
                         childAtPosition(
                                 childAtPosition(
@@ -75,7 +49,7 @@ public class BriefDetailedTest {
                                         0),
                                 2),
                         isDisplayed()));
-        clearButton.perform(click());
+        materialButton.perform(click());
 
         ViewInteraction materialAutoCompleteTextView = onView(
                 allOf(withId(R.id.search_bar),
@@ -85,92 +59,29 @@ public class BriefDetailedTest {
                                         0),
                                 0),
                         isDisplayed()));
-        materialAutoCompleteTextView.perform(replaceText("i"), closeSoftKeyboard());
+        materialAutoCompleteTextView.perform(replaceText("f"), closeSoftKeyboard());
 
         ViewInteraction materialTextView = onView(
-                allOf(withId(R.id.loc_name), withText("Arctic Foxes"),
+                allOf(withId(R.id.loc_name), withText("Flamingos"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.search_results),
-                                        0),
+                                        1),
                                 0),
                         isDisplayed()));
         materialTextView.perform(click());
 
-        ViewInteraction materialButton = onView(
-                allOf(withId(R.id.plan_btn), withText("plan"),
+        ViewInteraction materialAutoCompleteTextView2 = onView(
+                allOf(withId(R.id.search_bar), withText("f"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
                                         0),
-                                1),
+                                0),
                         isDisplayed()));
-        materialButton.perform(click());
+        materialAutoCompleteTextView2.perform(replaceText(""));
 
-        ViewInteraction materialButton2 = onView(
-                allOf(withId(R.id.direction_btn), withText("Direction"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                1),
-                        isDisplayed()));
-        materialButton2.perform(click());
-
-        ViewInteraction materialButton3 = onView(
-                allOf(withId(R.id.settings_button)));
-        materialButton3.perform(click());
-
-        ViewInteraction button = onView(
-                allOf(withId(R.id.briefDirectionsButton), withText("BRIEF"),
-                        withParent(withParent(withId(android.R.id.content))),
-                        isDisplayed()));
-        button.check(matches(isDisplayed()));
-
-        ViewInteraction materialButton4 = onView(
-                allOf(withId(R.id.detailedDirectionsButton), withText("DETAILED"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                3),
-                        isDisplayed()));
-        materialButton4.perform(click());
-
-        ViewInteraction materialButton5 = onView(
-                allOf(withId(R.id.exit_btn), withText("Exit"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                1),
-                        isDisplayed()));
-        materialButton5.perform(click());
-
-        ViewInteraction materialButton6 = onView(
-                allOf(withId(R.id.settings_button)));
-        materialButton6.perform(click());
-
-        ViewInteraction button2 = onView(
-                allOf(withId(R.id.detailedDirectionsButton), withText("DETAILED"),
-                        withParent(withParent(withId(android.R.id.content))),
-                        isDisplayed()));
-        button2.check(matches(isDisplayed()));
-    }
-
-    @Test
-    public void detailedToBrief() {
-        ViewInteraction clearButton = onView(
-                allOf(withId(R.id.clear_btn), withText("clear"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                2),
-                        isDisplayed()));
-        clearButton.perform(click());
-        
-        ViewInteraction materialAutoCompleteTextView = onView(
+        ViewInteraction materialAutoCompleteTextView3 = onView(
                 allOf(withId(R.id.search_bar),
                         childAtPosition(
                                 childAtPosition(
@@ -178,30 +89,80 @@ public class BriefDetailedTest {
                                         0),
                                 0),
                         isDisplayed()));
-        materialAutoCompleteTextView.perform(replaceText("i"), closeSoftKeyboard());
+        materialAutoCompleteTextView3.perform(closeSoftKeyboard());
 
-        ViewInteraction materialTextView = onView(
-                allOf(withId(R.id.loc_name), withText("Arctic Foxes"),
+        ViewInteraction materialAutoCompleteTextView4 = onView(
+                allOf(withId(R.id.search_bar),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                0),
+                        isDisplayed()));
+        materialAutoCompleteTextView4.perform(click());
+
+        ViewInteraction materialAutoCompleteTextView5 = onView(
+                allOf(withId(R.id.search_bar),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                0),
+                        isDisplayed()));
+        materialAutoCompleteTextView5.perform(replaceText("m"), closeSoftKeyboard());
+
+        ViewInteraction materialTextView2 = onView(
+                allOf(withId(R.id.loc_name), withText("Capuchin Monkeys"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.search_results),
                                         0),
                                 0),
                         isDisplayed()));
-        materialTextView.perform(click());
+        materialTextView2.perform(click());
 
-        ViewInteraction materialButton = onView(
-                allOf(withId(R.id.plan_btn), withText("plan"),
+        ViewInteraction materialAutoCompleteTextView6 = onView(
+                allOf(withId(R.id.search_bar), withText("m"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
                                         0),
-                                1),
+                                0),
                         isDisplayed()));
-        materialButton.perform(click());
+        materialAutoCompleteTextView6.perform(click());
+
+        ViewInteraction materialAutoCompleteTextView7 = onView(
+                allOf(withId(R.id.search_bar), withText("m"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                0),
+                        isDisplayed()));
+        materialAutoCompleteTextView7.perform(replaceText("g"));
+
+        ViewInteraction materialAutoCompleteTextView8 = onView(
+                allOf(withId(R.id.search_bar), withText("g"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                0),
+                        isDisplayed()));
+        materialAutoCompleteTextView8.perform(closeSoftKeyboard());
+
+        ViewInteraction materialTextView3 = onView(
+                allOf(withId(R.id.loc_name), withText("Gorillas"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.search_results),
+                                        0),
+                                0),
+                        isDisplayed()));
+        materialTextView3.perform(click());
 
         ViewInteraction materialButton2 = onView(
-                allOf(withId(R.id.direction_btn), withText("Direction"),
+                allOf(withId(R.id.plan_btn), withText("plan"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
@@ -210,63 +171,85 @@ public class BriefDetailedTest {
                         isDisplayed()));
         materialButton2.perform(click());
 
+        pressBack();
+
         ViewInteraction materialButton3 = onView(
-                allOf(withId(R.id.settings_button)));
-        materialButton3.perform(click());
-
-        ViewInteraction materialButton4 = onView(
-                allOf(withId(R.id.detailedDirectionsButton), withText("DETAILED"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                3),
-                        isDisplayed()));
-        materialButton4.perform(click());
-
-        ViewInteraction materialButton5 = onView(
-                allOf(withId(R.id.exit_btn), withText("Exit"),
+                allOf(withId(R.id.plan_btn), withText("plan"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
                                         0),
                                 1),
                         isDisplayed()));
-        materialButton5.perform(click());
+        materialButton3.perform(click());
 
-        ViewInteraction materialButton6 = onView(
-                allOf(withId(R.id.settings_button)));
-        materialButton6.perform(click());
+        ViewInteraction materialButton4 = onView(
+                allOf(withId(R.id.direction_btn), withText("Direction"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                1),
+                        isDisplayed()));
+        materialButton4.perform(click());
 
-        ViewInteraction materialButton7 = onView(
-                allOf(withId(R.id.briefDirectionsButton), withText("BRIEF"),
+        ViewInteraction appCompatEditText = onView(
+                allOf(withId(R.id.mock_route_input),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                1),
+                        isDisplayed()));
+        appCompatEditText.perform(click());
+
+        ViewInteraction appCompatEditText2 = onView(
+                allOf(withId(R.id.mock_route_input),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                1),
+                        isDisplayed()));
+        appCompatEditText2.perform(replaceText("32.74529,-117.16976"), closeSoftKeyboard());
+
+        ViewInteraction textView = onView(
+                allOf(withId(R.id.direction), withText("Proceed on 'Gate Path' 1100 feet towards 'Front Street / Treetops Way' from 'Entrance and Exit Gate'.\n"),
+                        withParent(withParent(withId(R.id.route_direction))),
+                        isDisplayed()));
+        textView.check(matches(withText("Proceed on 'Gate Path' 1100 feet towards 'Front Street / Treetops Way' from 'Entrance and Exit Gate'.\n")));
+
+        ViewInteraction materialButton5 = onView(
+                allOf(withId(R.id.start_mock), withText("Mock"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
                                         0),
                                 2),
                         isDisplayed()));
-        materialButton7.perform(click());
+        materialButton5.perform(click());
 
-        ViewInteraction materialButton8 = onView(
-                allOf(withId(R.id.exit_btn), withText("Exit"),
+        ViewInteraction textView2 = onView(
+                allOf(withId(R.id.ReplanText), withText("Off-Track. Replan?"),
+                        withParent(withParent(withId(android.R.id.content))),
+                        isDisplayed()));
+        textView2.check(matches(withText("Off-Track. Replan?")));
+
+        ViewInteraction materialButton6 = onView(
+                allOf(withId(R.id.yesButton), withText("Yes"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
                                         0),
-                                1),
+                                0),
                         isDisplayed()));
-        materialButton8.perform(click());
+        materialButton6.perform(click());
 
-        ViewInteraction materialButton9 = onView(
-                allOf(withId(R.id.settings_button)));
-        materialButton9.perform(click());
-
-        ViewInteraction button = onView(
-                allOf(withId(R.id.briefDirectionsButton), withText("BRIEF"),
-                        withParent(withParent(withId(android.R.id.content))),
+        ViewInteraction textView3 = onView(
+                allOf(withId(R.id.direction), withText("Proceed on 'Monkey Trail' 2300 feet towards 'Capuchin Monkeys' from 'Monkey Trail / Hippo Trail'.\n"),
+                        withParent(withParent(withId(R.id.route_direction))),
                         isDisplayed()));
-        button.check(matches(isDisplayed()));
+        textView3.check(matches(withText("Proceed on 'Monkey Trail' 2300 feet towards 'Capuchin Monkeys' from 'Monkey Trail / Hippo Trail'.\n")));
     }
 
     private static Matcher<View> childAtPosition(

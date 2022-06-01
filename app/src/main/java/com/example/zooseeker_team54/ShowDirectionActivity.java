@@ -1,16 +1,27 @@
 package com.example.zooseeker_team54;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.gson.Gson;
 
 import java.util.Collections;
 import java.util.List;
@@ -33,6 +44,19 @@ public class ShowDirectionActivity extends AppCompatActivity {
     private Button mockStep;
     private EditText mockRouteInput;
 
+    private final ActivityResultLauncher<Intent> settingActivityLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        // There are no request codes
+                        List<LocEdge> directions = Utilities.findDirections(routeInfo, routeInfo.getCurrentTarget(), getIsBrief());
+                        routeDirectionPresenter.setItems(directions);
+                    }
+                }
+            });
+
     /**
      * Create the activity from a given savedInstanceState and initialize everything
      * @param savedInstanceState saved instance from before
@@ -43,11 +67,14 @@ public class ShowDirectionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_direction);
         Intent intent = getIntent();
 
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
         // Initialize major fields
         {
             viewModel = new ViewModelProvider(this).get(ViewModel.class);
             routeInfo = (RouteInfo) intent.getSerializableExtra("routeInfo");
             locationTracker = new LocationTracker(this, false);
+            locationTracker.getUserCoordLive().observe(this, this::detectOffRoute);
             routeDirectionPresenter = new RecyclerViewPresenterBuilder<LocEdge>()
                     .setAdapter(new ShowDirectionAdapter())
                     .setRecyclerView(findViewById(R.id.route_direction))
@@ -120,21 +147,130 @@ public class ShowDirectionActivity extends AppCompatActivity {
             //Initialize the skip button
             skipBtn = this.findViewById(R.id.skip_btn);
             skipBtn.setOnClickListener(this::onSkipBtnClicked);
+            updateSkipBtn();
         }
 
     }
 
     /**
+     * Getter method for the location tracker
+     * @return the current location tracker
+     */
+    public LocationTracker getLocationTracker() {
+        return locationTracker;
+    }
+
+    /**
+     * Method to detect when the user is off the given route
+     * @param coord Current coordinates of the user
+     */
+    private void detectOffRoute(Coord coord) {
+
+        // filter exhibits part of group and exhibits that are not off route
+        {
+            String currentLocation = routeInfo.getCurrentLocation();
+            LocItem currentLocItem = viewModel.getLocItemById(currentLocation);
+
+            if (currentLocItem.group_id != null)
+                currentLocation = routeInfo.getGroupId(currentLocation);
+
+            if (coord.equals(viewModel.getLocItemById(currentLocation).getCoord())) {
+                return;
+            }
+        }
+
+        if (getDirection().equals("backward"))
+            setDirection("forward");
+
+        String currentTarget = routeInfo.getCurrentTarget();
+        LocItem targetLocItem = viewModel.getLocItemById(currentTarget);
+
+        LocItem closestLocItem = targetLocItem;
+        double minDifference = Double.MAX_VALUE;
+        List<LocItem> unvisitedLocItems = viewModel.getAllPlannedUnvisited();
+
+        for (LocItem locItem : unvisitedLocItems) {
+
+            // if the location is in a group, we want to find the route to its group instead.
+            if (locItem.group_id != null) {
+                locItem = viewModel.getLocItemById(locItem.group_id);
+            }
+
+            if (locItem.id.equals("entrance_exit_gate") && !currentTarget.equals("entrance_exit_gate"))
+                continue;
+
+            double difference = Coord.distanceBetweenTwoCoords(coord, locItem.getCoord());
+            if (difference < minDifference) {
+                closestLocItem = locItem;
+                minDifference = difference;
+            }
+        }
+
+        // if user doesn't want to reroute when there is a new target, return
+        if (!closestLocItem.id.equals(targetLocItem.id) && !askForReroute())
+            return;
+
+        String startLocation = Utilities.findClosestExhibitId(viewModel.getAllNonGroup(), coord);
+        RouteInfo newPlanForUnvisitedLocations = Utilities.findRoute(unvisitedLocItems, viewModel.getLocItemById(startLocation));
+        routeInfo.updateTheRest(newPlanForUnvisitedLocations);
+
+        // reset the directions
+        {
+            List<LocEdge> directions;
+            if (routeInfo == null) {
+                directions = Collections.emptyList();
+            }
+            else if (getDirection().equals("forward")) {
+                directions = Utilities.findDirections(routeInfo, routeInfo.getCurrentTarget(), getIsBrief());
+            }
+            else {
+                directions = Utilities.findReversedDirections(routeInfo, routeInfo.getCurrentLocation(), getIsBrief());
+            }
+            routeDirectionPresenter.setItems(directions);
+        }
+
+        // update Buttons
+        {
+            updateNextBtn(routeInfo.getCurrentTarget(), routeInfo.getNextTarget());
+            updatePreviousBtn(routeInfo.getCurrentLocation());
+            updateSkipBtn();
+        }
+    }
+
+    /**
+     * Getter method for the replan boolean to indicate whether to replan or not
      *
-     * @return
+     * @return boolean representing user input to replan or not
+     */
+    public boolean getShouldReplan() {
+        return getSharedPreferences("shouldReplan", MODE_PRIVATE).getBoolean("shouldReplan", false);
+    }
+
+    /**
+     * Method to ask for replan from the replan prompt activity
+     *
+     * @return Boolean indicating if user wants to replan route
+     */
+    public boolean askForReroute() {
+        //return Utilities.offRouteReplanAlert(this);
+        Intent intent = new Intent(this, ReplanPromptActivity.class);
+        startActivity(intent);
+        return getShouldReplan();
+    }
+
+    /**
+     * Getter method for the RouteDirectionPresenter
+     *
+     * @return member variable RouteDirectionPresenter
      */
     public RecyclerViewPresenter<LocEdge> getRouteDirectionPresenter() {
         return routeDirectionPresenter;
     }
 
     /**
+     * Method for when the next button is clicked
      *
-     * @param view
+     * @param view View to be launched from
      */
     private void onNextBtnClicked(View view) {
 
@@ -142,7 +278,13 @@ public class ShowDirectionActivity extends AppCompatActivity {
             setDirection("forward");
         } else {
             String arrivedLocation = routeInfo.getCurrentTarget();
-            viewModel.addVisitedLoc(viewModel.getLocItemById(arrivedLocation));
+            LocItem arrivedLocItem = viewModel.getLocItemById(arrivedLocation);
+            viewModel.addVisitedLoc(arrivedLocItem);
+
+            if (arrivedLocItem.group_id != null)
+                locationTracker.mockLocation(viewModel.getLocItemById(arrivedLocItem.group_id).getCoord());
+            else
+                locationTracker.mockLocation(viewModel.getLocItemById(arrivedLocation).getCoord());
 
             String groupId = routeInfo.getGroupId(arrivedLocation);
             if (groupId != null) {
@@ -162,19 +304,27 @@ public class ShowDirectionActivity extends AppCompatActivity {
         // update buttons
         updateNextBtn(routeInfo.getCurrentTarget(), routeInfo.getNextTarget());
         updatePreviousBtn(routeInfo.getCurrentLocation());
+        updateSkipBtn();
     }
 
     /**
+     * Method for when previous button is clicked
      *
-     * @param view
+     * @param view View to be launched from
      */
     private void onPreviousBtnClicked(View view) {
         if (!getDirection().equals("backward")) {
             setDirection("backward");
         }
         else {
-            String arrivedLocation = routeInfo.getCurrentLocation();
-            viewModel.removeVisitedLoc(viewModel.getLocItemById(arrivedLocation));
+            String arrivedLocation = routeInfo.getPreviousLocation();
+            LocItem arrivedLocItem = viewModel.getLocItemById(arrivedLocation);
+            viewModel.removeVisitedLoc(arrivedLocItem);
+
+            if (arrivedLocItem.group_id != null)
+                locationTracker.mockLocation(viewModel.getLocItemById(arrivedLocItem.group_id).getCoord());
+            else
+                locationTracker.mockLocation(viewModel.getLocItemById(arrivedLocation).getCoord());
 
             String groupId = routeInfo.getGroupId(arrivedLocation);
             if (groupId != null) {
@@ -194,12 +344,14 @@ public class ShowDirectionActivity extends AppCompatActivity {
         // update buttons
         updateNextBtn(routeInfo.getCurrentLocation(), routeInfo.getCurrentTarget());
         updatePreviousBtn(routeInfo.getCurrentLocation());
+        updateSkipBtn();
     }
 
     /**
+     * Method for when the next button is clicked
      *
-     * @param currTarget
-     * @param nextTarget
+     * @param currTarget the current target location
+     * @param nextTarget the next target location
      */
     private void updateNextBtn(String currTarget, String nextTarget) {
         String buttonText;
@@ -219,8 +371,9 @@ public class ShowDirectionActivity extends AppCompatActivity {
     }
 
     /**
+     * Method to update the previous button with new information
      *
-     * @param currentLocation
+     * @param currentLocation the current location
      */
     private void updatePreviousBtn(String currentLocation) {
         if (currentLocation == null || currentLocation.equals("entrance_exit_gate") ||
@@ -236,6 +389,23 @@ public class ShowDirectionActivity extends AppCompatActivity {
     }
 
     /**
+     * Method to update the skip button with new information
+     */
+    private void updateSkipBtn() {
+        if(routeInfo != null) {
+            String currTarget = routeInfo.getCurrentTarget();
+            String nextTarget = routeInfo.getNextTarget();
+            if ((nextTarget == null || nextTarget.equals("entrance_exit_gate")) && (currTarget == null || currTarget.equals("entrance_exit_gate"))) {
+                skipBtn.setClickable(false);
+                skipBtn.setEnabled(false);
+            } else {
+                skipBtn.setClickable(true);
+                skipBtn.setEnabled(true);
+            }
+        }
+    }
+
+    /**
      * Finishes the activity and goes back to the previous activity
      * @param view
      */
@@ -244,16 +414,17 @@ public class ShowDirectionActivity extends AppCompatActivity {
         data.putExtra("routeInfo", routeInfo);
         // Activity finished ok, return the data
         setResult(RESULT_OK, data);
+        setCoord(getCoord());
         finish();
     }
 
     /**
-     *
-     * @param view
+     * Method for when the Settings button is clicked
+     * @param view View to be launched from
      */
     private void onSettingsClicked(View view) {
         Intent intent = new Intent(this, SettingsActivity.class);
-        startActivity(intent);
+        settingActivityLauncher.launch(intent);
     }
 
     /**
@@ -287,42 +458,93 @@ public class ShowDirectionActivity extends AppCompatActivity {
     }
 
     /**
-     *
-     * @param view
+     * Method for when the skip button is clicked
+     * @param view View to be launched from
      */
     private void onSkipBtnClicked(View view){
         String target = routeInfo.getCurrentTarget();
         viewModel.removePlannedLoc(viewModel.getLocItemById(target));
-        routeInfo.removeLocation(target);
-        routeDirectionPresenter.setItems(routeInfo.getDirection(routeInfo.getCurrentTarget()));
+        routeInfo.removeCurrentTarget();
+
+        String currentLocation = routeInfo.getCurrentLocation();
+        String currentTarget = routeInfo.getCurrentTarget();
+        if (currentLocation != null && currentLocation.equals("entrance_exit_gate")) {
+            routeInfo = Utilities.findRoute(viewModel.getAllPlannedUnvisited(), viewModel.getLocItemById("entrance_exit_gate"));
+        }
+        else if (currentLocation != null && currentTarget != null && currentTarget.equals("entrance_exit_gate")) {
+
+            // safeguard protection
+            currentLocation = Utilities.getIdForRoute(viewModel.getLocItemById(currentLocation));
+            currentTarget = Utilities.getIdForRoute(viewModel.getLocItemById(currentTarget));
+
+            // get the actual pair
+            Pair<List<LocEdge>, Double> pair = Utilities.findShortestPathBetween(currentLocation, currentTarget);
+            routeInfo.addDirection("entrance_exit_gate", pair.first);
+            routeInfo.addDistance("entrance_exit_gate", pair.second);
+        }
+        else {
+            RouteInfo newPlanForUnvisitedLocations = Utilities.findRoute(viewModel.getAllPlannedUnvisited(), viewModel.getLocItemById(currentLocation));
+            routeInfo.updateTheRest(newPlanForUnvisitedLocations);
+        }
+
+        List<LocEdge> directions = routeInfo.getDirection(routeInfo.getCurrentTarget());
+        routeDirectionPresenter.setItems(directions);
         updateNextBtn(routeInfo.getCurrentTarget(), routeInfo.getNextTarget());
+        updateSkipBtn();
     }
 
     /**
-     *
-     * @return
+     * Getter method for the isBrief boolean in SharedPreferences
+     * @return the isBrief boolean from SharedPreferences
      */
-    private boolean getIsBrief() {
-        return getPreferences(MODE_PRIVATE).getBoolean("isBrief", true);
+    public boolean getIsBrief() {
+        return getSharedPreferences("isBrief", MODE_PRIVATE).getBoolean("isBrief", true);
     }
 
     /**
-     *
-     * @return
+     * Getter method for the direction from SharedPreferences
+     * @return the direction from SharedPreferences
      */
-
-    private String getDirection() {
+    public String getDirection() {
         return getPreferences(MODE_PRIVATE).getString("direction", "forward");
     }
 
     /**
-     *
-     * @param direction
+     * Setter method for the direction
+     * @param direction direction to be set
      */
-    private void setDirection(String direction) {
+    public void setDirection(String direction) {
         SharedPreferences preferences = getPreferences(MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString("direction", direction);
         editor.apply();
     }
+
+    /**
+     * Getter method the current coordinates
+     * @return the current coordinates
+     */
+    public Coord getCoord() {
+        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        Gson gson = new Gson();
+        Coord DEFAULT_COORD = viewModel.getLocItemById("entrance_exit_gate").getCoord();
+        String json = preferences.getString("coord", gson.toJson(DEFAULT_COORD));
+        Coord coord = gson.fromJson(json, Coord.class);
+        return coord;
+    }
+
+    /**
+     * Setter method for coordinates
+     * @param coord Coordinates to be set to
+     */
+    public void setCoord(Coord coord) {
+        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(coord);
+        editor.putString("coord", json);
+        editor.apply();
+    }
+
+    public RouteInfo getRouteInfo() { return routeInfo; }
 }

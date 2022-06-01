@@ -2,25 +2,19 @@ package com.example.zooseeker_team54;
 
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 
-import android.content.Context;
-import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 
-import androidx.room.Room;
-import androidx.test.core.app.ActivityScenario;
-import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -29,44 +23,21 @@ import androidx.test.filters.LargeTest;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.List;
-
-// MS 2 User Story 2 UI Test
+// MS 2 US 7 UI Test
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class BriefDetailedTest {
-    LocItemDao dao;
-    LocDatabase testDb;
-    Intent mainIntent;
+public class SkipBtnUITest {
 
-    @Before
-    public void setUp() {
-        mainIntent = new Intent(ApplicationProvider.getApplicationContext(), MainActivity.class);
-        ActivityScenario<MainActivity> mainActivityActivityScenario = ActivityScenario.launch(mainIntent);
-        mainActivityActivityScenario.onActivity(Utilities::loadOldZooJson);
-    }
-
-
-    @Before
-    public void resetDatabase() {
-        Context context = ApplicationProvider.getApplicationContext();
-        testDb = Room.inMemoryDatabaseBuilder(context, LocDatabase.class)
-                .allowMainThreadQueries()
-                .build();
-        LocDatabase.injectTestDatabase(testDb);
-
-        List<LocItem> todos = LocItem.loadJSON(context, "sample_node_info.json");
-        dao = testDb.LocItemDao();
-        dao.insertAll(todos);
-    }
+    @Rule
+    public ActivityScenarioRule<MainActivity> mActivityScenarioRule =
+            new ActivityScenarioRule<>(MainActivity.class);
 
     @Test
-    public void briefToDetailedTest() {
+    public void skipBtnUITest1() {
         ViewInteraction clearButton = onView(
                 allOf(withId(R.id.clear_btn), withText("clear"),
                         childAtPosition(
@@ -76,7 +47,6 @@ public class BriefDetailedTest {
                                 2),
                         isDisplayed()));
         clearButton.perform(click());
-
         ViewInteraction materialAutoCompleteTextView = onView(
                 allOf(withId(R.id.search_bar),
                         childAtPosition(
@@ -85,10 +55,11 @@ public class BriefDetailedTest {
                                         0),
                                 0),
                         isDisplayed()));
-        materialAutoCompleteTextView.perform(replaceText("i"), closeSoftKeyboard());
+        materialAutoCompleteTextView.perform(replaceText("a"), closeSoftKeyboard());
+
 
         ViewInteraction materialTextView = onView(
-                allOf(withId(R.id.loc_name), withText("Arctic Foxes"),
+                allOf(withId(R.id.loc_name), withText("Capuchin Monkeys"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.search_results),
@@ -96,6 +67,16 @@ public class BriefDetailedTest {
                                 0),
                         isDisplayed()));
         materialTextView.perform(click());
+
+        ViewInteraction materialTextView2 = onView(
+                allOf(withId(R.id.loc_name), withText("Fern Canyon"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.search_results),
+                                        1),
+                                0),
+                        isDisplayed()));
+        materialTextView2.perform(click());
 
         ViewInteraction materialButton = onView(
                 allOf(withId(R.id.plan_btn), withText("plan"),
@@ -118,48 +99,18 @@ public class BriefDetailedTest {
         materialButton2.perform(click());
 
         ViewInteraction materialButton3 = onView(
-                allOf(withId(R.id.settings_button)));
+                allOf(withId(R.id.skip_btn), withText("skip"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                6),
+                        isDisplayed()));
         materialButton3.perform(click());
-
-        ViewInteraction button = onView(
-                allOf(withId(R.id.briefDirectionsButton), withText("BRIEF"),
-                        withParent(withParent(withId(android.R.id.content))),
-                        isDisplayed()));
-        button.check(matches(isDisplayed()));
-
-        ViewInteraction materialButton4 = onView(
-                allOf(withId(R.id.detailedDirectionsButton), withText("DETAILED"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                3),
-                        isDisplayed()));
-        materialButton4.perform(click());
-
-        ViewInteraction materialButton5 = onView(
-                allOf(withId(R.id.exit_btn), withText("Exit"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                1),
-                        isDisplayed()));
-        materialButton5.perform(click());
-
-        ViewInteraction materialButton6 = onView(
-                allOf(withId(R.id.settings_button)));
-        materialButton6.perform(click());
-
-        ViewInteraction button2 = onView(
-                allOf(withId(R.id.detailedDirectionsButton), withText("DETAILED"),
-                        withParent(withParent(withId(android.R.id.content))),
-                        isDisplayed()));
-        button2.check(matches(isDisplayed()));
     }
 
     @Test
-    public void detailedToBrief() {
+    public void skipBtnUITest2() {
         ViewInteraction clearButton = onView(
                 allOf(withId(R.id.clear_btn), withText("clear"),
                         childAtPosition(
@@ -169,7 +120,6 @@ public class BriefDetailedTest {
                                 2),
                         isDisplayed()));
         clearButton.perform(click());
-        
         ViewInteraction materialAutoCompleteTextView = onView(
                 allOf(withId(R.id.search_bar),
                         childAtPosition(
@@ -178,10 +128,10 @@ public class BriefDetailedTest {
                                         0),
                                 0),
                         isDisplayed()));
-        materialAutoCompleteTextView.perform(replaceText("i"), closeSoftKeyboard());
+        materialAutoCompleteTextView.perform(replaceText("a"), closeSoftKeyboard());
 
         ViewInteraction materialTextView = onView(
-                allOf(withId(R.id.loc_name), withText("Arctic Foxes"),
+                allOf(withId(R.id.loc_name), withText("Capuchin Monkeys"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.search_results),
@@ -189,6 +139,16 @@ public class BriefDetailedTest {
                                 0),
                         isDisplayed()));
         materialTextView.perform(click());
+
+        ViewInteraction materialTextView2 = onView(
+                allOf(withId(R.id.loc_name), withText("Fern Canyon"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.search_results),
+                                        1),
+                                0),
+                        isDisplayed()));
+        materialTextView2.perform(click());
 
         ViewInteraction materialButton = onView(
                 allOf(withId(R.id.plan_btn), withText("plan"),
@@ -211,63 +171,26 @@ public class BriefDetailedTest {
         materialButton2.perform(click());
 
         ViewInteraction materialButton3 = onView(
-                allOf(withId(R.id.settings_button)));
+                allOf(withId(R.id.next_btn), withText("NEXT\n------\nFern Canyon, 12100"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                4),
+                        isDisplayed()));
         materialButton3.perform(click());
 
         ViewInteraction materialButton4 = onView(
-                allOf(withId(R.id.detailedDirectionsButton), withText("DETAILED"),
+                allOf(withId(R.id.skip_btn), withText("skip"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
                                         0),
-                                3),
+                                6),
                         isDisplayed()));
         materialButton4.perform(click());
-
-        ViewInteraction materialButton5 = onView(
-                allOf(withId(R.id.exit_btn), withText("Exit"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                1),
-                        isDisplayed()));
-        materialButton5.perform(click());
-
-        ViewInteraction materialButton6 = onView(
-                allOf(withId(R.id.settings_button)));
-        materialButton6.perform(click());
-
-        ViewInteraction materialButton7 = onView(
-                allOf(withId(R.id.briefDirectionsButton), withText("BRIEF"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                2),
-                        isDisplayed()));
-        materialButton7.perform(click());
-
-        ViewInteraction materialButton8 = onView(
-                allOf(withId(R.id.exit_btn), withText("Exit"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                1),
-                        isDisplayed()));
-        materialButton8.perform(click());
-
-        ViewInteraction materialButton9 = onView(
-                allOf(withId(R.id.settings_button)));
-        materialButton9.perform(click());
-
-        ViewInteraction button = onView(
-                allOf(withId(R.id.briefDirectionsButton), withText("BRIEF"),
-                        withParent(withParent(withId(android.R.id.content))),
-                        isDisplayed()));
-        button.check(matches(isDisplayed()));
     }
+
 
     private static Matcher<View> childAtPosition(
             final Matcher<View> parentMatcher, final int position) {

@@ -2,6 +2,7 @@ package com.example.zooseeker_team54;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 
 import android.content.Context;
 import android.content.Intent;
@@ -17,6 +18,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RunWith(AndroidJUnit4.class)
@@ -50,10 +52,42 @@ public class MockLocationTrack {
 
         ActivityScenario<ShowDirectionActivity> routeDirectionActivityActivityScenario = ActivityScenario.launch(routeDirectionIntent);
         routeDirectionActivityActivityScenario.onActivity(activity -> {
-            LocationTracker locationTracker = activity.getLocationTracker();
-            Coord coord = locationTracker.getUserCoordLive().getValue();
+            Coord coord = activity.getCoord();
             assertEquals(coord, new Coord(32.73459618734685, -117.14936));
         });
+
+    }
+
+    @Test
+    public void goOffRouteWithTheSameTarget() {
+
+        ActivityScenario<MainActivity> mActivityActivityScenario = ActivityScenario.launch(mainIntent);
+        mActivityActivityScenario.onActivity(activity -> {
+
+            LocItem fern_canyon = dao.get("fern_canyon");
+            LocItem gorilla = dao.get("gorilla");
+
+            List<LocItem> testItems = new ArrayList<>();
+            testItems.add(fern_canyon);
+            testItems.add(gorilla);
+            activity.getPlannedLocsPresenter().setItems(testItems);
+
+            RouteInfo routeInfo = activity.findRoute(activity.getPlannedLocsPresenter().getItems());
+            routeDirectionIntent.putExtra("routeInfo", routeInfo);
+        });
+
+        ActivityScenario<ShowDirectionActivity> routeDirectionActivityActivityScenario = ActivityScenario.launch(routeDirectionIntent);
+        routeDirectionActivityActivityScenario.onActivity(activity -> {
+            RouteInfo routeInfo = activity.getRouteInfo();
+            System.out.println(routeInfo.getDirections());
+            List<LocEdge> oldRouteForCanyon = routeInfo.getDirection("fern_canyon");
+            LocationTracker locationTracker = activity.getLocationTracker();
+            LocItem siamang = dao.get("siamang");
+            locationTracker.mockLocation(siamang.getCoord());
+            List<LocEdge> newRouteForCanyon = routeInfo.getDirection("fern_canyon");
+            assertNotEquals(oldRouteForCanyon, newRouteForCanyon);
+        });
+
 
     }
 }

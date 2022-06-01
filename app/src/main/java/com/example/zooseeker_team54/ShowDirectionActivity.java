@@ -151,14 +151,13 @@ public class ShowDirectionActivity extends AppCompatActivity {
             if (currentLocItem.group_id != null)
                 currentLocation = routeInfo.getGroupId(currentLocation);
 
-            if (coord.equals(viewModel.getLocItemById(routeInfo.getCurrentLocation()).getCoord())) {
+            if (coord.equals(viewModel.getLocItemById(currentLocation).getCoord())) {
                 return;
             }
         }
 
         String currentTarget = routeInfo.getCurrentTarget();
         LocItem targetLocItem = viewModel.getLocItemById(currentTarget);
-        double threshold = Coord.distanceBetweenTwoCoords(coord, targetLocItem.getCoord());
 
         LocItem closestLocItem = targetLocItem;
         double minDifference = Double.MAX_VALUE;
@@ -171,6 +170,9 @@ public class ShowDirectionActivity extends AppCompatActivity {
                 locItem = viewModel.getLocItemById(locItem.group_id);
             }
 
+            if (locItem.id.equals("entrance_exit_gate") && !currentTarget.equals("entrance_exit_gate"))
+                continue;
+
             double difference = Coord.distanceBetweenTwoCoords(coord, locItem.getCoord());
             if (difference < minDifference) {
                 closestLocItem = locItem;
@@ -179,11 +181,11 @@ public class ShowDirectionActivity extends AppCompatActivity {
         }
 
         // if user doesn't want to reroute when there is a new target, return
-        if (closestLocItem != targetLocItem && !askForReroute())
+        if (!closestLocItem.id.equals(targetLocItem.id) && !askForReroute())
             return;
 
         String startLocation = Utilities.findClosestExhibitId(viewModel.getAllNonGroup(), coord);
-        RouteInfo newPlanForUnvisitedLocations = Utilities.findRoute(unvisitedLocItems, startLocation);
+        RouteInfo newPlanForUnvisitedLocations = Utilities.findRoute(unvisitedLocItems, viewModel.getLocItemById(startLocation));
         routeInfo.updateTheRest(newPlanForUnvisitedLocations);
 
         // reset the directions
@@ -414,10 +416,10 @@ public class ShowDirectionActivity extends AppCompatActivity {
 
         String currentLocation = routeInfo.getCurrentLocation();
         if (currentLocation.equals("entrance_exit_gate")) {
-            routeInfo = Utilities.findRoute(viewModel.getAllPlannedUnvisited(), "entrance_exit_gate");
+            routeInfo = Utilities.findRoute(viewModel.getAllPlannedUnvisited(), viewModel.getLocItemById("entrance_exit_gate"));
         }
         else {
-            RouteInfo newPlanForUnvisitedLocations = Utilities.findRoute(viewModel.getAllPlannedUnvisited(), currentLocation);
+            RouteInfo newPlanForUnvisitedLocations = Utilities.findRoute(viewModel.getAllPlannedUnvisited(), viewModel.getLocItemById(currentLocation));
             routeInfo.updateTheRest(newPlanForUnvisitedLocations);
         }
 
@@ -431,7 +433,7 @@ public class ShowDirectionActivity extends AppCompatActivity {
      * Getter method for the isBrief boolean in SharedPreferences
      * @return the isBrief boolean from SharedPreferences
      */
-    private boolean getIsBrief() {
+    public boolean getIsBrief() {
         return getPreferences(MODE_PRIVATE).getBoolean("isBrief", true);
     }
 
@@ -439,7 +441,7 @@ public class ShowDirectionActivity extends AppCompatActivity {
      * Getter method for the direction from SharedPreferences
      * @return the direction from SharedPreferences
      */
-    private String getDirection() {
+    public String getDirection() {
         return getPreferences(MODE_PRIVATE).getString("direction", "forward");
     }
 
@@ -447,7 +449,7 @@ public class ShowDirectionActivity extends AppCompatActivity {
      * Setter method for the direction
      * @param direction direction to be set
      */
-    private void setDirection(String direction) {
+    public void setDirection(String direction) {
         SharedPreferences preferences = getPreferences(MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString("direction", direction);
@@ -458,7 +460,7 @@ public class ShowDirectionActivity extends AppCompatActivity {
      * Getter method the current coordinates
      * @return the current coordinates
      */
-    private Coord getCoord() {
+    public Coord getCoord() {
         SharedPreferences preferences = getPreferences(MODE_PRIVATE);
         Gson gson = new Gson();
         Coord DEFAULT_COORD = viewModel.getLocItemById("entrance_exit_gate").getCoord();
@@ -471,7 +473,7 @@ public class ShowDirectionActivity extends AppCompatActivity {
      * Setter method for coordinates
      * @param coord Coordinates to be set to
      */
-    private void setCoord(Coord coord) {
+    public void setCoord(Coord coord) {
         SharedPreferences preferences = getPreferences(MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         Gson gson = new Gson();
@@ -480,4 +482,5 @@ public class ShowDirectionActivity extends AppCompatActivity {
         editor.apply();
     }
 
+    public RouteInfo getRouteInfo() { return routeInfo; }
 }

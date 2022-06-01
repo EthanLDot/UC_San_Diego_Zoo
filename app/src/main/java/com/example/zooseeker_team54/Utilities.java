@@ -210,7 +210,8 @@ public class Utilities {
 
         // find the path from the last added exhibit and add it to the route
         String target = "entrance_exit_gate";
-        Pair<List<LocEdge>, Double> pair = Utilities.findShortestPathBetween(current.id, target);
+        String current_id = current.equals("entrance_exit_gate") ? "entrance_exit_gate" : getIdForRoute(current);
+        Pair<List<LocEdge>, Double> pair = Utilities.findShortestPathBetween(current_id, target);
         routeInfo.addDirection(target, pair.first);
 
         currDist += pair.second;

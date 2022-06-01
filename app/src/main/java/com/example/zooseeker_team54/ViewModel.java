@@ -49,6 +49,8 @@ public class ViewModel extends AndroidViewModel {
      */
     public List<LocItem> getAllExhibits() { return locItemDao.getAllExhibits(); }
 
+    public List<LocItem> getAllNonGroup() { return locItemDao.getAllNonGroup(); }
+
     /**
      * Getter method to retrieve all of the live planned LocItems except the entrance/exit
      * @return List of planed LocItems wrapped in a LiveData

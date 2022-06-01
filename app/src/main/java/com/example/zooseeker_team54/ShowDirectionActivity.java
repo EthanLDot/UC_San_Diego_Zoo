@@ -444,7 +444,8 @@ public class ShowDirectionActivity extends AppCompatActivity {
         routeInfo.removeCurrentTarget();
 
         String currentLocation = routeInfo.getCurrentLocation();
-        if (currentLocation.equals("entrance_exit_gate")) {
+        String currentTarget = routeInfo.getCurrentTarget();
+        if (currentLocation != null && currentLocation.equals("entrance_exit_gate")) {
             routeInfo = Utilities.findRoute(viewModel.getAllPlannedUnvisited(), viewModel.getLocItemById("entrance_exit_gate"));
         }
         else if (currentLocation != null && currentTarget != null && currentTarget.equals("entrance_exit_gate")) {

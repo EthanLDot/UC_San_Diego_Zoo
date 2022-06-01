@@ -12,16 +12,18 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 
 /**
- * Activity to represent the Settings page
+ * Java class representing the functionality of the SettingsActivity that is launched when the user
+ * presses the settings button on ShowDirectionActivity
  */
 public class SettingsActivity extends AppCompatActivity {
 
+    // initialize buttons
     private Button brief;
     private Button detailed;
     private Button exitBtn;
 
     /**
-     * Method for initial creation of the activity
+     * Create the activity from a savedInstanceState and initialize everything
      *
      * @param savedInstanceState the saved instance from before
      */
@@ -83,7 +85,7 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     /**
-     * Method for when the exit button is clicked
+     * Method for when the exit button is clicked, exits the activity
      *
      * @param view View to be passed in
      */
@@ -94,9 +96,9 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     /**
-     * Getter method for the boolean isBrief
+     * Getter method for the isBrief boolean, indicating if the directions should be brief
      *
-     * @return Boolean of isBrief
+     * @return boolean if directions should be brief
      */
     public boolean getIsBrief() {
         return getSharedPreferences("isBrief", MODE_PRIVATE).getBoolean("isBrief", true);

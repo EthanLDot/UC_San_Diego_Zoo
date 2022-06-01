@@ -11,13 +11,19 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
+/**
+ * Java class representing the functionality of the SettingsActivity that is launched when the user
+ * presses the settings button on ShowDirectionActivity
+ */
 public class SettingsActivity extends AppCompatActivity {
 
+    // initialize buttons
     private Button brief;
     private Button detailed;
     private Button exitBtn;
 
     /**
+     * Create the activity from a savedInstanceState and initialize everything
      *
      * @param savedInstanceState
      */
@@ -40,6 +46,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     /**
      * Setter method for isBrief
+     *
      * @param bool boolean for isBrief to be set to
      */
     public void setIsBrief(boolean bool) {
@@ -50,9 +57,10 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     /**
+     * Method to get the onClickListened of a given button
      *
-     * @param otherBtn
-     * @return
+     * @param otherBtn Button to get the OnClickListener for
+     * @return OnClickListener of the given button
      */
     private OnClickListener getOnClickedListener(Button otherBtn) {
         return (button) -> {
@@ -66,9 +74,10 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     /**
+     * Setter method for a given button
      *
-     * @param button
-     * @param isChecked
+     * @param button    Given button to be set
+     * @param isChecked boolean for if the button should be checked or not
      */
     private void setButton(View button, boolean isChecked) {
         String color = isChecked ? "#8BC34A" : "#40737373";
@@ -76,8 +85,9 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     /**
+     * Method for when the exit button is clicked, exits the activity
      *
-     * @param view
+     * @param view View to be passed in
      */
     private void onExitBtnClicked(View view) {
         Intent data = new Intent();
@@ -85,15 +95,30 @@ public class SettingsActivity extends AppCompatActivity {
         finish();
     }
 
+    /**
+     * Getter method for the isBrief boolean, indicating if the directions should be brief
+     *
+     * @return boolean if directions should be brief
+     */
     public boolean getIsBrief() {
         return getSharedPreferences("isBrief", MODE_PRIVATE).getBoolean("isBrief", true);
     }
 
+    /**
+     * Getter method for the detailed button
+     *
+     * @return detailed button of the activity
+     */
     @VisibleForTesting
     public Button getDetailed() {
         return detailed;
     }
 
+    /**
+     * Getter method for the brief button
+     *
+     * @return brief button of the activity
+     */
     @VisibleForTesting
     public Button getBrief() {
         return brief;

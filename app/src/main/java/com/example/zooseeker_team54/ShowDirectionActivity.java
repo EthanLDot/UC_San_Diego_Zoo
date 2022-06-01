@@ -313,7 +313,7 @@ public class ShowDirectionActivity extends AppCompatActivity {
             setDirection("backward");
         }
         else {
-            String arrivedLocation = routeInfo.getCurrentLocation();
+            String arrivedLocation = routeInfo.getPreviousLocation();
             LocItem arrivedLocItem = viewModel.getLocItemById(arrivedLocation);
             viewModel.removeVisitedLoc(arrivedLocItem);
 

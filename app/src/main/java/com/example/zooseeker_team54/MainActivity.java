@@ -161,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
             startLocation = Utilities.findClosestExhibitId(viewModel.getAllNonGroup(), coord);
         }
 
-        RouteInfo routeInfo = Utilities.findRoute(unvisitedLocItems, coord, startLocation);
+        RouteInfo routeInfo = Utilities.findRoute(unvisitedLocItems, startLocation);
 
         // Skip the ones that are visited
         for (String currTarget = routeInfo.getCurrentTarget(); currTarget != null && viewModel.getLocItemById(currTarget).visited; currTarget = routeInfo.getCurrentTarget())

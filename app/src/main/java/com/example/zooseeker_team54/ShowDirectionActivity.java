@@ -137,6 +137,10 @@ public class ShowDirectionActivity extends AppCompatActivity {
      * @param coord
      */
     private void detectOffRoute(Coord coord) {
+
+        if (coord.equals(viewModel.getLocItemById(routeInfo.getCurrentLocation()).getCoord())) {
+            return;
+        }
         String currentTarget = routeInfo.getCurrentTarget();
         LocItem targetLocItem = viewModel.getLocItemById(currentTarget);
         Double threshold = Coord.distanceBetweenTwoCoords(coord, targetLocItem.getCoord());
@@ -152,7 +156,7 @@ public class ShowDirectionActivity extends AppCompatActivity {
             if (Coord.distanceBetweenTwoCoords(coord, locItem.getCoord()) < threshold) {
                 if (askForReroute()) {
                     String startLocation = Utilities.findClosestExhibitId(viewModel.getAllNonGroup(), coord);
-                    RouteInfo newPlanForUnvisitedLocations = Utilities.findRoute(unvisitedLocItems, coord, startLocation);
+                    RouteInfo newPlanForUnvisitedLocations = Utilities.findRoute(unvisitedLocItems, startLocation);
                     routeInfo.updateTheRest(newPlanForUnvisitedLocations);
                 }
             }
@@ -187,10 +191,10 @@ public class ShowDirectionActivity extends AppCompatActivity {
             LocItem arrivedLocItem = viewModel.getLocItemById(arrivedLocation);
             viewModel.addVisitedLoc(arrivedLocItem);
 
-            if (arrivedLocItem.group_id != null)
-                locationTracker.mockLocation(viewModel.getLocItemById(arrivedLocItem.group_id).getCoord());
-            else
-                locationTracker.mockLocation(viewModel.getLocItemById(arrivedLocation).getCoord());
+//            if (arrivedLocItem.group_id != null)
+//                locationTracker.mockLocation(viewModel.getLocItemById(arrivedLocItem.group_id).getCoord());
+//            else
+//                locationTracker.mockLocation(viewModel.getLocItemById(arrivedLocation).getCoord());
 
             String groupId = routeInfo.getGroupId(arrivedLocation);
             if (groupId != null) {
@@ -226,10 +230,10 @@ public class ShowDirectionActivity extends AppCompatActivity {
             LocItem arrivedLocItem = viewModel.getLocItemById(arrivedLocation);
             viewModel.removeVisitedLoc(arrivedLocItem);
 
-            if (arrivedLocItem.group_id != null)
-                locationTracker.mockLocation(viewModel.getLocItemById(arrivedLocItem.group_id).getCoord());
-            else
-                locationTracker.mockLocation(viewModel.getLocItemById(arrivedLocation).getCoord());
+//            if (arrivedLocItem.group_id != null)
+//                locationTracker.mockLocation(viewModel.getLocItemById(arrivedLocItem.group_id).getCoord());
+//            else
+//                locationTracker.mockLocation(viewModel.getLocItemById(arrivedLocation).getCoord());
 
             String groupId = routeInfo.getGroupId(arrivedLocation);
             if (groupId != null) {
@@ -349,10 +353,10 @@ public class ShowDirectionActivity extends AppCompatActivity {
 
         String currentLocation = routeInfo.getCurrentLocation();
         if (currentLocation.equals("entrance_exit_gate")) {
-            routeInfo = Utilities.findRoute(viewModel.getAllPlannedUnvisited(), viewModel.getLocItemById("entrance_exit_gate").getCoord(), "entrance_exit_gate");
+            routeInfo = Utilities.findRoute(viewModel.getAllPlannedUnvisited(), "entrance_exit_gate");
         }
         else {
-            RouteInfo newPlanForUnvisitedLocations = Utilities.findRoute(viewModel.getAllPlannedUnvisited(), viewModel.getLocItemById(currentLocation).getCoord(), currentLocation);
+            RouteInfo newPlanForUnvisitedLocations = Utilities.findRoute(viewModel.getAllPlannedUnvisited(), currentLocation);
             routeInfo.updateTheRest(newPlanForUnvisitedLocations);
         }
 

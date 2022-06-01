@@ -82,8 +82,9 @@ public class ShowRouteActivity extends AppCompatActivity {
     }
 
     /**
+     * Setter method to set a given list of LocItems for display
      *
-     * @param locItems
+     * @param locItems Given locations of the route
      */
     public void setItems(List<LocItem> locItems) {
         List<String> locations = locItems

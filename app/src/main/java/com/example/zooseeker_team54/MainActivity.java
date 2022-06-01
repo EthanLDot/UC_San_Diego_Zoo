@@ -85,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
     // TODO: figure what should happen if a plan is there but users modify the plan in main
     /**
      * Create the activity from a given savedInstanceState and initialize everything
+     *
      * @param savedInstanceState the saved instance from before
      */
     @Override
@@ -138,19 +139,41 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public RecyclerViewPresenter<LocItem> getSearchResultPresenter() { return searchResultPresenter; }
+    /**
+     * Getter method for the SearchResultPresenter
+     *
+     * @return the current SearchResultPresenter
+     */
+    public RecyclerViewPresenter<LocItem> getSearchResultPresenter() {
+        return searchResultPresenter;
+    }
 
-    public RecyclerViewPresenter<LocItem> getPlannedLocsPresenter() { return plannedLocsPresenter; }
+    /**
+     * Getter method for the current PlannedLocsPresenter
+     *
+     * @return the current PlannedLocsPresenter
+     */
+    public RecyclerViewPresenter<LocItem> getPlannedLocsPresenter() {
+        return plannedLocsPresenter;
+    }
 
     /**
      * Finds route from a given list of LocItems
+     *
      * @param unvisitedLocItems List of LocItems to find a route for
-     * @return HashMap of the route to be displayed
+     * @return RouteInfo for the planned route
      */
     public RouteInfo findRoute(List<LocItem> unvisitedLocItems) {
         return findRoute(unvisitedLocItems, getCoord());
     }
 
+    /**
+     * Finds route from a given list of LocItems and starting coordinates
+     *
+     * @param unvisitedLocItems List of LocItems to find a route for
+     * @param coord starting coordinates of the user
+     * @return RouteInfo for the planned route
+     */
     private RouteInfo findRoute(List<LocItem> unvisitedLocItems, Coord coord) {
 
         String startLocation;
@@ -174,6 +197,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Removes the given LocItem from the viewModel
+     *
      * @param locItem LocItem to be removed
      */
     public void removePlannedLoc(LocItem locItem) {
@@ -200,6 +224,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Using our searchResultAdapter, we display the search results from the given query
+     *
      * @param query String query typed in by user
      */
     private void showSearchResult(String query) {
@@ -208,6 +233,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Function for when our clear button is clicked in MainActivity
+     *
      * @param view Passed in when "Clear" is clicked
      */
     private void onClearBtnClicked(View view) {
@@ -218,6 +244,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Function for when our plan button is clicked in MainActivity
+     *
      * @param view Passed in when "Plan" is clicked
      */
     private void onPlanButtonClicked(View view) {
@@ -239,8 +266,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
+     * Getter method for the current coordinates
      *
-     * @return
+     * @return coordinates of the current location of the user
      */
     private Coord getCoord() {
         SharedPreferences preferences = getPreferences(MODE_PRIVATE);

@@ -156,7 +156,12 @@ public class Utilities {
             return routeInfo;
         }
 
+        //Boolean a = unvisitedLocItems.size() == 1;
+        //Boolean b = unvisitedLocItems.get(0).id.equals("entrance_exit_gate");
+
+        if(!(unvisitedLocItems.size() == 1 && unvisitedLocItems.get(0).id.equals("entrance_exit_gate"))) {
         removeEntranceGate(unvisitedLocItems);
+        }
 
         // the final route to return
         RouteInfo routeInfo = new RouteInfo();

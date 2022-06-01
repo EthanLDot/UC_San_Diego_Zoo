@@ -51,7 +51,6 @@ public class ShowDirectionActivity extends AppCompatActivity {
             viewModel = new ViewModelProvider(this).get(ViewModel.class);
             routeInfo = (RouteInfo) intent.getSerializableExtra("routeInfo");
             locationTracker = new LocationTracker(this, false);
-            locationTracker.mockLocation(getCoord());
             locationTracker.getUserCoordLive().observe(this, this::detectOffRoute);
             routeDirectionPresenter = new RecyclerViewPresenterBuilder<LocEdge>()
                     .setAdapter(new ShowDirectionAdapter())
@@ -138,14 +137,27 @@ public class ShowDirectionActivity extends AppCompatActivity {
      */
     private void detectOffRoute(Coord coord) {
 
-        if (coord.equals(viewModel.getLocItemById(routeInfo.getCurrentLocation()).getCoord())) {
-            return;
+        // filter exhibits part of group and exhibits that are not off route
+        {
+            String currentLocation = routeInfo.getCurrentLocation();
+            LocItem currentLocItem = viewModel.getLocItemById(currentLocation);
+
+            if (currentLocItem.group_id != null)
+                currentLocation = routeInfo.getGroupId(currentLocation);
+
+            if (coord.equals(viewModel.getLocItemById(routeInfo.getCurrentLocation()).getCoord())) {
+                return;
+            }
         }
+
         String currentTarget = routeInfo.getCurrentTarget();
         LocItem targetLocItem = viewModel.getLocItemById(currentTarget);
-        Double threshold = Coord.distanceBetweenTwoCoords(coord, targetLocItem.getCoord());
+        double threshold = Coord.distanceBetweenTwoCoords(coord, targetLocItem.getCoord());
 
+        LocItem closestLocItem = targetLocItem;
+        double minDifference = Double.MAX_VALUE;
         List<LocItem> unvisitedLocItems = viewModel.getAllPlannedUnvisited();
+
         for (LocItem locItem : unvisitedLocItems) {
 
             // if the location is in a group, we want to find the route to its group instead.
@@ -153,13 +165,34 @@ public class ShowDirectionActivity extends AppCompatActivity {
                 locItem = viewModel.getLocItemById(locItem.group_id);
             }
 
-            if (Coord.distanceBetweenTwoCoords(coord, locItem.getCoord()) < threshold) {
-                if (askForReroute()) {
-                    String startLocation = Utilities.findClosestExhibitId(viewModel.getAllNonGroup(), coord);
-                    RouteInfo newPlanForUnvisitedLocations = Utilities.findRoute(unvisitedLocItems, startLocation);
-                    routeInfo.updateTheRest(newPlanForUnvisitedLocations);
-                }
+            double difference = Coord.distanceBetweenTwoCoords(coord, locItem.getCoord());
+            if (difference < minDifference) {
+                closestLocItem = locItem;
+                minDifference = difference;
             }
+        }
+
+        // if user doesn't want to reroute when there is a new target, return
+        if (closestLocItem != targetLocItem && !askForReroute())
+            return;
+
+        String startLocation = Utilities.findClosestExhibitId(viewModel.getAllNonGroup(), coord);
+        RouteInfo newPlanForUnvisitedLocations = Utilities.findRoute(unvisitedLocItems, startLocation);
+        routeInfo.updateTheRest(newPlanForUnvisitedLocations);
+
+        // reset the directions
+        {
+            List<LocEdge> directions;
+            if (routeInfo == null) {
+                directions = Collections.emptyList();
+            }
+            else if (getDirection().equals("forward")) {
+                directions = Utilities.findDirections(routeInfo, routeInfo.getCurrentTarget(), getIsBrief());
+            }
+            else {
+                directions = Utilities.findReversedDirections(routeInfo, routeInfo.getCurrentLocation(), getIsBrief());
+            }
+            routeDirectionPresenter.setItems(directions);
         }
     }
 
@@ -191,10 +224,10 @@ public class ShowDirectionActivity extends AppCompatActivity {
             LocItem arrivedLocItem = viewModel.getLocItemById(arrivedLocation);
             viewModel.addVisitedLoc(arrivedLocItem);
 
-//            if (arrivedLocItem.group_id != null)
-//                locationTracker.mockLocation(viewModel.getLocItemById(arrivedLocItem.group_id).getCoord());
-//            else
-//                locationTracker.mockLocation(viewModel.getLocItemById(arrivedLocation).getCoord());
+            if (arrivedLocItem.group_id != null)
+                locationTracker.mockLocation(viewModel.getLocItemById(arrivedLocItem.group_id).getCoord());
+            else
+                locationTracker.mockLocation(viewModel.getLocItemById(arrivedLocation).getCoord());
 
             String groupId = routeInfo.getGroupId(arrivedLocation);
             if (groupId != null) {
@@ -230,10 +263,10 @@ public class ShowDirectionActivity extends AppCompatActivity {
             LocItem arrivedLocItem = viewModel.getLocItemById(arrivedLocation);
             viewModel.removeVisitedLoc(arrivedLocItem);
 
-//            if (arrivedLocItem.group_id != null)
-//                locationTracker.mockLocation(viewModel.getLocItemById(arrivedLocItem.group_id).getCoord());
-//            else
-//                locationTracker.mockLocation(viewModel.getLocItemById(arrivedLocation).getCoord());
+            if (arrivedLocItem.group_id != null)
+                locationTracker.mockLocation(viewModel.getLocItemById(arrivedLocItem.group_id).getCoord());
+            else
+                locationTracker.mockLocation(viewModel.getLocItemById(arrivedLocation).getCoord());
 
             String groupId = routeInfo.getGroupId(arrivedLocation);
             if (groupId != null) {

@@ -20,6 +20,10 @@
         android:theme="@style/Theme.ZooSeeker_Team54">
 
         <activity
+            android:name=".ReplanPromptActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".SettingsActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustPan"/>

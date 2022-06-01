@@ -245,10 +245,10 @@ public class AskToReplan {
         materialButton6.perform(click());
 
         ViewInteraction textView3 = onView(
-                allOf(withId(R.id.direction), withText("Proceed on 'Monkey Trail' 1500 meters towards 'Flamingos' from 'Front Street / Monkey Trail'.\n"),
+                allOf(withId(R.id.direction), withText("Proceed on 'Hippo Trail' 1500 meters towards 'Monkey Trail' from 'Crocodiles'.\n"),
                         withParent(withParent(withId(R.id.route_direction))),
                         isDisplayed()));
-        textView3.check(matches(withText("Proceed on 'Monkey Trail' 1500 meters towards 'Flamingos' from 'Front Street / Monkey Trail'.\n")));
+        textView3.check(matches(withText("Proceed on 'Hippo Trail' 1500 meters towards 'Monkey Trail' from 'Crocodiles'.\n")));
     }
 
     private static Matcher<View> childAtPosition(

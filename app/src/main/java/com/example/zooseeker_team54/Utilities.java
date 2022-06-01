@@ -141,7 +141,7 @@ public class Utilities {
      * @param unvisitedLocItems List of LocItems within plan to find a route for
      * @return route from the planned exhibits as a HashMap of edges
      */
-    public static RouteInfo findRoute(List<LocItem> unvisitedLocItems, String startLocation) {
+    public static RouteInfo findRoute(List<LocItem> unvisitedLocItems, LocItem startLocation) {
 
         if (unvisitedLocItems.size() == 0) {
             RouteInfo routeInfo = new RouteInfo();
@@ -149,6 +149,8 @@ public class Utilities {
             routeInfo.addDirection("entrance_exit_gate", Collections.emptyList());
             return routeInfo;
         }
+
+        removeEntranceGate(unvisitedLocItems);
 
         // the final route to return
         RouteInfo routeInfo = new RouteInfo();
@@ -163,7 +165,8 @@ public class Utilities {
 
         // start at the entrance of the zoo
         double currDist = 0;
-        String current = startLocation;
+        String current = startLocation.id;
+        LocItem currentLocItem = startLocation;
 
         // while there are still unvisited locations, find the closest to the last added one, and add it to the route
         while (unvisited.size() > 0) {
@@ -178,7 +181,7 @@ public class Utilities {
             for (int i = 0; i < unvisited.size(); i++) {
                 target = unvisited.get(i);
 
-                String current_id = current.equals("entrance_exit_gate") ? current : getIdForRoute(locItemMap.get(current));
+                String current_id = current.equals("entrance_exit_gate") ? current : getIdForRoute(currentLocItem);
                 String target_id = getIdForRoute(locItemMap.get(target));
                 Pair<List<LocEdge>, Double> pair = findShortestPathBetween(current_id, target_id);
 
@@ -196,6 +199,7 @@ public class Utilities {
 
             // set closest to be current and remove the top element from unvisited
             current = closest;
+            currentLocItem = locItemMap.get(closest);
             unvisited.remove(minIndex);
 
             // add the next path to paths and add the next distance to distances
@@ -218,6 +222,11 @@ public class Utilities {
         routeInfo.addDistance(target, currDist);
 
         return routeInfo;
+    }
+
+    public static List<LocItem> removeEntranceGate(List<LocItem> unvisitedLocItems) {
+        unvisitedLocItems.removeIf(locItem -> locItem.id.equals("entrance_exit_gate"));
+        return unvisitedLocItems;
     }
 
     /**

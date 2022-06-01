@@ -197,10 +197,24 @@ public class ShowDirectionActivity extends AppCompatActivity {
     }
 
     /**
+     * Getter method for the replan boolean to indicate whether to replan or not
      *
+     * @return boolean representing user input to replan or not
+     */
+    public boolean getShouldReplan() {
+        return getSharedPreferences("shouldReplan", MODE_PRIVATE).getBoolean("shouldReplan", false);
+    }
+
+    /**
+     * Method to ask for replan from the replan prompt activity
+     *
+     * @return Boolean indicating if user wants to replan route
      */
     public boolean askForReroute() {
-        return true;
+        //return Utilities.offRouteReplanAlert(this);
+        Intent intent = new Intent(this, ReplanPromptActivity.class);
+        startActivity(intent);
+        return getShouldReplan();
     }
 
     /**

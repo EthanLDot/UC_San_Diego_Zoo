@@ -121,16 +121,16 @@ public class AdjustDirectionUITest {
         materialButton3.perform(click());
 
         ViewInteraction textView = onView(
-                allOf(withId(R.id.direction), withText("Proceed on 'Treetops Way' 1100 meters towards 'Treetops Way / Fern Canyon Trail' from 'Front Street / Treetops Way'.\n"),
+                allOf(withId(R.id.direction), withText("Proceed on 'Treetops Way' 1100 feet towards 'Treetops Way / Fern Canyon Trail' from 'Front Street / Treetops Way'.\n"),
                         withParent(withParent(withId(R.id.route_direction))),
                         isDisplayed()));
-        textView.check(matches(withText("Proceed on 'Treetops Way' 1100 meters towards 'Treetops Way / Fern Canyon Trail' from 'Front Street / Treetops Way'.\n")));
+        textView.check(matches(withText("Proceed on 'Treetops Way' 1100 feet towards 'Treetops Way / Fern Canyon Trail' from 'Front Street / Treetops Way'.\n")));
 
         ViewInteraction textView2 = onView(
-                allOf(withId(R.id.direction), withText("Proceed on 'Fern Canyon Trail' 6500 meters towards 'Fern Canyon' from 'Treetops Way / Fern Canyon Trail'.\n"),
+                allOf(withId(R.id.direction), withText("Proceed on 'Fern Canyon Trail' 6500 feet towards 'Fern Canyon' from 'Treetops Way / Fern Canyon Trail'.\n"),
                         withParent(withParent(withId(R.id.route_direction))),
                         isDisplayed()));
-        textView2.check(matches(withText("Proceed on 'Fern Canyon Trail' 6500 meters towards 'Fern Canyon' from 'Treetops Way / Fern Canyon Trail'.\n")));
+        textView2.check(matches(withText("Proceed on 'Fern Canyon Trail' 6500 feet towards 'Fern Canyon' from 'Treetops Way / Fern Canyon Trail'.\n")));
 
         ViewInteraction appCompatEditText = onView(
                 allOf(withId(R.id.mock_route_input),
@@ -163,16 +163,16 @@ public class AdjustDirectionUITest {
         materialButton4.perform(click());
 
         ViewInteraction textView3 = onView(
-                allOf(withId(R.id.direction), withText("Proceed on 'Aviary Trail' 3000 meters towards 'Fern Canyon' from 'Parker Aviary'.\n"),
+                allOf(withId(R.id.direction), withText("Proceed on 'Aviary Trail' 3000 feet towards 'Fern Canyon' from 'Parker Aviary'.\n"),
                         withParent(withParent(withId(R.id.route_direction))),
                         isDisplayed()));
-        textView3.check(matches(withText("Proceed on 'Aviary Trail' 3000 meters towards 'Fern Canyon' from 'Parker Aviary'.\n")));
+        textView3.check(matches(withText("Proceed on 'Aviary Trail' 3000 feet towards 'Fern Canyon' from 'Parker Aviary'.\n")));
 
         ViewInteraction textView4 = onView(
-                allOf(withId(R.id.direction), withText("Proceed on 'Orangutan Trail' 2600 meters towards 'Parker Aviary' from 'Siamangs'.\n"),
+                allOf(withId(R.id.direction), withText("Proceed on 'Orangutan Trail' 2600 feet towards 'Parker Aviary' from 'Siamangs'.\n"),
                         withParent(withParent(withId(R.id.route_direction))),
                         isDisplayed()));
-        textView4.check(matches(withText("Proceed on 'Orangutan Trail' 2600 meters towards 'Parker Aviary' from 'Siamangs'.\n")));
+        textView4.check(matches(withText("Proceed on 'Orangutan Trail' 2600 feet towards 'Parker Aviary' from 'Siamangs'.\n")));
 
         ViewInteraction materialButton5 = onView(
                 allOf(withId(R.id.settings_button),
@@ -205,10 +205,10 @@ public class AdjustDirectionUITest {
         materialButton7.perform(click());
 
         ViewInteraction textView5 = onView(
-                allOf(withId(R.id.direction), withText("Proceed on 'Aviary Trail' 1300 meters towards 'Owens Aviary' from 'Parker Aviary'.\n"),
+                allOf(withId(R.id.direction), withText("Proceed on 'Aviary Trail' 1300 feet towards 'Owens Aviary' from 'Parker Aviary'.\n"),
                         withParent(withParent(withId(R.id.route_direction))),
                         isDisplayed()));
-        textView5.check(matches(withText("Proceed on 'Aviary Trail' 1300 meters towards 'Owens Aviary' from 'Parker Aviary'.\n")));
+        textView5.check(matches(withText("Proceed on 'Aviary Trail' 1300 feet towards 'Owens Aviary' from 'Parker Aviary'.\n")));
     }
 
     private static Matcher<View> childAtPosition(

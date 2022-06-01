@@ -72,9 +72,9 @@ public class RouteDirectionTest {
 
         ActivityScenario<ShowDirectionActivity> routeDirectionActivityActivityScenario = ActivityScenario.launch(routeDirectionIntent);
         routeDirectionActivityActivityScenario.onActivity(activity -> {
-            String expectedDirections = "[Proceed on 'Entrance Way' 10 meters towards 'Entrance Plaza' from 'Entrance and Exit Gate'.\n" +
-                    ", Proceed on 'Reptile Road' 100 meters towards 'Alligators' from 'Entrance Plaza'.\n" +
-                    ", Proceed on 'Sharp Teeth Shortcut' 200 meters towards 'Lions' from 'Alligators'.\n" +
+            String expectedDirections = "[Proceed on 'Entrance Way' 10 feet towards 'Entrance Plaza' from 'Entrance and Exit Gate'.\n" +
+                    ", Proceed on 'Reptile Road' 100 feet towards 'Alligators' from 'Entrance Plaza'.\n" +
+                    ", Proceed on 'Sharp Teeth Shortcut' 200 feet towards 'Lions' from 'Alligators'.\n" +
                     "]";
             List<LocEdge> directions = activity.getRouteDirectionPresenter().getItems();
             assertEquals(expectedDirections, directions.toString());
@@ -112,8 +112,8 @@ public class RouteDirectionTest {
 
         ActivityScenario<ShowDirectionActivity> routeDirectionActivityActivityScenario = ActivityScenario.launch(routeDirectionIntent);
         routeDirectionActivityActivityScenario.onActivity(activity -> {
-            String expectedDirections = "[Proceed on 'Entrance Way' 10 meters towards 'Entrance Plaza' from 'Entrance and Exit Gate'.\n" +
-                    ", Proceed on 'Reptile Road' 100 meters towards 'Alligators' from 'Entrance Plaza'.\n" +
+            String expectedDirections = "[Proceed on 'Entrance Way' 10 feet towards 'Entrance Plaza' from 'Entrance and Exit Gate'.\n" +
+                    ", Proceed on 'Reptile Road' 100 feet towards 'Alligators' from 'Entrance Plaza'.\n" +
                     "]";
             List<LocEdge> directions = activity.getRouteDirectionPresenter().getItems();
             assertEquals(expectedDirections, directions.toString());

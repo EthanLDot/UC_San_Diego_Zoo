@@ -84,10 +84,10 @@ public class PlanRouteTests {
 
             RouteInfo routeInfo = activity.findRoute(locsAdapterContents);
             assertEquals(2, routeInfo.getLocations().size());
-            assertEquals("{entrance_exit_gate=[Proceed on 'Africa Rocks Street' 200 meters towards 'Entrance Plaza' from 'Gorillas'.\n" +
-                    ", Proceed on 'Entrance Way' 10 meters towards 'Entrance and Exit Gate' from 'Entrance Plaza'.\n" +
-                    "], gorillas=[Proceed on 'Entrance Way' 10 meters towards 'Entrance Plaza' from 'Entrance and Exit Gate'.\n" +
-                    ", Proceed on 'Africa Rocks Street' 200 meters towards 'Gorillas' from 'Entrance Plaza'.\n" +
+            assertEquals("{entrance_exit_gate=[Proceed on 'Africa Rocks Street' 200 feet towards 'Entrance Plaza' from 'Gorillas'.\n" +
+                    ", Proceed on 'Entrance Way' 10 feet towards 'Entrance and Exit Gate' from 'Entrance Plaza'.\n" +
+                    "], gorillas=[Proceed on 'Entrance Way' 10 feet towards 'Entrance Plaza' from 'Entrance and Exit Gate'.\n" +
+                    ", Proceed on 'Africa Rocks Street' 200 feet towards 'Gorillas' from 'Entrance Plaza'.\n" +
                     "]}", routeInfo.getDirections().toString());
         });
     }
@@ -128,12 +128,12 @@ public class PlanRouteTests {
 
             RouteInfo routeInfo = activity.findRoute(locsAdapterContents);
             assertEquals(3, routeInfo.getLocations().size());
-            assertEquals("{lions=[Proceed on 'Sharp Teeth Shortcut' 200 meters towards 'Lions' from 'Alligators'.\n" +
-                    "], entrance_exit_gate=[Proceed on 'Sharp Teeth Shortcut' 200 meters towards 'Alligators' from 'Lions'.\n" +
-                    ", Proceed on 'Reptile Road' 100 meters towards 'Entrance Plaza' from 'Alligators'.\n" +
-                    ", Proceed on 'Entrance Way' 10 meters towards 'Entrance and Exit Gate' from 'Entrance Plaza'.\n" +
-                    "], gators=[Proceed on 'Entrance Way' 10 meters towards 'Entrance Plaza' from 'Entrance and Exit Gate'.\n" +
-                    ", Proceed on 'Reptile Road' 100 meters towards 'Alligators' from 'Entrance Plaza'.\n" +
+            assertEquals("{lions=[Proceed on 'Sharp Teeth Shortcut' 200 feet towards 'Lions' from 'Alligators'.\n" +
+                    "], entrance_exit_gate=[Proceed on 'Sharp Teeth Shortcut' 200 feet towards 'Alligators' from 'Lions'.\n" +
+                    ", Proceed on 'Reptile Road' 100 feet towards 'Entrance Plaza' from 'Alligators'.\n" +
+                    ", Proceed on 'Entrance Way' 10 feet towards 'Entrance and Exit Gate' from 'Entrance Plaza'.\n" +
+                    "], gators=[Proceed on 'Entrance Way' 10 feet towards 'Entrance Plaza' from 'Entrance and Exit Gate'.\n" +
+                    ", Proceed on 'Reptile Road' 100 feet towards 'Alligators' from 'Entrance Plaza'.\n" +
                     "]}", routeInfo.getDirections().toString());
         });
     }

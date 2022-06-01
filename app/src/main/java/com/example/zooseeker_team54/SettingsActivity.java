@@ -3,6 +3,7 @@ package com.example.zooseeker_team54;
 import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -47,7 +48,7 @@ public class SettingsActivity extends AppCompatActivity {
      * @param bool boolean for isBrief to be set to
      */
     public void setIsBrief(boolean bool) {
-        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        SharedPreferences preferences = getSharedPreferences("isBrief", MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("isBrief", bool);
         editor.apply();
@@ -65,7 +66,7 @@ public class SettingsActivity extends AppCompatActivity {
                 setButton(otherBtn, false);
                 setButton(button, true);
                 setIsBrief(otherBtn.equals(detailed));
-                System.out.println(getPreferences(MODE_PRIVATE).getBoolean("isBrief", true));
+                System.out.println(getSharedPreferences("isBrief", MODE_PRIVATE).getBoolean("isBrief", true));
             }
         };
     }
@@ -76,8 +77,7 @@ public class SettingsActivity extends AppCompatActivity {
      * @param button Button to be set
      * @param isChecked Boolean representing if it has been checked or not
      */
-    private void setButton(View button, boolean isChecked)
-    {
+    private void setButton(View button, boolean isChecked) {
         String color = isChecked ? "#8BC34A" : "#40737373";
         button.setBackgroundColor(Color.parseColor(color));
     }
@@ -88,6 +88,8 @@ public class SettingsActivity extends AppCompatActivity {
      * @param view View to be passed in
      */
     private void onExitBtnClicked(View view) {
+        Intent data = new Intent();
+        setResult(RESULT_OK, data);
         finish();
     }
 
@@ -97,7 +99,7 @@ public class SettingsActivity extends AppCompatActivity {
      * @return Boolean of isBrief
      */
     public boolean getIsBrief() {
-        return getPreferences(MODE_PRIVATE).getBoolean("isBrief", true);
+        return getSharedPreferences("isBrief", MODE_PRIVATE).getBoolean("isBrief", true);
     }
 
     /**

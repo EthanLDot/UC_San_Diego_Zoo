@@ -41,8 +41,6 @@ public class ShowDirectionActivity extends AppCompatActivity {
     private Button backBtn;
     private Button settingsBtn;
     private Button skipBtn;
-    private Button mockStep;
-    private EditText mockRouteInput;
 
     private final ActivityResultLauncher<Intent> settingActivityLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
@@ -136,13 +134,6 @@ public class ShowDirectionActivity extends AppCompatActivity {
             // Initialize the settings button
             settingsBtn = this.findViewById(R.id.settings_button);
             settingsBtn.setOnClickListener(this::onSettingsClicked);
-
-            // Initialize the mock route input
-            mockRouteInput = this.findViewById(R.id.mock_route_input);
-
-            // Initialize the start mock button
-            mockStep = this.findViewById(R.id.start_mock);
-            mockStep.setOnClickListener(this::onMockStepClicked);
 
             //Initialize the skip button
             skipBtn = this.findViewById(R.id.skip_btn);
@@ -425,36 +416,6 @@ public class ShowDirectionActivity extends AppCompatActivity {
     private void onSettingsClicked(View view) {
         Intent intent = new Intent(this, SettingsActivity.class);
         settingActivityLauncher.launch(intent);
-    }
-
-    /**
-     * Mocks the next location in the route by calling locationtracker
-     * @param view
-     */
-    private void onMockStepClicked(View view) {
-      String [] nextLocation = mockRouteInput.getText().toString().split(",");
-        if(nextLocation.length == 2) {
-            try {
-                Coord locationCoord = new Coord(Double.parseDouble(nextLocation[0]), Double.parseDouble(nextLocation[1]));
-                // Log.d("NEXT Coord: ", String.valueOf(locationCoord));
-                locationTracker.mockLocation(locationCoord);
-                Toast.makeText(this, "Coordinates mocked!",
-                        Toast.LENGTH_LONG).show();
-            } catch (NumberFormatException nfe) {
-                Toast.makeText(this, "Invalid Coords!",
-                        Toast.LENGTH_LONG).show();
-                return;
-            }
-
-        }
-        else
-        {
-            Toast.makeText(this, "Invalid Coords!",
-                    Toast.LENGTH_LONG).show();
-        }
-        Coord locationCoord = new Coord (Double.parseDouble(nextLocation[0]), Double.parseDouble(nextLocation[1]));
-        // Log.d("NEXT Coord: ", String.valueOf(locationCoord));
-        locationTracker.mockLocation(locationCoord);
     }
 
     /**

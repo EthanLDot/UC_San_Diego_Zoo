@@ -8,8 +8,8 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/route_direction"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="423dp"
+        android:layout_height="327dp"
         android:layout_marginTop="50dp"
         android:layout_marginBottom="116dp"
         app:layout_constraintBottom_toTopOf="@+id/next_btn"
@@ -18,26 +18,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
-
-    <EditText
-        android:id="@+id/mock_route_input"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="24dp"
-        android:hint="Paste Mock JSON Here"
-        app:layout_constraintBottom_toTopOf="@+id/next_btn"
-        app:layout_constraintEnd_toStartOf="@id/start_mock" />
-
-    <Button
-        android:id="@+id/start_mock"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="60dp"
-        android:layout_marginBottom="24dp"
-        android:text="Mock"
-        app:layout_constraintBottom_toTopOf="@+id/next_btn"
-        app:layout_constraintEnd_toEndOf="parent"/>
 
     <Button
         android:id="@+id/previous_btn"
